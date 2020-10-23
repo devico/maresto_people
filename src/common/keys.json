@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "my-project-ppp-maresto",
+  "private_key_id": "f2deed6cf1f5e6151babcaae224f13c1e814f432",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQCxjiRcKvMf9zEz\nLClwMvtGK+waGVSAIYDqUWJsY8wO5S4x6nK3I5ECkbsdg7BvR+kdMrLP5a2rt54j\nGY5+rZLYDgakQMIUaJiLhLmm/MXHP0Q6tfyafxyshksjYj9XMJoW4nVRrurpSfvS\nqRGJnFG6qpVLqYYGdN1DinBgpU/HLnbEG88lDTSHYmrESrqfyolz/0d3ixDZ8uUO\nCXbErq6fg2IBzfR6iKWduQC8bzFaPsVgN+TdkgnbKckYjOXMpbVqHOa0iFOW2nBq\nweu4uFPvBTABC1lw+M/ElIpXFQoDrnQQMyUJT4xGlKAwGNKPr943HJCXr1pqhto4\n7HIldwAdAgMBAAECggEADoYGvd5KhFkbNmkcm5+j86W4mprrUU7MRX5yO1T/dlFz\nUaRwjT/0xt3GTT/+IOAkNp30x/Is3lC29/6JbB3FFvSwwONGLNawcash54GiKO3p\nJhdIShfvL8KNZ1/MOBTS6d/Mwml5MCt71Iu9UkEN42O8MhP0EVeiWLm8fv9Oswdc\nRzziAQfCfRmIejo5XsC2GvdzGiASWfq3A8kT2BfzqElUziVCVeG7mOg/zfhCIl/U\n4Z8bGJPyMwuM8BdP3gWSi4Yl/S8OOLtEV7OxsZ1yIlkyqH5dM/4TSktSqLSPr+td\nMrEPj2SznF5keiY7C1oL+r5nODqqeUpqnya/7DkiOQKBgQDffc8i7//R4+SXuGuU\n7MrNJW/ab/s4qOyoFmc5dOULVw1/IOtSharyJjIDKMY7Ol4OMAqp2KXHM6kKh56l\nFe2Bh5jVPJ3MNqL7lum0wHCxI79scUa8RrXMSLg9Ps4Q1tv143x2V8aQUds8aQZS\n5Lg7xRckIidlUybggKjJSMH1iQKBgQDLYcxke+5nVlTDhpE4HBQxds2A5E+OXE+H\nmH2LwJHWLZA038KN8M26aJNWPxh/wjV900hnh5PFG619vpudl59OtNFJYpFW/65x\n86jGjYq1CL2Xc38M0m2MpBmq/aTBozQGnltjO0tbV5yW1k7W1vsOm4BnvK3H/T8Z\nxZHwCqHk9QKBgGYTg0EU1wYZjXXSkKiDgpkySSU+0kJtvTGEkf8HKfoE97Ah6/lT\n/eD9mwggXnH81aqrPKOYxRb3vHSHvujt2/22XhK+zd/Q8J3yrqmU36O4jRzNnB4w\nOaalbCjk/59nUy26ikVPD+0oxfaQjYfc2VzLRyeExfOch/wwJ2dP6O7pAoGBAMcs\nhpMdf1L6C9bT0SGm9eufEhAZBwQ+yK/dGY4kT231fxUY0Rpaac8VHL1I20A6vFH1\n+SFSd9d/jH7pjNJfq2bT02XPvs/5Yyg7W9zevqkd3zYTqKew6BHknzKCZbgwkQGu\nUYcziU/x0+swA1OIg6NBjBWLhJCnJQWjI5F1iCiFAoGBALLgRo8Gk5bEoLEFTxTj\noe0Y2vcXXihb9q8Sd9qaffwo7eodGYAU2e1o3yasy8mQ+MrLcrW3DAaz7AEObEoP\nyQPk6ymjqrnlOETYRZK9/UhONirJFrzoea6Tyka2Z5HKb6Q1gK246KmaebukyxLj\nAqcaAwKRG6cAeOUeQa4ygPkC\n-----END PRIVATE KEY-----\n",
+  "client_email": "nick-8@my-project-ppp-maresto.iam.gserviceaccount.com",
+  "client_id": "113404358719311440638",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/nick-8%40my-project-ppp-maresto.iam.gserviceaccount.com"
+}
