@@ -5,7 +5,7 @@ module.exports = {
   "devServer": {
     "proxy": {
       "/ZUP/odata/standard.odata/*": {
-        "target": "http://localhost:80",
+        "target": "http://192.168.58.106:80",
         "ws": true,
         "changeOrigin": true
       }
