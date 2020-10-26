@@ -1,13 +1,13 @@
 <template>
   <div class="register">
-    <Register />
+    <register />
   </div>
 </template>
 <script>
-import register from '@/components/auth/Register';
+import register from '@/components/auth/register';
 export default {
   components: {
-    Register
+    register
   }
 };
 </script>

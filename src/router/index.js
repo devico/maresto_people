@@ -19,7 +19,7 @@ const routes = [
     path: "/register",
     name: "register",
     meta: {layout: 'empty'},
-    component: () => import("@/views/Register.vue")
+    component: () => import("../views/register.vue")
   },
   {
     path: "/employee/:id",
