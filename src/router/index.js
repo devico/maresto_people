@@ -63,6 +63,13 @@ const routes = [
     component: () => import("../views/PPP.vue"),
     props: true
   },
+  {
+    path: "/tablesheet",
+    name: "tablesheet",
+    meta: {layout: 'admin', auth: true},
+    component: () => import("../views/TabelSheet.vue"),
+    props: true
+  },
   
 ];
 const router = new VueRouter({

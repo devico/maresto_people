@@ -67,21 +67,21 @@ app.get("/ppp_secret", (req, res) => {
   
 });
 
-// app.get("/ppp_active", (req, res) => {
-//   api.connect().then((client) => {
-//     client.menu("/ppp active").get().then((result) => {
-//       res.send(JSON.stringify(result));
-//       api.close();
-//     }).catch((err) => {
-//         console.log(err); 
-//     });
+app.get("/ppp_active", (req, res) => {
+  api.connect().then((client) => {
+    client.menu("/ppp active").get().then((result) => {
+      res.send(JSON.stringify(result));
+      api.close();
+    }).catch((err) => {
+        console.log(err); 
+    });
   
-//   }).catch((err) => {
-//     // Connection error
-//     console.log(err); 
-//   });
+  }).catch((err) => {
+    // Connection error
+    console.log(err); 
+  });
   
-// });
+});
 
 const userRoutes = require("./api/user/route/user"); //bring in our user routes
 app.use("/user", userRoutes);

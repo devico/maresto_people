@@ -8,7 +8,8 @@ import '@/plugins/apexcharts'
 import vuetify from './plugins/vuetify';
 
 const base = axios.create({
-  baseURL: "http://people.maresto.ua:4000"
+  // baseURL: "http://people.maresto.ua:4000"
+  baseURL: "http://192.168.58.106:4000"
 });
 
 Vue.prototype.$http = base;

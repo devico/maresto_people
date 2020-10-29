@@ -61,6 +61,7 @@ export default {
         { title: "Сотрудники", icon: mdiAccountGroup, url: "/employees" },
         { title: "База знаний", icon: mdiBookshelf, url: "/checkout" },
         { title: "Отчеты", icon: mdiFileChart, url: "/reports" },
+        { title: "Табель", icon: mdiFileChart, url: "/tablesheet" },
         { title: "PPP", icon: mdiFileChart, url: "/ppp" },
       ],
       mdiAccount: mdiAccount,
