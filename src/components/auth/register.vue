@@ -79,12 +79,7 @@ export default {
           // swal("Error", "Something Went Wrong", "error");
         }
       } catch (err) {
-        let error = err.response;
-        if (error.status == 409) {
-          // swal("Error", error.data.message, "error");
-        } else {
-          // swal("Error", error.data.err.message, "error");
-        }
+        console.log(err.response)
       }
     }
   }
