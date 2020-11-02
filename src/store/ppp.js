@@ -31,7 +31,7 @@ export default {
       //   // ctx.commit('updateDataMikrotik', data)
       // })
 
-      fetch('http://192.168.58.106:4000/ppp_active').then(response => {
+      fetch('http://localhost:4000/ppp_active').then(response => {
         return response.json();
       }).then(data => {
         console.log("Active: ", data)
@@ -39,7 +39,7 @@ export default {
       })
     },
     async getVpnUsers(ctx) {
-      const res = await fetch('http://192.168.58.106:4000/api/vpnusers')
+      const res = await fetch('http://localhost:4000/api/vpnusers')
       const data = await res.json();
       const datetime = "2020-09"
   
