@@ -73,7 +73,7 @@
             {{item.phone}}
           </template>
           <template #item.email="{item}">
-            {{item.email}}
+            {{item.innerPhone}}
           </template>
           <template #item.work_place="{item}">
             <WorkPlaceDisplay :work_place="item.id" />
@@ -228,6 +228,24 @@ export default {
       }
       
     },
+    getInnerPhone(p_id) {
+      const cnts = this.contacts.filter((c) => {
+        return p_id == c.personKey
+      });
+      const phone = cnts.filter(c => {
+        const kind = this.typesContact.filter(k => {
+          return c.kind == k.refKey
+        })
+
+        return kind[0].description == 'Внутренний телефон'
+      })
+      
+      if (phone[0] == undefined) {
+        return "Нет номера";
+      }
+      return phone[0].description
+      
+    },
     getEmail(p_id) {
       const cnts = this.contacts.filter((c) => {
         return p_id == c.personKey
@@ -260,7 +278,8 @@ export default {
           position: this.getPosition(e.orgPosition),
           unit: this.getUnit(e.unitKey),
           phone: this.getPhone(e.personKey),
-          email: this.getEmail(e.personKey)
+          innerPhone: this.getInnerPhone(e.personKey),          
+          //email: this.getEmail(e.personKey)
         };
       });
     },
@@ -282,8 +301,8 @@ export default {
         },
         { text: "Должность", value: "position" },
         { text: "Подразделение", value: "unit" },
-        { text: 'Телефон', value: 'phone' },
-        { text: 'Email', value: 'email' }
+        { text: 'Корпоративный(личный)', value: 'phone' },
+        { text: 'Вн.телефон', value: 'innerPhone' }
       ];
     },
   },
