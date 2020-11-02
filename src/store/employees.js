@@ -81,7 +81,7 @@ export default {
       };
 
       //fetch('http://people.maresto.ua/ZUP/odata/standard.odata/Catalog_СотрудникиОрганизаций?&$format=json', config).then(response => {
-      await fetch('http://192.168.58.106:8080/ZUP/odata/standard.odata/Catalog_СотрудникиОрганизаций?&$format=json', config).then(response => {
+      await fetch('http://localhost:8080/ZUP/odata/standard.odata/Catalog_СотрудникиОрганизаций?&$format=json', config).then(response => {
         return response.json();
       }).then(data => {
         const filteredEmployees = data.value.filter(e => {
@@ -123,7 +123,7 @@ export default {
       };
 
       // const data = await fetch(`http://people.maresto.ua/ZUP/odata/standard.odata/Catalog_СотрудникиОрганизаций?&$format=json&$filter=Ref_Key eq guid'${id}'`, config)
-      const data = await fetch(`http://192.168.58.106:8080/ZUP/odata/standard.odata/Catalog_СотрудникиОрганизаций?&$format=json&$filter=Ref_Key eq guid'${id}'`, config)
+      const data = await fetch(`http://localhost:8080/ZUP/odata/standard.odata/Catalog_СотрудникиОрганизаций?&$format=json&$filter=Ref_Key eq guid'${id}'`, config)
         .then(response => {
           return response.json();
         })
@@ -162,7 +162,7 @@ export default {
       };
 
       // const data = await fetch(`http://people.maresto.ua/ZUP/odata/standard.odata/Catalog_ФизическиеЛица?&$format=json&$filter=Ref_Key eq guid'${id}'`, config)
-      const data = await fetch(`http://192.168.58.106:8080/ZUP/odata/standard.odata/Catalog_ФизическиеЛица?&$format=json&$filter=Ref_Key eq guid'${id}'`, config)
+      const data = await fetch(`http://localhost:8080/ZUP/odata/standard.odata/Catalog_ФизическиеЛица?&$format=json&$filter=Ref_Key eq guid'${id}'`, config)
         .then(response => {
           return response.json();
         })
@@ -197,7 +197,7 @@ export default {
       };
 
       // await fetch('http://people.maresto.ua/ZUP/odata/standard.odata/Catalog_УчебныеЗаведения?&$format=json', config).then(response => {
-      await fetch('http://192.168.58.106:8080/ZUP/odata/standard.odata/Catalog_УчебныеЗаведения?&$format=json', config).then(response => {
+      await fetch('http://localhost:8080/ZUP/odata/standard.odata/Catalog_УчебныеЗаведения?&$format=json', config).then(response => {
         return response.json();
       }).then(data => {
         const schools = data.value.map(s => {
@@ -227,7 +227,7 @@ export default {
       };
 
       // await fetch('http://people.maresto.ua/ZUP/odata/standard.odata/Catalog_КлассификаторСпециальностейПоОбразованию?&$format=json', config).then(response => {
-      await fetch('http://192.168.58.106:8080/ZUP/odata/standard.odata/Catalog_КлассификаторСпециальностейПоОбразованию?&$format=json', config).then(response => {
+      await fetch('http://localhost:8080/ZUP/odata/standard.odata/Catalog_КлассификаторСпециальностейПоОбразованию?&$format=json', config).then(response => {
         return response.json();
       }).then(data => {
         const spec = data.value.map(s => {
@@ -256,7 +256,7 @@ export default {
       };
 
       // await fetch('http://people.maresto.ua/ZUP/odata/standard.odata/Catalog_ВидыОбразованияФизЛиц?&$format=json', config).then(response => {
-      await fetch('http://192.168.58.106:8080/ZUP/odata/standard.odata/Catalog_ВидыОбразованияФизЛиц?&$format=json', config).then(response => {
+      await fetch('http://localhost:8080/ZUP/odata/standard.odata/Catalog_ВидыОбразованияФизЛиц?&$format=json', config).then(response => {
         return response.json();
       }).then(data => {
         const typeEdu = data.value.map(t => {
@@ -284,7 +284,7 @@ export default {
       };
 
       // const data = await fetch('http://people.maresto.ua/ZUP/odata/standard.odata/InformationRegister_Работники?&$format=json', config).then(response => {
-      const data = await fetch('http://192.168.58.106:8080/ZUP/odata/standard.odata/InformationRegister_Работники?&$format=json', config).then(response => {
+      const data = await fetch('http://localhost:8080/ZUP/odata/standard.odata/InformationRegister_Работники?&$format=json', config).then(response => {
         return response.json();
       })
 
@@ -319,7 +319,7 @@ export default {
       };
 
       // await fetch('http://people.maresto.ua/ZUP/odata/standard.odata/Catalog_ФизическиеЛица?&$format=json', config).then(response => {
-      await fetch('http://192.168.58.106:8080/ZUP/odata/standard.odata/Catalog_ФизическиеЛица?&$format=json', config).then(response => {
+      await fetch('http://localhost:8080/ZUP/odata/standard.odata/Catalog_ФизическиеЛица?&$format=json', config).then(response => {
         return response.json();
       }).then(data => {
         const filteredPersons = data.value.filter(p => {
@@ -357,7 +357,7 @@ export default {
       };
 
       // await fetch('http://people.maresto.ua/ZUP/odata/standard.odata/Catalog_Подразделения?&$format=json', config).then(response => {
-      await fetch('http://192.168.58.106:8080/ZUP/odata/standard.odata/Catalog_Подразделения?&$format=json', config).then(response => {
+      await fetch('http://localhost:8080/ZUP/odata/standard.odata/Catalog_Подразделения?&$format=json', config).then(response => {
         return response.json();
       }).then(data => {
         const units = data.value.map(u => {
@@ -386,7 +386,7 @@ export default {
       };
 
       // await fetch('http://people.maresto.ua/ZUP/odata/standard.odata/Catalog_ДолжностиОрганизаций?&$format=json', config).then(response => {
-      await fetch('http://192.168.58.106:8080/ZUP/odata/standard.odata/Catalog_ДолжностиОрганизаций?&$format=json', config).then(response => {
+      await fetch('http://localhost:8080/ZUP/odata/standard.odata/Catalog_ДолжностиОрганизаций?&$format=json', config).then(response => {
         return response.json();
       }).then(data => {
         const positions = data.value.map(p => {
@@ -415,7 +415,7 @@ export default {
       };
 
       // await fetch(`http://people.maresto.ua/ZUP/odata/standard.odata/Catalog_СотрудникиОрганизаций?&$format=json&$filter=IsFolder eq'true'`, config).then(response => {
-      await fetch(`http://192.168.58.106:8080/ZUP/odata/standard.odata/Catalog_СотрудникиОрганизаций?&$format=json&$filter=IsFolder eq'true'`, config).then(response => {
+      await fetch(`http://localhost:8080/ZUP/odata/standard.odata/Catalog_СотрудникиОрганизаций?&$format=json&$filter=IsFolder eq'true'`, config).then(response => {
         return response.json();
       }).then(data => {
         const workPlaces = data.value.map(wp => {
@@ -443,7 +443,7 @@ export default {
       };
 
       // await fetch('http://people.maresto.ua/ZUP/odata/standard.odata/Catalog_ВидыКонтактнойИнформации?&$format=json', config).then(response => {
-      await fetch('http://192.168.58.106:8080/ZUP/odata/standard.odata/Catalog_ВидыКонтактнойИнформации?&$format=json', config).then(response => {
+      await fetch('http://localhost:8080/ZUP/odata/standard.odata/Catalog_ВидыКонтактнойИнформации?&$format=json', config).then(response => {
         return response.json();
       }).then(data => {
         const typesContact = data.value.map(tc => {
@@ -471,7 +471,7 @@ export default {
       };
 
       // await fetch('http://people.maresto.ua/ZUP/odata/standard.odata/InformationRegister_КонтактнаяИнформация?&$format=json', config).then(response => {
-      await fetch('http://192.168.58.106:8080/ZUP/odata/standard.odata/InformationRegister_КонтактнаяИнформация?&$format=json', config).then(response => {
+      await fetch('http://localhost:8080/ZUP/odata/standard.odata/InformationRegister_КонтактнаяИнформация?&$format=json', config).then(response => {
         return response.json();
       }).then(data => {
         const contacts = data.value.map(c => {
@@ -499,7 +499,7 @@ export default {
       };
 
       // await fetch('http://people.maresto.ua/ZUP/odata/standard.odata/Catalog_СтепениРодстваФизЛиц?&$format=json', config).then(response => {
-      await fetch('http://192.168.58.106:8080/ZUP/odata/standard.odata/Catalog_СтепениРодстваФизЛиц?&$format=json', config).then(response => {
+      await fetch('http://localhost:8080/ZUP/odata/standard.odata/Catalog_СтепениРодстваФизЛиц?&$format=json', config).then(response => {
         return response.json();
       }).then(data => {
         const relDegree = data.value.map(rd => {

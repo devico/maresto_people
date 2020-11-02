@@ -231,7 +231,7 @@ export default {
     this.ovpn_clients = await this.getOVPNClients;
     this.ppp_clients = this.getPPPClients;
     this.duration_work_time = this.calcDurationWorkTime;
-    console.log(this.fillTableVPN)
+    console.log('!!!!!', this.fillTableVPN)
     this.getDataFromMikrotik()
     // this.getVpnUsers()
     // this.getCountConstant();

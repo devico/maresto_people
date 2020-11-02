@@ -43,6 +43,13 @@ const routes = [
     props: true
   },
   {
+    path: "/employeesnow",
+    name: "employeesNow",    
+    meta: {layout: 'admin', auth: true},
+    component: () => import("../views/EmployeesNow.vue"),
+    props: true
+  },
+  {
     path: "/reports",
     name: "reports",
     meta: {layout: 'admin', auth: true},

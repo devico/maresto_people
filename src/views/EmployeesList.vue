@@ -142,9 +142,7 @@ export default {
     };
   },
   async mounted() {
-    console.log('mounted')
     await this.fetchEmployees();
-    console.log('after fetch')
     await this.fetchPersons();
     await this.fetchUnits();
     await this.fetchPositions();

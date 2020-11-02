@@ -6,6 +6,9 @@ export default {
     ppp_clients: JSON.parse(localStorage.getItem('ppp_clients') || '[]'),
     skud_clients: JSON.parse(localStorage.getItem('skud_clients') || '[]'),
     ovpn_clients: JSON.parse(localStorage.getItem('ovpn_clients') || '[]'),
+    active_vpn_users: JSON.parse(localStorage.getItem('active_vpn_users') || '[]'),
+    active_office_users: JSON.parse(localStorage.getItem('active_office_users') || '[]'),
+    
   },
   mutations: {
     updatePPPClients(state, records) {
@@ -19,11 +22,18 @@ export default {
     updateVpnUsersConnection(state, records) {
       state.ovpn_clients = records
       localStorage.setItem('ovpn_clients', JSON.stringify(state.ovpn_clients))
+    },    
+    updateActiveVpnUsers(state, records) {
+      state.active_vpn_users = records
+      localStorage.setItem('active_vpn_users', JSON.stringify(state.active_vpn_users))
+    },    
+    updateSKUDEmployeesToday(state, records) {
+      state.active_office_users = records
+      localStorage.setItem('active_office_users', JSON.stringify(state.active_office_users))
     },
-    
   },
   actions: {
-    async getDataFromMikrotik(ctx) {
+    async fetchActiveVpnUsers(ctx) {
       // fetch('http://localhost:4000/ppp_secret').then(response => {
       //   return response.json();
       // }).then(data => {
@@ -31,15 +41,35 @@ export default {
       //   // ctx.commit('updateDataMikrotik', data)
       // })
 
-      fetch('http://192.168.58.106:4000/ppp_active').then(response => {
+      fetch('http://localhost:4000/ppp_active').then(response => {
         return response.json();
       }).then(data => {
+        const activeVpnUsers = data.map(avu => {
+          return {
+            name: avu.name,
+            service: avu.service,
+            uptime: avu.uptime
+          }
+        })
+        ctx.commit('updateActiveVpnUsers', activeVpnUsers)
+        // $$path: "/ppp/active"
+        // address: "10.58.1.9"
+        // callerId: "46.150.102.210"
+        // encoding: "MPPE128 stateless"
+        // id: "*8000000A"
+        // limitBytesIn: 0
+        // limitBytesOut: 0
+        // name: "donetsk93_ppp"
+        // radius: false
+        // service: "pptp"
+        // sessionId: "0x8180000A"
+        // uptime: "4d19h35m15s"
         console.log("Active: ", data)
         // ctx.commit('updateDataMikrotik', data)
       })
     },
     async getVpnUsers(ctx) {
-      const res = await fetch('http://192.168.58.106:4000/api/vpnusers')
+      const res = await fetch('http://localhost:4000/api/vpnusers')
       const data = await res.json();
       const datetime = "2020-09"
   
@@ -115,7 +145,7 @@ export default {
         
         ctx.commit('updatePPPClients', data)
   
-      },
+    },
     async fetchSKUDClients(ctx) {
       const doc = new GoogleSpreadsheet('1pg5tGaFeR1RUMTSRHBpnq248-zbFIK5CTHGEvveX7v0');
       // https://docs.google.com/spreadsheets/d/1pg5tGaFeR1RUMTSRHBpnq248-zbFIK5CTHGEvveX7v0/edit?ts=5f97df8c#gid=1101354038
@@ -172,6 +202,35 @@ export default {
       })
       ctx.commit('updateSKUDClients', data)
 
+    },
+    async fetchSKUDCurrentDay(ctx) {
+      const doc = new GoogleSpreadsheet('1pg5tGaFeR1RUMTSRHBpnq248-zbFIK5CTHGEvveX7v0');
+      // https://docs.google.com/spreadsheets/d/1pg5tGaFeR1RUMTSRHBpnq248-zbFIK5CTHGEvveX7v0/edit?ts=5f97df8c#gid=1101354038
+      await doc.useServiceAccountAuth({
+        client_email: client_email,
+        private_key: private_key,
+      });
+
+      await doc.loadInfo();
+      // console.log(doc.title);
+
+      // const sheet = doc.sheetsByIndex[0]; // or use doc.sheetsById[id]
+      const sheet = doc.sheetsByTitle['current']
+      
+      const rows = await sheet.getRows();
+      
+      const accounts = rows.filter(r => {
+        return r.total !== "0:00"
+      })
+      const data = accounts.map(a => {
+        return {
+          fullName: a.full_name,
+          personal_number: a.position,          
+          total: a.total
+        }
+      })
+      ctx.commit('updateSKUDEmployeesToday', data)
+
     }
   },
   getters: {
@@ -184,5 +243,12 @@ export default {
     getOVPNClients(state) {
       return state.ovpn_clients
     },
+    getActiveVpnUsers(state) {
+      return state.active_vpn_users
+    },
+    getActiveOfficeUsers(state) {
+      return state.active_office_users
+    },
+    
   }
 }
