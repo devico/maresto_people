@@ -204,8 +204,7 @@ export default {
 
     },
     async fetchSKUDCurrentDay(ctx) {
-      const doc = new GoogleSpreadsheet('1pg5tGaFeR1RUMTSRHBpnq248-zbFIK5CTHGEvveX7v0');
-      // https://docs.google.com/spreadsheets/d/1pg5tGaFeR1RUMTSRHBpnq248-zbFIK5CTHGEvveX7v0/edit?ts=5f97df8c#gid=1101354038
+      const doc = new GoogleSpreadsheet('1gnAjRarMOdZ3dZC0K-YQVIxTwpJSZQ-4AcZLo6SH04M');
       await doc.useServiceAccountAuth({
         client_email: client_email,
         private_key: private_key,
@@ -215,18 +214,16 @@ export default {
       // console.log(doc.title);
 
       // const sheet = doc.sheetsByIndex[0]; // or use doc.sheetsById[id]
-      const sheet = doc.sheetsByTitle['current']
+      const sheet = doc.sheetsByTitle['02.11.2020']
       
-      const rows = await sheet.getRows();
+      const rows = await sheet.getRows();     
       
-      const accounts = rows.filter(r => {
-        return r.total !== "0:00"
-      })
-      const data = accounts.map(a => {
+      const data = rows.map(a => {
         return {
           fullName: a.full_name,
-          personal_number: a.position,          
-          total: a.total
+          personal_number: a.personal_number,          
+          date: a.date,
+          coming: a.coming
         }
       })
       ctx.commit('updateSKUDEmployeesToday', data)

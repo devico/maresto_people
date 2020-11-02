@@ -477,6 +477,7 @@ export default {
         const contacts = data.value.map(c => {
           return {
             personKey: c.Объект,
+            kind: c.Вид,
             type: c.Тип,
             description: c.Представление
           }

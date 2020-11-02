@@ -22,13 +22,13 @@
             class="form-control mb-5"
             placeholder="Password"
           />
-          <p>
+          <!-- Password<p>
             Dont have an account??<router-link
               to="/register"
             >
               click here
             </router-link>
-          </p>
+          </p> -->
           <!-- Sign in button -->
           <center>
             <button

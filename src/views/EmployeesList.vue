@@ -203,19 +203,42 @@ export default {
         return p_id == c.personKey
       });
       const phone = cnts.filter(c => {
-        return c.type == 'Телефон'
+        const kind = this.typesContact.filter(k => {
+          return c.kind == k.refKey
+        })
+
+        return kind[0].description == 'Мобильный корпоративный телефон'
       })
+      
       if (phone[0] == undefined) {
-        return "Нет номера";
+        const phone1 = cnts.filter(c => {
+          const kind = this.typesContact.filter(k => {
+            return c.kind == k.refKey
+          })
+          
+          return kind[0].description == 'Личный мобильный телефон'
+        })
+        if (phone1[0] !== undefined) {
+          return phone1[0].description
+        } else {
+          return "Нет номера";
+        }
+      } else {
+        return phone[0].description
       }
-      return phone[0].description      
+      
     },
     getEmail(p_id) {
       const cnts = this.contacts.filter((c) => {
         return p_id == c.personKey
       });
+      
       const email = cnts.filter(c => {
-        return c.type == 'АдресЭлектроннойПочты'
+        const kind = this.typesContact.filter(k => {
+          return c.kind == k.refKey
+        })
+        // console.log('KN: ', kind[0].description)
+        return kind[0].description == 'Корпоративная электронная почта'
       })
       if (email[0] == undefined) {
         return "Нет ящика";

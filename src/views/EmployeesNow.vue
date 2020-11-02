@@ -134,7 +134,7 @@
                 <v-list-item-subtitle
                   >{{user.fullName }}</v-list-item-subtitle
                 >
-                <v-list-item-title> В офисе  {{user.total}} часов</v-list-item-title>
+                <v-list-item-title>В офисе</v-list-item-title>
               </v-list-item-content>
               
             </v-list-item>
@@ -172,6 +172,7 @@ export default {
     this.ppp_clients = this.getPPPClients;
     this.active_vpn_users = this.getActiveVpnUsers;
     this.active_office_users = this.getActiveOfficeUsers;
+    console.log('AU: ', this.active_office_users)
   },
   methods: {
     ...mapActions([
