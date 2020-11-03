@@ -7,7 +7,7 @@ export default {
     skud_clients: JSON.parse(localStorage.getItem('skud_clients') || '[]'),
     ovpn_clients: JSON.parse(localStorage.getItem('ovpn_clients') || '[]'),
     active_vpn_users: JSON.parse(localStorage.getItem('active_vpn_users') || '[]'),
-    active_office_users: JSON.parse(localStorage.getItem('active_office_users') || '[]'),
+    active_office_users: [],
     
   },
   mutations: {
@@ -28,8 +28,7 @@ export default {
       localStorage.setItem('active_vpn_users', JSON.stringify(state.active_vpn_users))
     },    
     updateSKUDEmployeesToday(state, records) {
-      state.active_office_users = records
-      localStorage.setItem('active_office_users', JSON.stringify(state.active_office_users))
+      state.active_office_users = records      
     },
   },
   actions: {
@@ -204,7 +203,7 @@ export default {
 
     },
     async fetchSKUDCurrentDay(ctx) {
-      const doc = new GoogleSpreadsheet('1gnAjRarMOdZ3dZC0K-YQVIxTwpJSZQ-4AcZLo6SH04M');
+      const doc = new GoogleSpreadsheet('1t-Rx1AM1TZyrzx2lFKiH5qEE7Rf8ASdwD2xYhIqgqWI');
       await doc.useServiceAccountAuth({
         client_email: client_email,
         private_key: private_key,
@@ -212,22 +211,48 @@ export default {
 
       await doc.loadInfo();
       // console.log(doc.title);
+      var today = new Date();
+      var dd = today.getDate();
+
+      var mm = today.getMonth()+1; 
+      var yyyy = today.getFullYear();
+      if(dd<10) 
+      {
+          dd='0'+dd;
+      } 
+
+      if(mm<10) 
+      {
+          mm='0'+mm;
+      } 
+      today = dd+'.'+mm+'.'+yyyy
+      console.log(today)
+      // today = mm+'/'+dd+'/'+yyyy;
+      // console.log(today);
+      // today = dd+'-'+mm+'-'+yyyy;
+      // console.log(today);
+      // today = dd+'/'+mm+'/'+yyyy;
+      // console.log(today);
 
       // const sheet = doc.sheetsByIndex[0]; // or use doc.sheetsById[id]
-      const sheet = doc.sheetsByTitle['02.11.2020']
+      // const sheet = doc.sheetsByTitle['02.11.2020']
+      const sheet = doc.sheetsByTitle[`${today}`]
+      if (sheet._cells.length !== 0) {
+        console.log(sheet._cells.length !== 0)
+        const rows = await sheet.getRows();     
       
-      const rows = await sheet.getRows();     
-      
-      const data = rows.map(a => {
-        return {
-          fullName: a.full_name,
-          personal_number: a.personal_number,          
-          date: a.date,
-          coming: a.coming
-        }
-      })
-      ctx.commit('updateSKUDEmployeesToday', data)
-
+        const data = rows.map(a => {
+          return {
+            fullName: a.full_name,
+            personal_number: a.personal_number,          
+            date: a.date,
+            coming: a.coming
+          }
+        })
+        ctx.commit('updateSKUDEmployeesToday', data)
+      }
+    
+      // console.log('SH ', sheet._cells)
     }
   },
   getters: {

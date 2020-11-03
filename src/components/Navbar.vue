@@ -63,7 +63,7 @@ export default {
         { title: "Отчеты", icon: mdiFileChart, url: "/reports" },
         { title: "Табель", icon: mdiFileChart, url: "/tablesheet" },
         { title: "PPP", icon: mdiFileChart, url: "/ppp" },
-        { title: "Сотрудники сегодня", icon: mdiFileChart, url: "/employeesnow" },
+        { title: "Cегодня", icon: mdiFileChart, url: "/employeesnow" },
       ],
       mdiAccount: mdiAccount,
     };
