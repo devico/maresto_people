@@ -120,11 +120,26 @@
           </div>
           <div v-if="workplace === 'office' && active_office_users !== 0">
             <v-list-item v-for="(user, idx) in active_office_users" :key="idx">
-              <v-list-item-content>
-                <v-list-item-subtitle>{{ user.fullName }}</v-list-item-subtitle>
-                <v-list-item-title>В офисе</v-list-item-title>
-              </v-list-item-content>
+              <v-flex>
+                <v-card class="ma-5 mt-1" elevation="3">
+                  <v-list>
+                    <v-list-item>
+                      <v-list-item-content>
+                        <v-list-item-title class="indigo--text"
+                          ><h5>{{ user.fullName }}</h5></v-list-item-title
+                        >
+                        <v-list-item-title
+                          >В офисе с {{ user.coming }}</v-list-item-title
+                        >
+                      </v-list-item-content>
+                      
+                    </v-list-item>
+                  </v-list>
+                </v-card>
+              </v-flex>
             </v-list-item>
+
+
           </div>
           <div v-if="workplace === 'office' && active_office_users == 0">
             <v-sheet color="white" align="center"
