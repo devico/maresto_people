@@ -2,7 +2,7 @@
   <v-app>
     <v-container pa-0>
       <v-flex>
-        <v-list class="mt-5">
+        <v-list class="mt-5 mb-5">
           <v-list-item>
             <v-list-item-title class="dicyan--text text--darken-1 display-1">
               Рабочее место сотрудника {{ getCurrentDay }}
@@ -22,9 +22,9 @@
                 <v-list two-line subheader class="ml-n8">
                   <v-list-item>
                     <v-list-item-content>
-                      <v-list-item-subtitle>В офисе</v-list-item-subtitle>
+                      <v-list-item-subtitle>Всего / Сейчас в офисе</v-list-item-subtitle>
                       <v-list-item-title class="display-1 text--primary"
-                        >{{ employeesCount.length }} /
+                        >88 /
                         {{ active_office_users.length }}</v-list-item-title
                       >
                     </v-list-item-content>
@@ -42,9 +42,9 @@
                 <v-list two-line subheader class="ml-n8">
                   <v-list-item>
                     <v-list-item-content>
-                      <v-list-item-subtitle>На удаленке</v-list-item-subtitle>
+                      <v-list-item-subtitle>С доступом / Активных</v-list-item-subtitle>
                       <v-list-item-title class="display-1 text--primary"
-                        >{{ employeesCount.length }} /
+                        >{{ getCountPermissionRemote }} /
                         {{ getVpnEmployes.length }}</v-list-item-title
                       >
                     </v-list-item-content>
@@ -314,6 +314,13 @@ export default {
       //console.log("AVU: ", avu);
       return avu.sort();
     },
+    getCountPermissionRemote() {
+      const pcs = this.ppp_clients.filter((p) => {
+        return p.status == 'постоянный' || p.status == 'временный' 
+      });
+      console.log("RMT: ", pcs.length)
+      return pcs.length
+    }
   },
 };
 </script>
