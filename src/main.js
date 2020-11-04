@@ -4,6 +4,7 @@ import router from "./router";
 import axios from "axios";
 import store from './store'
 import "bootstrap/dist/css/bootstrap.css";
+import Loader from './components/app/Loader'
 import '@/plugins/apexcharts'
 import vuetify from './plugins/vuetify';
 
@@ -14,6 +15,9 @@ const base = axios.create({
 
 Vue.prototype.$http = base;
 Vue.config.productionTip = false;
+
+Vue.component('Loader', Loader)
+
 new Vue({
   router,
   store,

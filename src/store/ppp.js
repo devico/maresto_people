@@ -227,52 +227,24 @@ export default {
       console.log(today)
 
       await doc.loadInfo();
-      console.log(doc.title);
-      
-      // today = mm+'/'+dd+'/'+yyyy;
-      // console.log(today);
-      // today = dd+'-'+mm+'-'+yyyy;
-      // console.log(today);
-      // today = dd+'/'+mm+'/'+yyyy;
-      // console.log(today);
 
       // const sheet = doc.sheetsByIndex[0]; // or use doc.sheetsById[id]
       // const sheet = doc.sheetsByTitle['02.11.2020']
       // const sheet = doc.sheetsByTitle[`${today}`]
-      // const sheet = doc.sheetsByTitle['02.11.2020']
-      // const sheet = doc.sheetsByTitle['03.11.2020']
-      // console.log('SH', sheet._cells)
-      // if (sheet._cells.length !== 0) {
-      //   console.log(sheet._cells.length !== 0)
-      //   const rows = await sheet.getRows();     
-      
-      //   const data = rows.map(a => {
-      //     return {
-      //       fullName: a.full_name,
-      //       personal_number: a.personal_number,          
-      //       date: a.date,
-      //       coming: a.coming
-      //     }
-      //   })
-        
-      //   ctx.commit('updateSKUDEmployeesToday', data)
-      // }
-      // console.log(sheet._cells.length !== 0)
-        const sheet = doc.sheetsByTitle[`${today}`]
-        const rows = await sheet.getRows();     
-      
-        const data = rows.map(a => {
-          return {
-            fullName: a.full_name,
-            personal_number: a.personal_number,          
-            date: a.date,
-            coming: a.coming
-          }
-        })
-        
-        ctx.commit('updateSKUDEmployeesToday', data)
+              
+      const sheet = doc.sheetsByTitle[`${today}`]
+      const rows = await sheet.getRows();     
     
-      // console.log('SH ', sheet._cells)
+      const data = rows.map(a => {
+        return {
+          fullName: a.full_name,
+          personal_number: a.personal_number,          
+          date: a.date,
+          coming: a.coming
+        }
+      })
+      
+      ctx.commit('updateSKUDEmployeesToday', data)
     }
   },
   getters: {

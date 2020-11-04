@@ -13,27 +13,7 @@
 
       <v-flex>
         <v-row no-gutters>
-          <v-col cols="12" md="4">
-            <v-row>
-              <v-col cols="12" md="2">
-                <v-card height="80px" width="10px" color="green"></v-card>
-              </v-col>
-              <v-col cols="12" md="10">
-                <v-list two-line subheader class="ml-n8">
-                  <v-list-item>
-                    <v-list-item-content>
-                      <v-list-item-subtitle>Всего / Сейчас в офисе</v-list-item-subtitle>
-                      <v-list-item-title class="display-1 text--primary"
-                        >88 /
-                        {{ active_office_users.length }}</v-list-item-title
-                      >
-                    </v-list-item-content>
-                  </v-list-item>
-                </v-list>
-              </v-col>
-            </v-row>
-          </v-col>
-          <v-col cols="12" md="4">
+          <v-col cols="12" md="3">
             <v-row>
               <v-col cols="12" md="2">
                 <v-card height="80px" width="10px" color="cyan"></v-card>
@@ -42,10 +22,12 @@
                 <v-list two-line subheader class="ml-n8">
                   <v-list-item>
                     <v-list-item-content>
-                      <v-list-item-subtitle>С доступом / Активных</v-list-item-subtitle>
+                      <v-list-item-subtitle
+                        >Всего офисных сотрудника</v-list-item-subtitle
+                      >
                       <v-list-item-title class="display-1 text--primary"
-                        >{{ getCountPermissionRemote }} /
-                        {{ getVpnEmployes.length }}</v-list-item-title
+                        >88
+                        </v-list-item-title
                       >
                     </v-list-item-content>
                   </v-list-item>
@@ -53,7 +35,50 @@
               </v-col>
             </v-row>
           </v-col>
-          <v-col cols="12" md="4">
+          <v-col cols="12" md="3">
+            <v-row>
+              <v-col cols="12" md="2">
+                <v-card height="80px" width="10px" color="green"></v-card>
+              </v-col>
+              <v-col cols="12" md="10">
+                <v-list two-line subheader class="ml-n8">
+                  <v-list-item>
+                    <v-list-item-content>
+                      <v-list-item-subtitle
+                        >Сейчас в офисе</v-list-item-subtitle
+                      >
+                      <v-list-item-title class="display-1 text--primary"
+                        >{{ active_office_users.length }} 
+                        </v-list-item-title
+                      >
+                    </v-list-item-content>
+                  </v-list-item>
+                </v-list>
+              </v-col>
+            </v-row>
+          </v-col>
+          <v-col cols="12" md="3">
+            <v-row>
+              <v-col cols="12" md="2">
+                <v-card height="80px" width="10px" color="indigo"></v-card>
+              </v-col>
+              <v-col cols="12" md="10">
+                <v-list two-line subheader class="ml-n8">
+                  <v-list-item>
+                    <v-list-item-content>
+                      <v-list-item-subtitle
+                        >Удаленный доступ разрешен</v-list-item-subtitle
+                      >
+                      <v-list-item-title class="display-1 text--primary"
+                        >{{ getCountPermissionRemote }}</v-list-item-title
+                      >
+                    </v-list-item-content>
+                  </v-list-item>
+                </v-list>
+              </v-col>
+            </v-row>
+          </v-col>
+          <v-col cols="12" md="3">
             <v-row>
               <v-col cols="12" md="2">
                 <v-card height="80px" width="10px" color="yellow"></v-card>
@@ -63,10 +88,10 @@
                   <v-list-item>
                     <v-list-item-content>
                       <v-list-item-subtitle
-                        >Временный удаленный доступ</v-list-item-subtitle
+                        >Активные на удаленке</v-list-item-subtitle
                       >
                       <v-list-item-title class="display-1 text--primary"
-                        >2</v-list-item-title
+                        >{{ getVpnEmployes.length }}</v-list-item-title
                       >
                     </v-list-item-content>
                   </v-list-item>
@@ -89,64 +114,71 @@
     <v-container pa-0 fluid>
       <v-row>
         <v-col cols="12" md12>
-          <div v-if="workplace === 'remote'">
-            <v-list-item v-for="(user, idx) in getVpnEmployes" :key="idx">
-              <v-flex>
-                <v-card class="ma-5 mt-1" elevation="3">
-                  <v-list>
-                    <v-list-item>
-                      <v-list-item-content>
-                        <v-list-item-title class="indigo--text"
-                          ><h5>{{ user.full_name }}</h5></v-list-item-title
-                        >
-                        <v-list-item-title
-                          >Основание: {{ user.based_on }}</v-list-item-title
-                        >
-                      </v-list-item-content>
-                      <v-list-item-content align="right">
-                        <v-list-item-title
-                          >Тип подключения:
-                          {{ user.service }}</v-list-item-title
-                        >
-                        <v-list-item-title
-                          >Время работы: {{ user.uptime }}</v-list-item-title
-                        >
-                      </v-list-item-content>
-                    </v-list-item>
-                  </v-list>
-                </v-card>
-              </v-flex>
-            </v-list-item>
-          </div>
-          <div v-if="workplace === 'office' && active_office_users !== 0">
-            <v-list-item v-for="(user, idx) in active_office_users" :key="idx">
-              <v-flex>
-                <v-card class="ma-5 mt-1" elevation="3">
-                  <v-list>
-                    <v-list-item>
-                      <v-list-item-content>
-                        <v-list-item-title class="indigo--text"
-                          ><h5>{{ user.fullName }}</h5></v-list-item-title
-                        >
-                        <v-list-item-title
-                          >В офисе с {{ user.coming }}</v-list-item-title
-                        >
-                      </v-list-item-content>
-                      
-                    </v-list-item>
-                  </v-list>
-                </v-card>
-              </v-flex>
-            </v-list-item>
-
-
-          </div>
-          <div v-if="workplace === 'office' && active_office_users == 0">
-            <v-sheet color="white" align="center"
-              ><h5 class="mx-auto mt-10 mb-10">Данные еще не загружены</h5></v-sheet
-            >
-          </div>
-          <v-divider></v-divider>
+          <section>
+            <Loader v-if="loading" />
+            <div v-else>
+              <div v-if="workplace === 'remote'">
+                <v-list-item v-for="(user, idx) in getVpnEmployes" :key="idx">
+                  <v-flex>
+                    <v-card class="ma-5 mt-1" elevation="3">
+                      <v-list>
+                        <v-list-item>
+                          <v-list-item-content>
+                            <v-list-item-title class="indigo--text"
+                              ><h5>{{ user.full_name }}</h5></v-list-item-title
+                            >
+                            <v-list-item-title
+                              >Основание: {{ user.based_on }}</v-list-item-title
+                            >
+                          </v-list-item-content>
+                          <v-list-item-content align="right">
+                            <v-list-item-title
+                              >Тип подключения:
+                              {{ user.service }}</v-list-item-title
+                            >
+                            <v-list-item-title
+                              >Время работы:
+                              {{ user.uptime }}</v-list-item-title
+                            >
+                          </v-list-item-content>
+                        </v-list-item>
+                      </v-list>
+                    </v-card>
+                  </v-flex>
+                </v-list-item>
+              </div>
+              <div v-if="workplace === 'office' && active_office_users !== 0">
+                <v-list-item
+                  v-for="(user, idx) in active_office_users"
+                  :key="idx"
+                >
+                  <v-flex>
+                    <v-card class="ma-5 mt-1" elevation="3">
+                      <v-list>
+                        <v-list-item>
+                          <v-list-item-content>
+                            <v-list-item-title class="indigo--text"
+                              ><h5>{{ user.fullName }}</h5></v-list-item-title
+                            >
+                            <v-list-item-title
+                              >В офисе с {{ user.coming }}</v-list-item-title
+                            >
+                          </v-list-item-content>
+                        </v-list-item>
+                      </v-list>
+                    </v-card>
+                  </v-flex>
+                </v-list-item>
+              </div>
+              <div v-if="workplace === 'office' && active_office_users == 0">
+                <v-sheet color="white" align="center"
+                  ><h5 class="mx-auto mt-10 mb-10">
+                    Данные еще не загружены
+                  </h5></v-sheet
+                >
+              </div>
+            </div>
+          </section>
         </v-col>
       </v-row>
     </v-container>
@@ -158,6 +190,7 @@ import { mapGetters, mapActions } from "vuex";
 // const RouterOSClient = require("routeros-client").RouterOSClient;
 export default {
   data: () => ({
+    loading: true,
     skud_clients: [],
     ppp_clients: [],
     ovpn_clients: [],
@@ -190,9 +223,10 @@ export default {
     this.active_vpn_users = this.getActiveVpnUsers;
     this.active_office_users = this.getActiveOfficeUsers;
     this.getCountEmployeeWithEmail();
+    this.loading = false
 
     // this.getEmployeesRemote
-    // console.log('AU: ', this.getEmployeesRemote)
+    
   },
   methods: {
     ...mapActions([
@@ -262,7 +296,7 @@ export default {
         });
         return avp[0];
       });
-      // console.log('AVS: ', avus)
+      
       return avus;
     },
     getCurrentDay() {
@@ -295,10 +329,9 @@ export default {
       const vua = vu.filter((ve) => {
         return ve !== undefined;
       });
-      // console.log('VUA: ', vua)
+      
       const vuae = vua.map((v) => {
         const emps = this.employees.filter((e) => {
-          //console.log('E: ', e)
           return v.personal_number == parseInt(e.code, 10);
         });
         if (emps[0] !== undefined) {
@@ -311,16 +344,16 @@ export default {
       const avu = vuae.filter((ve) => {
         return ve !== undefined;
       });
-      //console.log("AVU: ", avu);
+
       return avu.sort();
     },
     getCountPermissionRemote() {
       const pcs = this.ppp_clients.filter((p) => {
-        return p.status == 'постоянный' || p.status == 'временный' 
+        return p.status == "постоянный" || p.status == "временный";
       });
-      console.log("RMT: ", pcs.length)
-      return pcs.length
-    }
+      
+      return pcs.length;
+    },
   },
 };
 </script>
