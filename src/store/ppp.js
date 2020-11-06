@@ -70,7 +70,7 @@ export default {
     async getVpnUsers(ctx) {
       const res = await fetch('http://localhost:4000/api/vpnusers')
       const data = await res.json();
-      const datetime = "2020-09"
+      const datetime = "2020-10"
   
       const uLogin =  data.map(u => {
         return u.login
@@ -81,30 +81,38 @@ export default {
       // console.log('UL: ', usersLogin)
 
       const vpnConnectionsByMonth = usersLogin.map(ul => {
+
         const conns = data.filter(c => {
+
           if (ul == c.login) {
             if (c.timestamp.startsWith(datetime) && c.action == "DISCONNECTED") {
+
               return {
+                login: c.login,
                 timestamp: c.timestamp,
                 uptime: c.uptime
               }
             }
           }          
         })
-
-        return {
-          login: ul,
-          connections: conns
-        }
-        
-        
+               
+        return conns
       })
+
+      const enters = []
+      vpnConnectionsByMonth.map(c => {
+        c.map(i => {
+          enters.push(i)
+        }) 
+      })
+
+      
       // const vpnConnectionsByMonth = data.filter(c => {
       //   return (c.timestamp.startsWith(datetime) && c.action == "DISCONNECTED")
       // })
-      // console.log('Ietm: ', vpnConnectionsByMonth)
+      // console.log('I: ', vpnConnectionsByMonth)
       
-      ctx.commit('updateVpnUsersConnection', vpnConnectionsByMonth)
+      ctx.commit('updateVpnUsersConnection', enters)
       
     },
     async fetchPPPClients(ctx) {
@@ -157,7 +165,7 @@ export default {
       // console.log(doc.title);
 
       // const sheet = doc.sheetsByIndex[0]; // or use doc.sheetsById[id]
-      const sheet = doc.sheetsByTitle['DATA']
+      const sheet = doc.sheetsByTitle['10_2020']
       const rows = await sheet.getRows();
       const data = rows.map(r => {
         return {
