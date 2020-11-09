@@ -5,7 +5,7 @@
         <v-list class="mt-5 mb-5">
           <v-list-item>
             <v-list-item-title class="dicyan--text text--darken-1 display-1">
-              Рабочее место сотрудника {{ getCurrentDay }}
+              Места работы сотрудников сегодня {{ getCurrentDay }}
             </v-list-item-title>
           </v-list-item>
         </v-list>
