@@ -228,7 +228,7 @@ export default {
           year: this.select_year,
         });
         this.complete_clients = this.fillDataForGS();
-
+        // console.log('CC: ', this.complete_clients)
         // await this.setEmployeesToTabel({data: this.complete_clients, month: this.select_month, year: this.select_year})
       }
     },
@@ -367,12 +367,24 @@ export default {
       return this.toHHMM(total_duration);
     },
     checkRemote(skud, id, day) {
+      const holidays = [
+          "2020-10-03",
+          "2020-10-04",
+          "2020-10-10",
+          "2020-10-11",
+          "2020-10-14",
+          "2020-10-17",
+          "2020-10-18",
+          "2020-10-24",
+          "2020-10-25",
+          "2020-10-31",
+        ];
       if (skud == 0) {
         let value = 0;
         const days_remote_id = this.clear_vpn_clients.filter((v) => {
-          return v.personal_number == id;
+          return v.personal_number == id && !holidays.includes(v.date)
         });
-
+        
         const df = days_remote_id.filter((d) => {
           return d.date == day;
         });
@@ -385,9 +397,14 @@ export default {
             value = 0;
           }
         }
-        return `#${value}`;
+
+        if (value == 0) {
+          return `^${value}`
+        } else {
+          return `#${value}`
+        }        
       } else {
-        return `*${skud}`;
+        return `*${skud}`
       }
     },
     fillDataForGS() {
@@ -606,7 +623,23 @@ export default {
       }
       return days.length
     },
-    calcDaysOnRemote(empl){
+    calcDaysOnRemote(empl){      
+      const days = []
+      for (const [key, value] of Object.entries(empl)) {
+        if (`${key}`.startsWith("day") && `${value}`.startsWith("#")) {
+          // console.log('Days: ', days)
+          days.push(`${value.substring(1)} на удаленке`);
+        }       
+      }
+      
+      // if ((days.length - holidays.length) < 0) {
+      //   return 0
+      // } else {
+      return days.length
+      //}
+      
+    },
+    calcOtherDays(empl){
       const holidays = [
           "day3",
           "day4",
@@ -621,21 +654,19 @@ export default {
         ];
       const days = []
       for (const [key, value] of Object.entries(empl)) {
-        if (`${key}`.startsWith("day") && `${value}`.startsWith("#")) {
+        if (`${key}`.startsWith("day") && `${value}`.startsWith("^")) {
           // console.log('Days: ', days)
-          days.push(`${value.substring(1)} на удаленке`);
+          days.push(`${value.substring(1)} другое`);
         }       
       }
-      
-      if ((days.length - holidays.length) < 0) {
+      if ((days.length - holidays.length) < 0 ) {
         return 0
       } else {
         return days.length - holidays.length
       }
       
-    },
-    calcOtherDays(empl){
-      return this.calcAllDays - this.calcDaysInOffice(empl) - this.calcDaysOnRemote(empl)      
+      
+      
     },
   },
   computed: {
