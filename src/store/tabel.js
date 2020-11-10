@@ -5,7 +5,7 @@ export default {
   state: {
         
   },
-  mutations: {
+  mutations: {   
     
   },
   actions: {
@@ -94,7 +94,62 @@ export default {
         // })
         
         // ctx.commit('updateSKUDEmployeesToday', data)
-      }
+    },
+    async fetchTabelFromGS(ctx, data) {
+        const doc = new GoogleSpreadsheet('1SENJfrbUtiSj2d9zz-xQSwKZ7lscD1T322t4hsyk-OI');
+        await doc.useServiceAccountAuth({
+          client_email: client_email,
+          private_key: private_key,
+        });
+  
+        await doc.loadInfo();
+                  
+        const sheet = doc.sheetsByTitle['10_2020']
+        
+        const rows = await sheet.getRows();
+        
+        // console.log('RW', rows)
+        const data_rows = rows.map((a, i) => {
+          return {
+            'num': i+1,
+            'personal_number': a.personal_number, 
+            'full_name': a.full_name,
+            day1: a["1"],
+            day2: a["2"],
+            day3: a["3"],
+            day4: a["4"],
+            day5: a["5"],
+            day6: a["6"],
+            day7: a["7"],
+            day8: a["8"],
+            day9: a["9"],
+            day10: a["10"],
+            day11: a["11"],
+            day12: a["12"],
+            day13: a["13"],
+            day14: a["14"],
+            day15: a["15"],
+            day16: a["16"],
+            day17: a["17"],
+            day18: a["18"],
+            day19: a["19"],
+            day20: a["20"],
+            day21: a["21"],
+            day22: a["22"],
+            day23: a["23"],
+            day24: a["24"],
+            day25: a["25"],
+            day26: a["26"],
+            day27: a["27"],
+            day28: a["28"],
+            day29: a["29"],
+            day30: a["30"],
+            day31: a["31"],
+          }
+        })
+        return data_rows
+        // ctx.commit('updateTabelFromGS', data)
+    },
   },
   getters: {
        

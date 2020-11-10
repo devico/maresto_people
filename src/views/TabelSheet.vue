@@ -57,28 +57,14 @@
         </v-container>
       </v-flex>
     </v-layout>
-    <v-layout row>
-      <!-- <v-flex>
-                    <v-card class="ma-5 mt-1" elevation="3">
-                      <v-list>
-                        <v-list-item>
-                          <v-list-item-content>
-                            <v-list-item-title class="indigo--text"
-                              ><h5>1</h5></v-list-item-title
-                            >
-                            <v-list-item-title
-                              >2</v-list-item-title
-                            >
-                          </v-list-item-content>
-                        </v-list-item>
-                      </v-list>
-                    </v-card>
-                  </v-flex> -->
+    <Loader v-if="loading" />
+    <v-layout v-else row>
+      
       <v-flex md12 align-end>
         <div class="ma-5 mt-1" elevation="1">
           <v-expansion-panels v-model="panel" multiple>
             <v-expansion-panel
-              v-for="(item, i) in complete_clients"
+              v-for="(item, i) in gsRows"
               :key="i"
               class="ma-5 mt-1"
               elevation="1"
@@ -170,6 +156,7 @@ export default {
     TabelItemCalendar,
   },
   data: () => ({
+    loading: true,
     panel: [],
     items: 5,
     valid: false,
@@ -199,6 +186,7 @@ export default {
     vpn_clients: [],
     clear_vpn_clients: [],
     complete_clients: [],
+    gsRows: []
   }),
   async mounted() {
     await this.fetchEmployees();
@@ -209,6 +197,9 @@ export default {
     this.ppp_clients = this.getPPPClients;
     this.skud_clients = await this.getSKUDClients;
     this.ovpn_clients = await this.getOVPNClients;
+    this.gsRows = await this.fetchTabelFromGS()
+    // console.log('GR: ', this.gsRows)
+    this.loading = false
   },
   methods: {
     ...mapActions([
@@ -217,6 +208,7 @@ export default {
       "setEmployeesToTabel",
       "getVpnUsers",
       "fetchPPPClients",
+      "fetchTabelFromGS",
     ]),
     async fillGS() {
       if (this.$refs.form.validate()) {
