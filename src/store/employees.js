@@ -14,6 +14,7 @@ export default {
     specialities: JSON.parse(localStorage.getItem('specialities') || '[]'),
     schools: JSON.parse(localStorage.getItem('schools') || '[]'),
     relationDegree: JSON.parse(localStorage.getItem('relationDegree') || '[]'),
+    dismissed: JSON.parse(localStorage.getItem('dismissed') || '[]'),    
   },
   mutations: {
     updateEmployees(state, records) {
@@ -63,6 +64,10 @@ export default {
     updateRelationDegree(state, data) {
       state.relationDegree = data
       localStorage.setItem('relationDegree', JSON.stringify(state.relationDegree))
+    },    
+    updateDismissed(state, data) {
+      state.dismissed = data
+      localStorage.setItem('dismissed', JSON.stringify(state.dismissed))
     },
   },
   actions: {
@@ -485,6 +490,36 @@ export default {
         ctx.commit('updateContacts', contacts)
       })
     },
+    async fetchDismissed(ctx) {
+      const username = 'Дмитраков С.Н.';
+      const password = '340340340';
+      const config = {
+        method: "GET",
+        headers: {
+          'Access-Control-Allow-Origin': '*',
+          "content-type": "application/json",
+          "Authorization": `Basic ${Base64.encode(username + ":" + password)}`,
+        },
+        withCredentials: true,
+        credentials: 'same-origin',
+      };
+
+      // await fetch('http://people.maresto.ua/ZUP/odata/standard.odata/InformationRegister_КонтактнаяИнформация?&$format=json', config).then(response => {
+      await fetch('http://localhost:8080/ZUP/odata/standard.odata/Document_Увольнение?&$format=json', config).then(response => {
+        return response.json();
+      }).then(data => {
+        
+        const workers = data.value.map(d => {
+           return d.Работники
+        })
+        const dismiss = workers.map(w => {
+          return w[0].Сотрудник_Key
+        })
+        // console.log('DSM: ', dismiss)
+        ctx.commit('updateDismissed', dismiss)
+
+      })
+    },
     async fetchRelationDegree(ctx) {
       const username = 'Дмитраков С.Н.';
       const password = '340340340';
@@ -551,5 +586,8 @@ export default {
     getRelationDegree(state) {
       return state.relationDegree
     },
+    getDismissed(state) {
+      return state.dismissed
+    },    
   }
 }

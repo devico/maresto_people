@@ -149,7 +149,9 @@ export default {
       contacts: [],
       employeesTable: [],
       imagePath: "../assets/images/",
-      employeeID: ''
+      employeeID: '',
+      active_employees: [],
+      dismissed_employees: [],
     };
   },
   async mounted() {
@@ -160,7 +162,9 @@ export default {
     await this.fetchWorkPlaces();
     await this.fetchTypesContact();
     await this.fetchContacts();
+    await this.fetchDismissed()
     this.employees = await this.getEmployees;
+    this.dismissed_employees = await this.getDismissed
     this.persons = await this.getPersons;
     this.units = await this.getUnits;
     this.positions = await this.getPositions;
@@ -171,7 +175,7 @@ export default {
     
   },
   methods: {
-    ...mapActions(["fetchEmployees", "fetchPersons", "fetchUnits", "fetchPositions", "fetchWorkPlaces", "fetchTypesContact", "fetchContacts"]),
+    ...mapActions(["fetchEmployees", "fetchPersons", "fetchUnits", "fetchPositions", "fetchWorkPlaces", "fetchTypesContact", "fetchContacts", "fetchDismissed"]),
     getUserDetails() {
       let token = localStorage.getItem("jwt");
       let decoded = VueJwtDecode.decode(token);
@@ -290,16 +294,18 @@ export default {
     },
     buildEmployeesTable() {
       this.employeesTable = this.employees.map((e) => {
-        return {
-          id: e.refKey,
-          img: this.getImage(e.personKey),
-          full_name: e.description,
-          position: this.getPosition(e.orgPosition),
-          unit: this.getUnit(e.unitKey),
-          phone: this.getPhone(e.personKey),
-          innerPhone: this.getInnerPhone(e.personKey),          
-          //email: this.getEmail(e.personKey)
-        };
+        if(!this.dismissed_employees.includes(e.refKey)) {
+          return {
+            id: e.refKey,
+            img: this.getImage(e.personKey),
+            full_name: e.description,
+            position: this.getPosition(e.orgPosition),
+            unit: this.getUnit(e.unitKey),
+            phone: this.getPhone(e.personKey),
+            innerPhone: this.getInnerPhone(e.personKey),          
+            //email: this.getEmail(e.personKey)
+          };
+        }        
       });
     },
     imageSrc(img) {
@@ -307,7 +313,7 @@ export default {
     },
   },
   computed: {
-    ...mapGetters(["getEmployees", "getPersons", "getUnits", "getPositions", "getWorkPlaces", "getTypesContact", "getContacts"]),
+    ...mapGetters(["getEmployees", "getPersons", "getUnits", "getPositions", "getWorkPlaces", "getTypesContact", "getContacts", "getDismissed"]),
     headers() {
       return [
         { text: "", value: "image", width: "50px" },
