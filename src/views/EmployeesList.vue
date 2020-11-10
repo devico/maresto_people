@@ -1,18 +1,27 @@
 <template>
-  <div flex class="mx-15">
+  <div flex class="mx-5">
     <v-row>
       <v-col cols="12" class="mt-3">
         <h2>Сотрудники</h2>
       </v-col>
     </v-row>
-    <v-row class="m0 p0">
+    <v-row dense>
+      <v-col cols="2" v-if="onFilter">
+      <FilterEmployees />
+      </v-col>
+      <v-col>
+        <v-row class="m0 p0">
       <v-col cols="10"> </v-col>
       <v-col cols="2" class="d-flex justify-end">
         <v-spacer></v-spacer>
         <v-btn icon @click.prevent="onFilter = !onFilter">
           <v-icon v-if="onFilter">mdi-filter</v-icon>
           <v-icon v-else>mdi-filter-outline</v-icon>
-          
+        </v-btn>
+        <v-spacer></v-spacer>
+        <v-btn icon @click.prevent="onDetail = false">
+          <v-icon v-if="onDetail">mdi-account-arrow-right</v-icon>
+          <v-icon v-else>mdi-account-arrow-right-outline</v-icon>
         </v-btn>
         <v-spacer></v-spacer>
         <v-btn icon @click.prevent="toGrid">
@@ -27,11 +36,6 @@
         <v-spacer></v-spacer>
       </v-col>
     </v-row>
-    <v-row dense>
-      <v-col cols="2" v-if="onFilter">
-      <FilterEmployees />
-      </v-col>
-      <v-col>
         <v-card-title text-xl-h4>
           <v-spacer></v-spacer>
           <v-text-field
@@ -97,6 +101,9 @@
           ></v-text-field> -->
         </div>
       </v-col>
+      <v-col cols="2" v-if="onDetail">
+      <EmployeeDetail :id="employeeID"/>
+      </v-col>
     </v-row>
   </div>
 </template>
@@ -107,8 +114,9 @@ import { apiService } from "../common/api.service.js";
 import { mapGetters, mapActions } from "vuex";
 import axios from "axios";
 import { Base64 } from "js-base64";
-import UnitDisplay from "../components/UnitDisplay";
-import FilterEmployees from "../components/FilterEmployees";
+import UnitDisplay from "@/components/UnitDisplay";
+import FilterEmployees from "@/components/FilterEmployees";
+import EmployeeDetail from "@/components/employees/EmployeeDetail";
 
 // import { mdiFilter } from '@mdi/js';
 // import { mdiViewList } from '@mdi/js';
@@ -118,11 +126,13 @@ import FilterEmployees from "../components/FilterEmployees";
 export default {
   components: {
     UnitDisplay,
-    FilterEmployees
+    FilterEmployees,
+    EmployeeDetail
   },
   data() {
     return {
       onFilter: false,
+      onDetail: false,
       onGrid: false,
       onList: true,
       user: {},
@@ -139,6 +149,7 @@ export default {
       contacts: [],
       employeesTable: [],
       imagePath: "../assets/images/",
+      employeeID: ''
     };
   },
   async mounted() {
@@ -264,7 +275,15 @@ export default {
       return email[0].description      
     },
     showEmployeeDetail(item) {
-      this.$router.push(`/employee/${item.id}`)
+      this.onDetail = false
+      console.log('1 ID', this.onDetail)
+      this.employeeID = item.id
+      setTimeout(() => {
+        this.onDetail = true
+        console.log('2 ID', this.onDetail)
+      }, 500)
+      
+      // this.$router.push(`/employee/${item.id}`)
     },
     toGrid() {
       // this.$router.push('/employees/grid')

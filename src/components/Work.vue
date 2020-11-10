@@ -1,30 +1,12 @@
 <template>
-  <v-sheet class="mx-auto mt-5 px-4" width="100%" :elevation="6">
-      <div>
-        <p class="my-2 subtitle-1 grey--text"><strong>Организация</strong></p>
-        <p class="my-2 subtitle-1">Наша организация</p>
-      </div>
-      <div>
-        <p class="my-2 subtitle-1 grey--text"><strong>Подразделение</strong></p>
-        <p class="my-2 subtitle-1">{{unit}}</p>
-      </div>
-      <div>
-        <p class="my-2 subtitle-1 grey--text"><strong>Руководитель</strong></p>
-        <p class="my-2 subtitle-1">Директор</p>
-      </div>
-      <div>
-        <p class="my-2 subtitle-1 grey--text"><strong>Должность</strong></p>
-        <p class="my-2 subtitle-1">{{orgPosition}}</p>
-      </div>
-      <div>
-        <p class="my-2 subtitle-1 grey--text"><strong>Место работы</strong></p>
-        <p class="my-2 subtitle-1">{{workPlace}}</p>
-      </div>
-      <div>
-        <p class="my-2 subtitle-1 grey--text"><strong>Работает с</strong></p>
-        <p class="my-2 subtitle-1">{{recruitment}}</p>
-      </div>
-      </v-sheet>
+  <v-card-text class="px-0 py-0">
+      <p class="subtitle-0">Организация: Наша организация</p>
+      <p class="subtitle-0">Подразделение: {{unit}}</p>
+      <p class="subtitle-0">Руководитель: Руководитель</p>
+      <p class="subtitle-0">Должность: {{orgPosition}}</p>
+      <p class="subtitle-0">Место работы: {{workPlace}}</p>
+      <p class="subtitle-0">Работает с {{recruitment}}</p>
+   </v-card-text>
 </template>
 
 <script>

@@ -1,5 +1,9 @@
 <template>
-  <div>
+  <v-card-text class="px-0 py-0">
+      <p class="subtitle-0">{{ rel_degree }}: {{ individ }}</p>
+      <p class="subtitle-0">Год рождения: {{ year_burth }}</p>
+   </v-card-text>
+  <!-- <div>
     <v-card class="mt-2">
       <v-row justify="start" align="start">
         <v-col>
@@ -11,7 +15,7 @@
         </v-col>
       </v-row>
     </v-card>
-  </div>
+  </div> -->
 </template>
 
 <script>

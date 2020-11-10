@@ -1,5 +1,12 @@
 <template>
-    <v-card>
+  <v-card-text class="px-0 py-0">
+      <p class="subtitle-0">Год окончания: {{ finish_year }}</p>
+      <p class="subtitle-0">Вид: {{ vid_edu }}</p>
+      <p class="subtitle-0">Уч. заведение: {{ uch_edu }}</p>
+      <p class="subtitle-0">Специальность: {{ specialnost }}</p>
+      <p class="subtitle-0">Квалификация: {{ kvalification }}</p>
+   </v-card-text>
+    <!-- <v-card>
       <v-card-title class="pt-0">Основное</v-card-title>
       <v-timeline align-top dense >
           <v-timeline-item color="pink">
@@ -18,29 +25,7 @@
           </v-timeline-item>
         </v-timeline>
      
-    </v-card>
-        <!-- <v-list-item class="mt-5">
-            <v-list-item-content>
-                <v-list-item-title>{{ vid_edu }}</v-list-item-title>
-                <v-list-item-subtitle class="mt-2"
-                    >Учебное заведение: {{ uch_edu }}</v-list-item-subtitle
-                >
-                <v-list-item-subtitle class="mt-2"
-                    >Специальность: {{ specialnost }}</v-list-item-subtitle
-                >
-                <v-list-item-subtitle class="mt-2"
-                    >Диплом: {{ diplom }}</v-list-item-subtitle
-                >
-                <v-list-item-subtitle class="mt-2"
-                    >Год окончания: {{ finish_year }}</v-list-item-subtitle
-                >
-                <v-list-item-subtitle class="mt-2"
-                    >Квалификация: {{ kvalification }}</v-list-item-subtitle
-                >
-            </v-list-item-content>
-        </v-list-item> -->
-        
-    
+    </v-card> -->
 </template>
   
 
