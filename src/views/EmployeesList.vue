@@ -172,6 +172,7 @@ export default {
     this.typesContact = await this.getTypesContact;
     this.contacts = await this.getContacts;
     this.buildEmployeesTable();
+    console.log('ET: ', this.employees)
     
   },
   methods: {
@@ -293,9 +294,12 @@ export default {
       // this.$router.push('/employees/grid')
     },
     buildEmployeesTable() {
-      this.employeesTable = this.employees.map((e) => {
-        if(!this.dismissed_employees.includes(e.refKey)) {
-          return {
+      const actual = this.employees.filter((e) => {
+        return !this.dismissed_employees.includes(e.refKey)
+      })
+      
+      this.employeesTable = actual.map((e) => {
+        return {
             id: e.refKey,
             img: this.getImage(e.personKey),
             full_name: e.description,
@@ -305,7 +309,6 @@ export default {
             innerPhone: this.getInnerPhone(e.personKey),          
             //email: this.getEmail(e.personKey)
           };
-        }        
       });
     },
     imageSrc(img) {
