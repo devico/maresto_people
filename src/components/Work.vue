@@ -5,7 +5,7 @@
       <p class="subtitle-0">Руководитель: Руководитель</p>
       <p class="subtitle-0">Должность: {{orgPosition}}</p>
       <p class="subtitle-0">Место работы: {{workPlace}}</p>
-      <p class="subtitle-0">Работает с {{recruitment}}</p>
+      
    </v-card-text>
 </template>
 
@@ -13,7 +13,7 @@
 
 export default {
   name: "Work",
-  props: ['unit', 'orgPosition', 'workPlace', 'recruitment']
+  props: ['unit', 'orgPosition', 'workPlace']
 }
 </script>
 

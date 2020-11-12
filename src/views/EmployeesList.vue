@@ -1,5 +1,7 @@
 <template>
-  <div flex class="mx-5">
+  <div>
+    <Loader v-if="loading" class="mt-20"/>
+  <div v-else flex class="mx-5">
     <v-row>
       <v-col cols="12" class="mt-3">
         <h2>Сотрудники</h2>
@@ -106,6 +108,7 @@
       </v-col>
     </v-row>
   </div>
+  </div>
 </template>
 
 <script>
@@ -131,6 +134,7 @@ export default {
   },
   data() {
     return {
+      loading: true,
       onFilter: false,
       onDetail: false,
       onGrid: false,
@@ -152,6 +156,7 @@ export default {
       employeeID: '',
       active_employees: [],
       dismissed_employees: [],
+      resumes: []
     };
   },
   async mounted() {
@@ -163,6 +168,7 @@ export default {
     await this.fetchTypesContact();
     await this.fetchContacts();
     await this.fetchDismissed()
+    await this.fetchResume()
     this.employees = await this.getEmployees;
     this.dismissed_employees = await this.getDismissed
     this.persons = await this.getPersons;
@@ -172,11 +178,10 @@ export default {
     this.typesContact = await this.getTypesContact;
     this.contacts = await this.getContacts;
     this.buildEmployeesTable();
-    console.log('ET: ', this.employees)
-    
+    this.loading = false
   },
   methods: {
-    ...mapActions(["fetchEmployees", "fetchPersons", "fetchUnits", "fetchPositions", "fetchWorkPlaces", "fetchTypesContact", "fetchContacts", "fetchDismissed"]),
+    ...mapActions(["fetchEmployees", "fetchPersons", "fetchUnits", "fetchPositions", "fetchWorkPlaces", "fetchTypesContact", "fetchContacts", "fetchDismissed", "fetchResume"]),
     getUserDetails() {
       let token = localStorage.getItem("jwt");
       let decoded = VueJwtDecode.decode(token);
@@ -316,7 +321,7 @@ export default {
     },
   },
   computed: {
-    ...mapGetters(["getEmployees", "getPersons", "getUnits", "getPositions", "getWorkPlaces", "getTypesContact", "getContacts", "getDismissed"]),
+    ...mapGetters(["getEmployees", "getPersons", "getUnits", "getPositions", "getWorkPlaces", "getTypesContact", "getContacts", "getDismissed", "getResumes"]),
     headers() {
       return [
         { text: "", value: "image", width: "50px" },

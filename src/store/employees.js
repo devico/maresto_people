@@ -1,4 +1,6 @@
 import { Base64 } from 'js-base64';
+import { saveAs } from 'file-saver';
+const FileSaver = require('file-saver');
 
 export default {
   state: {
@@ -14,7 +16,8 @@ export default {
     specialities: JSON.parse(localStorage.getItem('specialities') || '[]'),
     schools: JSON.parse(localStorage.getItem('schools') || '[]'),
     relationDegree: JSON.parse(localStorage.getItem('relationDegree') || '[]'),
-    dismissed: JSON.parse(localStorage.getItem('dismissed') || '[]'),    
+    dismissed: JSON.parse(localStorage.getItem('dismissed') || '[]'), 
+    resumes: JSON.parse(localStorage.getItem('resumes') || '[]'),     
   },
   mutations: {
     updateEmployees(state, records) {
@@ -69,6 +72,10 @@ export default {
       state.dismissed = data
       localStorage.setItem('dismissed', JSON.stringify(state.dismissed))
     },
+    updateListResume(state, data){
+      state.resumes = data
+      localStorage.setItem('resumes', JSON.stringify(state.resumes))
+    }
   },
   actions: {
     async fetchEmployees(ctx) {
@@ -548,6 +555,35 @@ export default {
         ctx.commit('updateRelationDegree', relDegree)
       })
     },
+    async fetchResume(ctx) {
+      const username = 'Дмитраков С.Н.';
+      const password = '340340340';
+      const config = {
+        method: "GET",
+        headers: {
+          'Access-Control-Allow-Origin': '*',
+          "content-type": "application/json",
+          "Authorization": `Basic ${Base64.encode(username + ":" + password)}`,
+        },
+        withCredentials: true,
+        credentials: 'same-origin',
+      };
+
+      await fetch("http://localhost:8080/ZUP/odata/standard.odata/Catalog_ХранилищеДополнительнойИнформации?&$format=json", config).then(response => {
+        return response.json()
+      }).then(data => {
+        const files = data.value.map(f => {
+          return {
+            refKey: f.Ref_Key,
+            description: f.Description,
+            file_name: f.ИмяФайла,
+            person_key: f.Объект
+          }
+        })
+        ctx.commit('updateListResume', files)
+      })
+      
+    },
   },
   getters: {
     getEmployees(state) {
@@ -588,6 +624,10 @@ export default {
     },
     getDismissed(state) {
       return state.dismissed
-    },    
+    },
+    getResumes(state) {
+      return state.resumes
+    },
+    
   }
 }
