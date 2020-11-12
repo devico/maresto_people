@@ -1,6 +1,4 @@
 import { Base64 } from 'js-base64';
-import { saveAs } from 'file-saver';
-const FileSaver = require('file-saver');
 
 export default {
   state: {
