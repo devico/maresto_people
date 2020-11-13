@@ -9,36 +9,34 @@
     </v-row>
     <v-row dense>
       <v-col cols="2" v-if="onFilter">
-      <FilterEmployees />
+        <FilterEmployees        
+          :employees="employees"
+          :persons="persons"
+          :units="units"
+          :positions="positions"
+          :workPlaces="workPlaces"
+          @filtered_employees="filterEmployeesTable"
+        />
       </v-col>
       <v-col>
-        <v-row class="m0 p0">
-      <v-col cols="10"> </v-col>
-      <v-col cols="2" class="d-flex justify-end">
-        <v-spacer></v-spacer>
-        <v-btn icon @click.prevent="onFilter = !onFilter">
-          <v-icon v-if="onFilter">mdi-filter</v-icon>
-          <v-icon v-else>mdi-filter-outline</v-icon>
-        </v-btn>
-        <v-spacer></v-spacer>
-        <v-btn icon @click.prevent="onDetail = false">
-          <v-icon v-if="onDetail">mdi-account-arrow-right</v-icon>
-          <v-icon v-else>mdi-account-arrow-right-outline</v-icon>
-        </v-btn>
-        <v-spacer></v-spacer>
-        <v-btn icon @click.prevent="toGrid">
-          <v-icon v-if="onGrid">mdi-view-grid</v-icon>
-          <v-icon v-else>mdi-view-grid-outline</v-icon>
-        </v-btn>
-        <v-spacer></v-spacer>
-        <v-btn icon right @click.prevent="onList = !onList">
-          <v-icon v-if="onList">mdi-view-list</v-icon>
-          <v-icon v-else>mdi-view-list-outline</v-icon>
-        </v-btn>
-        <v-spacer></v-spacer>
-      </v-col>
-    </v-row>
+
         <v-card-title text-xl-h4>
+          <v-btn icon @click.prevent="onFilter = !onFilter">
+              <v-icon v-if="onFilter">mdi-filter</v-icon>
+              <v-icon v-else>mdi-filter-outline</v-icon>
+            </v-btn>
+            <v-btn icon @click.prevent="onDetail = false">
+              <v-icon v-if="onDetail">mdi-account-arrow-right</v-icon>
+              <v-icon v-else>mdi-account-arrow-right-outline</v-icon>
+            </v-btn>
+            <v-btn icon @click.prevent="toGrid">
+              <v-icon v-if="onGrid">mdi-view-grid</v-icon>
+              <v-icon v-else>mdi-view-grid-outline</v-icon>
+            </v-btn>
+            <v-btn icon right @click.prevent="onList = !onList">
+              <v-icon v-if="onList">mdi-view-list</v-icon>
+              <v-icon v-else>mdi-view-list-outline</v-icon>
+            </v-btn>
           <v-spacer></v-spacer>
           <v-text-field
             v-model="search"
@@ -48,6 +46,14 @@
             hide-details
           ></v-text-field>
         </v-card-title>
+        <v-chip
+        v-if="textFilter !== ''"
+          class="ma-2"
+          color="primary"
+          outlined
+          pill
+        >{{textFilter}}          
+        </v-chip>
         <v-data-table
           :headers="headers"
           :items="employeesTable"
@@ -156,7 +162,8 @@ export default {
       employeeID: '',
       active_employees: [],
       dismissed_employees: [],
-      resumes: []
+      resumes: [],
+      textFilter: ''
     };
   },
   async mounted() {
@@ -177,7 +184,7 @@ export default {
     this.workPlaces = await this.getWorkPlaces;
     this.typesContact = await this.getTypesContact;
     this.contacts = await this.getContacts;
-    this.buildEmployeesTable();
+    this.buildEmployeesTable(this.employees);
     this.loading = false
   },
   methods: {
@@ -298,8 +305,8 @@ export default {
     toGrid() {
       // this.$router.push('/employees/grid')
     },
-    buildEmployeesTable() {
-      const actual = this.employees.filter((e) => {
+    buildEmployeesTable(employees) {
+      const actual = employees.filter((e) => {
         return !this.dismissed_employees.includes(e.refKey)
       })
       
@@ -318,6 +325,10 @@ export default {
     },
     imageSrc(img) {
       return require("@/assets/images/" + img);
+    },
+    filterEmployeesTable(result) {
+      this.textFilter = result['text']
+      this.buildEmployeesTable(result['peoples'])
     },
   },
   computed: {

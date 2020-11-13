@@ -180,14 +180,14 @@ export default {
       const person = data.value.map(p => {
         return {
           refKey: p.Ref_Key,
-            parentKey: p.Parent_Key,
-            code: p.Code,
-            description: p.Description,
-            birthday: p.ДатаРождения,
-            gender: p.Пол,
-            image: `${p.ОсновноеИзображение_Key}.png`,
-            family: p.СоставСемьи,
-            education: p.Образование
+          parentKey: p.Parent_Key,
+          code: p.Code,
+          description: p.Description,
+          birthday: p.ДатаРождения,
+          gender: p.Пол,
+          image: `${p.ОсновноеИзображение_Key}.png`,
+          family: p.СоставСемьи,
+          education: p.Образование
         }
       })
       return person[0]

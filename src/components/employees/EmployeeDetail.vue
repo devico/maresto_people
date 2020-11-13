@@ -2,7 +2,7 @@
     <div>
       <Loader v-if="loading" class="mt-20" />
     <v-row v-else flex>
-      <v-card class="mx-auto ml-3 mt-3" width="100%" :elevation="6">
+      <v-card class="mx-auto ml-3 mt-3" width="100%" :elevation="1">
         <v-card-text class="text-center">
           <!-- <v-avatar size="100" class="mt-2">
             <v-img
