@@ -74,7 +74,7 @@
                   <v-list-item>
                     <v-list-item-content>
                       <v-list-item-title class="indigo--text">
-                        <h5>{{ item.fullName }}</h5>
+                        <h5>{{ item.full_name }}</h5>
                       </v-list-item-title>
                       <v-list-item-title
                         class="text--primary"
@@ -199,6 +199,7 @@ export default {
     this.ovpn_clients = await this.getOVPNClients;
     this.gsRows = await this.fetchTabelFromGS()
     // console.log('GR: ', this.gsRows)
+    // console.log('E: ', this.employees)
     this.loading = false
   },
   methods: {

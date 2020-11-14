@@ -147,6 +147,7 @@ export default {
             day31: a["31"],
           }
         })
+        console.log('R: ', data_rows)
         return data_rows
         // ctx.commit('updateTabelFromGS', data)
     },
