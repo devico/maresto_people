@@ -22,7 +22,7 @@
       <v-col>
 
         <v-card-title text-xl-h4>
-          <v-btn icon @click.prevent="onFilter = !onFilter">
+          <v-btn icon @click.prevent="toggleFilter">
               <v-icon v-if="onFilter">mdi-filter</v-icon>
               <v-icon v-else>mdi-filter-outline</v-icon>
             </v-btn>
@@ -373,9 +373,16 @@ export default {
       this.textFilter = result['text']
       this.buildEmployeesTable(result['peoples'])
     },
+    toggleFilter() {
+      this.onFilter = !this.onFilter
+      if (this.onFilter == false) {
+        this.buildEmployeesTable(this.employees)
+      }
+    },
   },
   computed: {
     ...mapGetters(["getEmployees", "getPersons", "getUnits", "getPositions", "getWorkPlaces", "getTypesContact", "getContacts", "getDismissed", "getResumes"]),
+    
     headers() {
       return [
         { text: "", value: "image", width: "50px" },
