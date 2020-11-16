@@ -47,8 +47,8 @@
             hide-details
           ></v-text-field>
         </v-card-title>
-        <v-row align="center">
-          <v-card-title v-if="onFilter" class="ml-2">Отфильтровано: </v-card-title>
+        <v-row  v-if="onFilter" align="center">
+          <v-card-title class="ml-2">Отфильтровано: </v-card-title>
           <v-chip
             v-if="filterPosition.length > 12"
             class="ma-2"
