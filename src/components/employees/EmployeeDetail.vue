@@ -4,13 +4,13 @@
     <v-row v-else flex>
       <v-card class="mx-auto ml-3 mt-3" width="100%" :elevation="1">
         <v-card-text class="text-center">
-          <!-- <v-avatar size="100" class="mt-2">
+          <v-avatar size="100" class="mt-2">
             <v-img
               class="mr-3"
               :src="require(`@/assets/images/${person.image}`)"
               height="100"
             ></v-img>
-          </v-avatar> -->
+          </v-avatar>
         </v-card-text>
         <v-card-text class="justify-center subtitle-1 indigo--text"><strong>{{
           person.description}}</strong>

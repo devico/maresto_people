@@ -16,6 +16,7 @@
           :positions="positions"
           :workPlaces="workPlaces"
           @filtered_employees="filterEmployeesTable"
+          @all_employees="setAllEmployees"
         />
       </v-col>
       <v-col>
@@ -46,14 +47,41 @@
             hide-details
           ></v-text-field>
         </v-card-title>
-        <v-chip
-        v-if="textFilter !== ''"
-          class="ma-2"
-          color="primary"
-          outlined
-          pill
-        >{{textFilter}}          
-        </v-chip>
+        <v-row align="center">
+          <v-card-title v-if="onFilter" class="ml-2">Отфильтровано: </v-card-title>
+          <v-chip
+            v-if="filterPosition.length > 12"
+            class="ma-2"
+            color="primary"
+            outlined
+            pill
+          >{{filterPosition}}
+          </v-chip>
+          <v-chip
+            v-if="filterUnit.length > 15"
+            class="ma-2"
+            color="orange"
+            outlined
+            pill
+          >{{filterUnit}}
+          </v-chip>
+          <v-chip
+            v-if="filterWP.length > 8"
+            class="ma-2"
+            color="red"
+            outlined
+            pill
+          >{{filterWP}}
+          </v-chip>
+          <v-chip
+            v-if="filterGender.length > 6"
+            class="ma-2"
+            color="green"
+            outlined
+            pill
+          >{{filterGender}}
+          </v-chip>
+        </v-row>        
         <v-data-table
           :headers="headers"
           :items="employeesTable"
@@ -163,7 +191,10 @@ export default {
       active_employees: [],
       dismissed_employees: [],
       resumes: [],
-      textFilter: ''
+      filterPosition: '',
+      filterUnit: '',
+      filterWP: '',
+      filterGender: '',      
     };
   },
   async mounted() {
@@ -326,7 +357,19 @@ export default {
     imageSrc(img) {
       return require("@/assets/images/" + img);
     },
+    setAllEmployees(result) {
+      this.filterPosition = result['filterPosition']
+      this.filterUnit = ['filterUnit']
+      this.filterWP =result['filterWP']
+      this.filterGender = result['filterGender']
+      this.textFilter = result['text']
+      this.buildEmployeesTable(result['peoples'])
+    },
     filterEmployeesTable(result) {
+      this.filterPosition = result['filterPosition']
+      this.filterUnit = ['filterUnit']
+      this.filterWP =result['filterWP']
+      this.filterGender = result['filterGender']
       this.textFilter = result['text']
       this.buildEmployeesTable(result['peoples'])
     },

@@ -45,10 +45,15 @@
             dense
             outlined
           ></v-select>
-
-          <v-btn :disabled="!valid" type="submit"  color="blue darken-1" class="mr-4 white--text">
-            Фильтровать
+          <div class="text-center">
+            <v-btn :disabled="!valid" type="submit" color="blue darken-1" class="mr-4 white--text">
+            Фильтр
           </v-btn>
+          <v-btn @click.prevent="clearFilter" color="orange darken-1" class="mr-4 white--text">
+            Сброс
+          </v-btn>
+          </div>
+          
         </v-form>
 
     </v-card>
@@ -77,18 +82,22 @@ export default {
 
   methods: {
     filterEmployees() {
-      let textFilter = 'Отфильтровано: '
+      let filterPosition = ''
+      let filterUnit = ''
+      let filterWP = ''
+      let filterGender = ''
+
       if (this.selectPosition !== null) {
-        textFilter += `Должность - ${this.selectPosition}, `
+        filterPosition += `Должность: ${this.selectPosition}`
       }
       if (this.selectUnit !== null) {
-        textFilter += `Подразделение - ${this.selectUnit}, `
+        filterUnit += `Подразделение: ${this.selectUnit}`
       }
       if (this.selectWorkPlace !== null) {
-        textFilter += `Адрес - ${this.selectWorkPlace}, `
+        filterWP += `Адрес: ${this.selectWorkPlace}`
       }
       if (this.selectGender !== null) {
-        textFilter += `Пол - ${this.selectGender}`
+        filterGender += `Пол: ${this.selectGender}`
       }
 
       let f_posistion = this.employees.filter(e => {
@@ -113,8 +122,7 @@ export default {
         } else {
           return e
         }
-      })
-      
+      })      
       
       let peoples = f_wplace.filter(e => {
         if (this.selectGender !== null) {          
@@ -131,24 +139,32 @@ export default {
       this.selectWithChild = null
 
       let result = {
-        text: textFilter,
+        filterPosition: filterPosition,
+        filterUnit: filterUnit,
+        filterWP: filterWP,
+        filterGender: filterGender,
         peoples: peoples
       }
       
       this.$emit("filtered_employees", result);
-      // let result = {
-      //   peoples: зущзду,
-      //   date_finish: this.date_finish,
-      //   edrpou: this.edrpou,
-      //   title_org: this.title_org
-      // };
-
-      // console.log('3', peoples)
-      // console.log('2', this.selectUnit)
-      // console.log('3', this.selectWorkPlace)
-      // console.log('4', this.selectGender)
-      // console.log('4', this.selectWithChild)
     },
+    clearFilter() {
+      let filterPosition = ''
+      let filterUnit = ''
+      let filterWP = ''
+      let filterGender = ''
+
+      let result = {
+        filterPosition: filterPosition,
+        filterUnit: filterUnit,
+        filterWP: filterWP,
+        filterGender: filterGender,
+        peoples: this.employees
+      }
+      
+      this.$emit("all_employees", result);
+    },
+
     getWorkPlaceEmployee(wplace) {
       const wrsplace = this.workPlaces.filter((wp) => {
         return wp.refKey == wplace;
