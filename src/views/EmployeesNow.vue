@@ -149,15 +149,18 @@
               </div>
               <div v-if="workplace === 'office' && active_office_users !== 0">
                 <v-list-item
-                  v-for="(user, idx) in active_office_users"
-                  :key="idx"
+                  v-for="(user, idx) in sortActiveUsersByTime"
+                  :key="idx"                  
                 >
                   <v-flex>
-                    <v-card class="ma-5 mt-1" elevation="3">
-                      <v-list>
-                        <v-list-item>
+                    <v-card 
+                      class="ma-5 mt-1"
+                      elevation="3"
+                    >
+                      <v-list :color="user.color">
+                        <v-list-item> 
                           <v-list-item-content>
-                            <v-list-item-title class="indigo--text"
+                            <v-list-item-title class="text--white"
                               ><h5>{{ user.fullName }}</h5></v-list-item-title
                             >
                             <v-list-item-title
@@ -223,9 +226,13 @@ export default {
     this.active_vpn_users = this.getActiveVpnUsers;
     this.active_office_users = this.getActiveOfficeUsers;
     this.getCountEmployeeWithEmail();
+    this.sortActiveUsersByTime
     this.loading = false
 
     // this.getEmployeesRemote
+    // array.sort((a, b) => {
+    //   return new Date(b.date) - new Date(a.date) 
+    // })
     
   },
   methods: {
@@ -274,6 +281,14 @@ export default {
         return ee.email !== "Нет ящика";
       });
     },
+    calcTime(times) {
+      const total_array = times.split(":");
+      if (total_array[1] !== undefined) {
+        return ((parseInt(total_array[0], 10) * 60 + parseInt(total_array[1], 10)) / 60).toFixed(2)
+      } else {
+        return parseInt(total_array[0]);
+      }
+    },
   },
   computed: {
     ...mapGetters([
@@ -287,6 +302,31 @@ export default {
       "getTypesContact",
       "getContacts",
     ]),
+    
+    sortActiveUsersByTime() {
+      let currentTime = new Date()
+      let month = currentTime.getMonth() + 1
+      let year = currentTime.getFullYear()
+      let day = currentTime.getDate()
+      console.log('CT: ', this.calcTime('11:06:11'))
+      const aou = this.active_office_users.map(u => {
+        return {
+          coming: u.coming,
+          coming_time: `${year}-${month}-${day}T${u.coming}`,
+          date: u.date,
+          fullName: u.fullName,
+          personal_number: u.personal_number,
+          color: this.calcTime(u.coming) <= 9.25 ? 'green lighten-2' : 'red lighten-2'
+        }
+      })
+      
+      aou.sort((a, b) => {
+        return new Date(b.coming_time) - new Date(a.coming_time) 
+      })
+      console.log('color', aou[0])
+      return aou.reverse()
+
+    },
     getEmployeesToday() {},
     getEmployeesOffice() {},
     getEmployeesRemote() {
