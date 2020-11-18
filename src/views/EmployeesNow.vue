@@ -45,7 +45,7 @@
                   <v-list-item>
                     <v-list-item-content>
                       <v-list-item-subtitle
-                        >Сейчас в офисе</v-list-item-subtitle
+                        >Сотрудников в офисе</v-list-item-subtitle
                       >
                       <v-list-item-title class="display-1 text--primary"
                         >{{ active_office_users.length }} 
@@ -105,8 +105,9 @@
     <v-container>
       <v-row>
         <v-radio-group v-model="workplace" dense row>
-          <v-radio label="В офисе" color="green" value="office"></v-radio>
-          <v-radio label="На удаленке" color="primary" value="remote"></v-radio>
+          <v-radio label="Посещали офис" color="green" value="office"></v-radio>
+          <v-radio label="Подключались на удаленку" color="primary" value="remote"></v-radio>
+          <v-radio label="Активные на удаленке" color="primary" value="active_remote"></v-radio>
         </v-radio-group>
       </v-row>
     </v-container>
@@ -117,7 +118,7 @@
           <section>
             <Loader v-if="loading" />
             <div v-else>
-              <div v-if="workplace === 'remote'">
+              <div v-if="workplace === 'active_remote'">
                 <v-list-item v-for="(user, idx) in sortVPNUsersByTime" :key="idx">
                   <v-flex>
                     <v-card class="ma-5 mt-1" elevation="3">
@@ -144,6 +145,36 @@
                               >Продолжительность работы:
                               {{ user.duration }} часов</v-list-item-title
                             >
+                          </v-list-item-content>
+                        </v-list-item>
+                      </v-list>
+                    </v-card>
+                  </v-flex>
+                </v-list-item>
+              </div>
+                <div v-if="workplace === 'remote'">
+                <v-list-item v-for="(user, idx) in sortTodayVpnUsersByTime" :key="idx">
+                  <v-flex>
+                    <v-card class="ma-5 mt-1" elevation="3">
+                      <v-list :color="user.color">
+                        <v-list-item>
+                          <v-list-item-content>
+                            <v-list-item-title class="text--white"
+                              ><h5>{{ user.full_name }}</h5></v-list-item-title
+                            >
+                            <v-list-item-title
+                              >Основание: {{ user.based_on }}</v-list-item-title
+                            >
+                          </v-list-item-content>
+                          <v-list-item-content align="right">
+                            <v-list-item-title
+                              >Тип подключения:
+                              {{ user.service }}</v-list-item-title
+                            >
+                            <v-list-item-title
+                              >Начало работы:
+                              {{ user.start_time_work }}</v-list-item-title
+                            >                            
                           </v-list-item-content>
                         </v-list-item>
                       </v-list>
@@ -209,6 +240,9 @@ export default {
     employeesCount: 0,
     typesContact: [],
     contacts: [],
+    today_start_vpn_users: [],
+    today_vpn_clients: [],
+    today_vpn_employees: []
   }),
   async mounted() {
     await this.fetchEmployees();
@@ -220,18 +254,22 @@ export default {
     await this.fetchSKUDCurrentDay();
     await this.fetchTypesContact();
     await this.fetchContacts();
+    await this.fetchVpnUsersFromDB()
     this.employees = await this.getEmployees;
     this.persons = await this.getPersons;
     this.typesContact = await this.getTypesContact;
     this.contacts = await this.getContacts;
     this.skud_clients = await this.getSKUDClients;
     this.ovpn_clients = await this.getOVPNClients;
-    this.ppp_clients = this.getPPPClients;
-    this.active_vpn_users = this.getActiveVpnUsers;
-    this.active_office_users = this.getActiveOfficeUsers;
+    this.ppp_clients = await this.getPPPClients;
+    this.active_vpn_users = await this.getActiveVpnUsers;
+    this.active_office_users = await this.getActiveOfficeUsers;
+    this.today_start_vpn_users = this.getVpnUserStartConnections
     this.getCountEmployeeWithEmail();
     this.sortActiveUsersByTime
-    this.sortVPNUsersByTime
+    this.sortVPNUsersByTime    
+    this.prepareTodayStartVpnUsers()
+    this.today_vpn_employees = this.getTodayVpnEmployes
     this.loading = false
 
     // this.getEmployeesRemote
@@ -252,6 +290,7 @@ export default {
       "fetchTypesContact",
       "fetchContacts",
       "fetchSKUDCurrentDay",
+      "fetchVpnUsersFromDB",
     ]),
     getEmail(p_id) {
       const cnts = this.contacts.filter((c) => {
@@ -294,6 +333,30 @@ export default {
         return parseInt(total_array[0]);
       }
     },
+    calcTimeVpnToday(times) {
+      const total_array = times.split(":");
+      if (total_array[1] !== undefined) {
+        return ((parseInt(total_array[0], 10) * 60 + parseInt(total_array[1], 10)) / 60).toFixed(2)
+      } else {
+        return parseInt(total_array[0]);
+      }
+    },
+    prepareTodayStartVpnUsers() {
+      const today_vpn_clients = this.today_start_vpn_users.filter((oc, i) => {
+        const pcs = this.ppp_clients.filter((pc) => {
+          return oc.login == pc.login;
+        });
+        
+        if (pcs[0] !== undefined) {
+          return {
+            ...oc,
+            personal_number: pcs[0].personal_number,
+          };
+        }
+      });
+      
+      this.today_vpn_clients = today_vpn_clients
+    },
   },
   computed: {
     ...mapGetters([
@@ -306,6 +369,7 @@ export default {
       "getPersons",
       "getTypesContact",
       "getContacts",
+      "getVpnUserStartConnections"
     ]),
     
     sortActiveUsersByTime() {
@@ -313,7 +377,7 @@ export default {
       let month = currentTime.getMonth() + 1
       let year = currentTime.getFullYear()
       let day = currentTime.getDate()
-      // console.log('CT: ', this.calcTime('11:06:11'))
+      
       const aou = this.active_office_users.map(u => {
         return {
           coming: u.coming,
@@ -328,9 +392,8 @@ export default {
       aou.sort((a, b) => {
         return new Date(b.coming_time) - new Date(a.coming_time) 
       })
-      //console.log('color', aou[0])
+      
       return aou.reverse()
-
     },
     sortVPNUsersByTime() {
       let currentTime = new Date()
@@ -342,6 +405,7 @@ export default {
 
 
       let vpn_usrs = this.getVpnEmployes
+      console.log("vpn_users", vpn_usrs)
       const match_hh = /^(\d{1,2}h)/i
       const match_mm = /^(\d{1,2}m)/i
       const match_ss = /^(\d{1,2}s)/i
@@ -377,7 +441,7 @@ export default {
         start_mm = "" + parseInt((parseFloat(start_mm) * 60))
         start_mm = start_mm.length == 1 ? `0${start_mm}` : start_mm
         const start_time_work = `${start_hh}:${start_mm}:00`
-        // console.log('START', start_time_work)
+        
         return {
           ...u,
           duration: duration,
@@ -389,9 +453,49 @@ export default {
       // aou.sort((a, b) => {
       //   return new Date(b.coming_time) - new Date(a.coming_time) 
       // })
-      // console.log('YES', vau[0])
+      
       // return aou.reverse()
       return vau
+
+    },
+    sortTodayVpnUsersByTime() {
+      let currentTime = new Date()
+      let month = currentTime.getMonth() + 1
+      let year = currentTime.getFullYear()
+      let day = currentTime.getDate()
+      var hours = currentTime.getHours();
+      var minutes = currentTime.getMinutes()
+
+      let vpn_usrs = this.today_vpn_employees
+      
+      let hour = ''
+      let mm = ''
+      let ss = ''
+      
+      const moment = ((parseInt(hours)*60  + parseInt(minutes)) / 60).toFixed(2)
+
+      const vau = vpn_usrs.map(u => {
+        hour = (u.timestamp).substring(11, 13)
+        mm = (u.timestamp).substring(14, 16)
+        hour = parseInt(hour) + 2
+        hour = hour.length == 1 ? `0${hour}` : hour
+        
+        // const duration = ((parseInt(hour)*60  + parseInt(mm)) / 60).toFixed(2)
+        // const start_work = (moment - duration).toFixed(2)
+        const start_time_work = `${hour}:${mm}:00`
+
+        return {
+          ...u,
+          start_time_work: start_time_work,
+          color: this.calcTimeVpnToday(`${hour}:${mm}`) <= 9.25 ? 'green lighten-2' : 'red lighten-2'
+        }
+      })
+      
+      vau.sort((a, b) => {
+        return new Date(b.timestamp) - new Date(a.timestamp) 
+      })
+      
+      return vau.reverse()
 
     },
     getEmployeesToday() {},
@@ -452,6 +556,42 @@ export default {
         return ve !== undefined;
       });
 
+      return avu.sort();
+    },
+    getTodayVpnEmployes() {
+      const vu = this.today_vpn_clients.map((ve) => {
+        const pc = this.ppp_clients.filter((p) => {
+          return p.login == ve.login;
+        });
+        
+        if (pc[0] !== undefined) {
+          return {
+            ...ve,
+            personal_number: pc[0].personal_number,
+            based_on: pc[0].based_on,
+          };
+        }
+      });
+      
+      const vua = vu.filter((ve) => {
+        return ve !== undefined;
+      });
+      
+      const vuae = vua.map((v) => {
+        const emps = this.employees.filter((e) => {
+          return v.personal_number == parseInt(e.code, 10);
+        });
+        if (emps[0] !== undefined) {
+          return {
+            ...v,
+            full_name: emps[0].description,
+          };
+        }
+      });
+      const avu = vuae.filter((ve) => {
+        return ve !== undefined;
+      });
+      
       return avu.sort();
     },
     getCountPermissionRemote() {

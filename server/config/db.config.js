@@ -2,7 +2,7 @@ module.exports = {
     HOST: "192.168.58.252",
     USER: "operator",
     PASSWORD: "Mimoza2019",
-    DB: "vpn-users-copy",
+    DB: "vpn-users",
     dialect: "mysql",
     pool: {
       max: 5,

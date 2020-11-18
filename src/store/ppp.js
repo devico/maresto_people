@@ -7,6 +7,7 @@ export default {
     skud_clients: JSON.parse(localStorage.getItem('skud_clients') || '[]'),
     ovpn_clients: JSON.parse(localStorage.getItem('ovpn_clients') || '[]'),
     active_vpn_users: JSON.parse(localStorage.getItem('active_vpn_users') || '[]'),
+    vpn_users_start_conns: JSON.parse(localStorage.getItem('vpn_users_start_conns') || '[]'),
     active_office_users: [],
     
   },
@@ -28,7 +29,11 @@ export default {
       localStorage.setItem('active_vpn_users', JSON.stringify(state.active_vpn_users))
     },    
     updateSKUDEmployeesToday(state, records) {
-      state.active_office_users = records      
+      state.active_office_users = records
+    },
+    updateTodatVpnUsersConnection(state, records) {
+      state.vpn_users_start_conns = records
+      localStorage.setItem('vpn_users_start_conns', JSON.stringify(state.vpn_users_start_conns))
     },
   },
   actions: {
@@ -63,7 +68,6 @@ export default {
         // service: "pptp"
         // sessionId: "0x8180000A"
         // uptime: "4d19h35m15s"
-        console.log("Active: ", data)
         // ctx.commit('updateDataMikrotik', data)
       })
     },
@@ -81,12 +85,9 @@ export default {
       // console.log('UL: ', usersLogin)
 
       const vpnConnectionsByMonth = usersLogin.map(ul => {
-
         const conns = data.filter(c => {
-
           if (ul == c.login) {
             if (c.timestamp.startsWith(datetime) && c.action == "DISCONNECTED") {
-
               return {
                 login: c.login,
                 timestamp: c.timestamp,
@@ -114,6 +115,47 @@ export default {
       
       ctx.commit('updateVpnUsersConnection', enters)
       
+    },
+    async fetchVpnUsersFromDB(ctx) {
+      let currentTime = new Date()
+      let month = currentTime.getMonth() + 1
+      let year = currentTime.getFullYear()
+      let day = currentTime.getDate()
+
+      const res = await fetch('http://localhost:4000/api/vpnusers')
+      const data = await res.json();
+
+      const datetime = `${year}-${month}-${day}`
+  
+      const uLogin =  data.map(u => {
+        return u.login
+      })
+
+      const usersLogin = uLogin.filter((v, i, a) => a.indexOf(v) === i);
+
+      const vpnConnectionsByDay = usersLogin.map(ul => {
+        const conns = data.filter(c => {
+          if (ul == c.login) {
+            if (c.timestamp.startsWith(datetime) && c.action == "CONNECTED") {
+              return {
+                login: c.login,
+                timestamp: c.timestamp,
+                uptime: c.uptime
+              }
+            }
+          }          
+        })
+               
+        return conns
+      })
+
+      const first_enters = []
+      vpnConnectionsByDay.map(c => {
+        if (c[0] !== undefined) {
+          first_enters.push(c[0])
+        }
+      })      
+      ctx.commit('updateTodatVpnUsersConnection', first_enters)      
     },
     async fetchPPPClients(ctx) {
         const doc = new GoogleSpreadsheet('14ekGHIeqRgHse1_q7bXk6nukhgRJQevgFYXGMrPl-pY');
@@ -232,8 +274,6 @@ export default {
           mm='0'+mm;
       } 
       today = dd+'.'+mm+'.'+yyyy
-      console.log(today)
-
       await doc.loadInfo();
 
       // const sheet = doc.sheetsByIndex[0]; // or use doc.sheetsById[id]
@@ -270,6 +310,9 @@ export default {
     },
     getActiveOfficeUsers(state) {
       return state.active_office_users
+    },
+    getVpnUserStartConnections(state) {
+      return state.vpn_users_start_conns
     },
     
   }
