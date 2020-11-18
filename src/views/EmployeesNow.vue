@@ -118,13 +118,13 @@
             <Loader v-if="loading" />
             <div v-else>
               <div v-if="workplace === 'remote'">
-                <v-list-item v-for="(user, idx) in getVpnEmployes" :key="idx">
+                <v-list-item v-for="(user, idx) in sortVPNUsersByTime" :key="idx">
                   <v-flex>
                     <v-card class="ma-5 mt-1" elevation="3">
-                      <v-list>
+                      <v-list :color="user.color">
                         <v-list-item>
                           <v-list-item-content>
-                            <v-list-item-title class="indigo--text"
+                            <v-list-item-title class="text--white"
                               ><h5>{{ user.full_name }}</h5></v-list-item-title
                             >
                             <v-list-item-title
@@ -137,8 +137,12 @@
                               {{ user.service }}</v-list-item-title
                             >
                             <v-list-item-title
-                              >Время работы:
-                              {{ user.uptime }}</v-list-item-title
+                              >Начало работы:
+                              {{ user.start_time_work }}</v-list-item-title
+                            >
+                            <v-list-item-title
+                              >Продолжительность работы:
+                              {{ user.duration }} часов</v-list-item-title
                             >
                           </v-list-item-content>
                         </v-list-item>
@@ -227,6 +231,7 @@ export default {
     this.active_office_users = this.getActiveOfficeUsers;
     this.getCountEmployeeWithEmail();
     this.sortActiveUsersByTime
+    this.sortVPNUsersByTime
     this.loading = false
 
     // this.getEmployeesRemote
@@ -308,7 +313,7 @@ export default {
       let month = currentTime.getMonth() + 1
       let year = currentTime.getFullYear()
       let day = currentTime.getDate()
-      console.log('CT: ', this.calcTime('11:06:11'))
+      // console.log('CT: ', this.calcTime('11:06:11'))
       const aou = this.active_office_users.map(u => {
         return {
           coming: u.coming,
@@ -323,8 +328,70 @@ export default {
       aou.sort((a, b) => {
         return new Date(b.coming_time) - new Date(a.coming_time) 
       })
-      console.log('color', aou[0])
+      //console.log('color', aou[0])
       return aou.reverse()
+
+    },
+    sortVPNUsersByTime() {
+      let currentTime = new Date()
+      let month = currentTime.getMonth() + 1
+      let year = currentTime.getFullYear()
+      let day = currentTime.getDate()
+      var hours = currentTime.getHours();
+      var minutes = currentTime.getMinutes()
+
+
+      let vpn_usrs = this.getVpnEmployes
+      const match_hh = /^(\d{1,2}h)/i
+      const match_mm = /^(\d{1,2}m)/i
+      const match_ss = /^(\d{1,2}s)/i
+
+      let hour = ''
+      let mm = ''
+      let ss = ''
+      
+      const moment = ((parseInt(hours)*60  + parseInt(minutes)) / 60).toFixed(2)
+
+      const vau = vpn_usrs.map(u => {
+        if ((u.uptime).match(match_hh)) {
+          let hr = (u.uptime).split('h')
+          hour = hr[0]
+          mm = hr[1].split('m')[0]
+          ss = 0
+        } else if ((u.uptime).match(match_mm)) {
+          hour = 0
+          mm = (u.uptime).split('m')[0]
+          ss = 0
+        } else if ((u.uptime).match(match_ss)) {
+          hour = 0
+          mm = 0
+          ss = (u.uptime).split('s')[0]
+        }
+
+        const duration = ((parseInt(hour)*60  + parseInt(mm)) / 60).toFixed(2)
+        const start_work = (moment - duration).toFixed(2)
+        const start_hh_mm = ("" + start_work).split('.')
+        let start_hh = start_hh_mm[0]
+        start_hh = start_hh.length == 1 ? `0${start_hh}` : start_hh
+        let start_mm = `0.${start_hh_mm[1]}`
+        start_mm = "" + parseInt((parseFloat(start_mm) * 60))
+        start_mm = start_mm.length == 1 ? `0${start_mm}` : start_mm
+        const start_time_work = `${start_hh}:${start_mm}:00`
+        // console.log('START', start_time_work)
+        return {
+          ...u,
+          duration: duration,
+          start_time_work: start_time_work,
+          color: start_work <= 9.25 ? 'green lighten-2' : 'red lighten-2'
+        }
+      })
+      
+      // aou.sort((a, b) => {
+      //   return new Date(b.coming_time) - new Date(a.coming_time) 
+      // })
+      // console.log('YES', vau[0])
+      // return aou.reverse()
+      return vau
 
     },
     getEmployeesToday() {},
