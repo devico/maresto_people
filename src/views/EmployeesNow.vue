@@ -405,7 +405,7 @@ export default {
 
 
       let vpn_usrs = this.getVpnEmployes
-      console.log("vpn_users", vpn_usrs)
+      
       const match_hh = /^(\d{1,2}h)/i
       const match_mm = /^(\d{1,2}m)/i
       const match_ss = /^(\d{1,2}s)/i

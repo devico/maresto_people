@@ -81,7 +81,18 @@
             pill
           >{{filterGender}}
           </v-chip>
-        </v-row>        
+        </v-row>
+        <v-row justify="space-around">
+          <v-chip-group
+            v-model="selectAlfabet"
+            active-class="deep-purple--text text--accent-4"
+            mandatory            
+          >
+            <v-chip v-for="ab in alfabet" :key="ab" :value="ab" @click="filterAlfabet">
+              {{ ab }}
+            </v-chip>
+          </v-chip-group>
+        </v-row>
         <v-data-table
           :headers="headers"
           :items="employeesTable"
@@ -169,6 +180,7 @@ export default {
   data() {
     return {
       loading: true,
+      selectAlfabet: 'Все',
       onFilter: false,
       onDetail: false,
       onGrid: false,
@@ -194,7 +206,8 @@ export default {
       filterPosition: '',
       filterUnit: '',
       filterWP: '',
-      filterGender: '',      
+      filterGender: '',
+      alfabet: ['Все', 'А', 'Б', 'В', 'Г', 'Д', 'Е', 'Є', 'Ж', 'З', 'И', 'І', 'Ї', 'Й', 'К', 'Л', 'М', 'Н', 'О', 'П', 'Р', 'С', 'Т', 'У', 'Ф', 'Х', 'Ц', 'Ч', 'Ш', 'Щ', 'Ю', 'Я'],
     };
   },
   async mounted() {
@@ -220,6 +233,17 @@ export default {
   },
   methods: {
     ...mapActions(["fetchEmployees", "fetchPersons", "fetchUnits", "fetchPositions", "fetchWorkPlaces", "fetchTypesContact", "fetchContacts", "fetchDismissed", "fetchResume"]),
+    filterAlfabet() {
+      this.buildEmployeesTable(this.employees);
+      const filteredEmployees = this.employeesTable.filter(e => {
+        if (this.selectAlfabet === 'Все') {
+          return e
+        }        
+        return this.selectAlfabet == (e.full_name).substring(0, 1)
+      })
+      
+      this.employeesTable = filteredEmployees
+    },
     getUserDetails() {
       let token = localStorage.getItem("jwt");
       let decoded = VueJwtDecode.decode(token);
@@ -400,6 +424,11 @@ export default {
       ];
     },
   },
+  watch: {
+    selectAlfabet: function() {
+      this.filterAlfabet()
+    }
+  }
 };
 </script>
 <style scoped>

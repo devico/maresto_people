@@ -124,19 +124,22 @@ export default {
 
       const res = await fetch('http://localhost:4000/api/vpnusers')
       const data = await res.json();
-
+      
       const datetime = `${year}-${month}-${day}`
+      
   
       const uLogin =  data.map(u => {
         return u.login
       })
-
+      
       const usersLogin = uLogin.filter((v, i, a) => a.indexOf(v) === i);
 
       const vpnConnectionsByDay = usersLogin.map(ul => {
         const conns = data.filter(c => {
+          
           if (ul == c.login) {
             if (c.timestamp.startsWith(datetime) && c.action == "CONNECTED") {
+              
               return {
                 login: c.login,
                 timestamp: c.timestamp,
@@ -148,13 +151,14 @@ export default {
                
         return conns
       })
-
+      
       const first_enters = []
       vpnConnectionsByDay.map(c => {
         if (c[0] !== undefined) {
           first_enters.push(c[0])
         }
-      })      
+      })
+      console.log('first_enters', first_enters)
       ctx.commit('updateTodatVpnUsersConnection', first_enters)      
     },
     async fetchPPPClients(ctx) {
