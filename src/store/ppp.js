@@ -158,7 +158,7 @@ export default {
           first_enters.push(c[0])
         }
       })
-      console.log('first_enters', first_enters)
+      
       ctx.commit('updateTodatVpnUsersConnection', first_enters)      
     },
     async fetchPPPClients(ctx) {

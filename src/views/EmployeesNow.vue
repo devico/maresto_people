@@ -446,7 +446,8 @@ export default {
           ...u,
           duration: duration,
           start_time_work: start_time_work,
-          color: start_work <= 9.25 ? 'green lighten-2' : 'red lighten-2'
+          // color: start_work <= 9.25 ? 'green lighten-2' : 'red lighten-2'
+          color: 'blue lighten-3'
         }
       })
       
