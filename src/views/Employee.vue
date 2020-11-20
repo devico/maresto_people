@@ -1,8 +1,8 @@
 <template>
   <div>
     <Loader v-if="loading"/>
-    <div v-else flex class="mx-15">
-      <v-row>
+    <div v-else flex class="ml-5 mr-15">
+      <!-- <v-row>
         <v-col cols="12" class="mt-3">
           <v-row>
             <v-btn x-large icon right tile class="ml-2" @click.prevent="backToEmployees">
@@ -11,9 +11,16 @@
             <span class="mt-2 ml-5"><h2>Сотрудники</h2></span>
           </v-row>
         </v-col>
-      </v-row>
-      <v-row>
-        <v-col cols="3" class="pl-10 mt-1">
+      </v-row> -->
+      <v-row align="center" justify="center">
+        <v-col cols="1">
+          <v-row  width="50">
+            <v-btn x-large icon right tile class="ml-5" @click.prevent="backToEmployees">
+              <v-icon>mdi-arrow-left</v-icon>
+            </v-btn>
+          </v-row>
+        </v-col>
+        <v-col cols="3" class="mt-1">
           <v-row flex>
             <v-card class="mx-auto" width="100%" :elevation="6"  height="875">
               <v-card-text class="text-center">
@@ -35,10 +42,10 @@
             </v-card>
           </v-row>
         </v-col>
-        <v-col cols="9" class="pl-7 my-0">
+        <v-col cols="8" class="pl-7 my-0">
           <v-row flex>
             <v-col cols="6" class="mx-0 py-1">
-              <v-card class="mx-auto" width="100%" :elevation="6" height="250">
+              <v-card class="mx-auto" width="100%" :elevation="6" height="265">
                 <v-card-title class="justify-start">ЛИЧНОЕ</v-card-title>
                 <Individual
                   :homePlace="getHomePlace"
@@ -49,7 +56,7 @@
               </v-card>
             </v-col>
             <v-col cols="6" class="mx-0  py-1">
-              <v-card class="mx-auto" width="100%" :elevation="6" height="250">
+              <v-card class="mx-auto" width="100%" :elevation="6" height="265">
                 <v-card-title class="justify-start">РАБОТА</v-card-title>
                   <Work
                     :unit="getUnit"
@@ -59,23 +66,20 @@
                   />
                 </v-card>
             </v-col>
-            
           </v-row>
           <v-row flex>
             <v-col cols="6" class="mx-0 py-1">
-              <v-card class="mx-auto" width="100%" :elevation="6" height="500">
+              <v-card class="mx-auto" width="100%" :elevation="6" height="485">
                 <v-card-title class="justify-start">ОБРАЗОВАНИЕ</v-card-title>
                 <Education :educations="educations"/>
               </v-card>
-              
             </v-col>
             <v-col cols="6" class="mx-0 py-1">
-              <v-card class="mx-auto" width="100%" :elevation="6" height="500">
+              <v-card class="mx-auto" width="100%" :elevation="6" height="485">
                 <v-card-title class="justify-start">РОДСТВЕННИКИ</v-card-title>
                   <Family :relatives="relatives" />
                 </v-card>
             </v-col>
-            
           </v-row>
           <v-row flex>
             <v-col cols="12" class="mx-0  py-1">
@@ -90,14 +94,10 @@
                   </v-expansion-panel>
                 </v-expansion-panels>
               </v-card>
-            </v-col>          
+            </v-col>
           </v-row>
-
-          
         </v-col>
       </v-row>
-      
-
     </div>
   </div>
 </template>
