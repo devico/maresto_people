@@ -1,7 +1,8 @@
 <template>
-  
-    <v-row flex>
-      <v-card class="mx-auto ml-3 mt-3" width="100%" :elevation="6">
+    <div>
+      <Loader v-if="loading" class="mt-20" />
+    <v-row v-else flex>
+      <v-card class="mx-auto ml-3 mt-3" width="100%" :elevation="1">
         <v-card-text class="text-center">
           <v-avatar size="100" class="mt-2">
             <v-img
@@ -23,20 +24,26 @@
           </p>
         </v-card-text>
         <v-expansion-panels v-model="panel" multiple flat class="ml-2">
-            <v-expansion-panel
-            >
-              <v-expansion-panel-header class="py-0 px-2">
-                <v-list>
-                  <v-list-item>
-                    <v-list-item-content >
-                      <v-list-item-title class="indigo--text">
-                        Контакты
-                      </v-list-item-title>                      
-                    </v-list-item-content>
-                  </v-list-item>
-                </v-list>
-              </v-expansion-panel-header>
+          <v-expansion-panel>
+          <v-expansion-panel-header class="py-0 px-2 indigo--text">
+            Документы
+          </v-expansion-panel-header>
 
+          <v-expansion-panel-content align-self-center>
+            <!-- <v-btn
+            class="mt-2"
+              depressed
+              small
+              color="primary"
+              @click="saveResume"
+            >Скачать резюме
+            </v-btn> -->
+          </v-expansion-panel-content>
+        </v-expansion-panel>
+            <v-expansion-panel>
+              <v-expansion-panel-header class="py-0 px-2 indigo--text">
+                Контакты                
+              </v-expansion-panel-header>
               <v-expansion-panel-content>
                 <Individual
                   :homePlace="getHomePlace"
@@ -44,67 +51,42 @@
                   :email="getEmail"
                   :birthday="getBirthday"
                 />
-              </v-expansion-panel-content>
-              
+              </v-expansion-panel-content>              
             </v-expansion-panel>
             <v-expansion-panel>
-              <v-expansion-panel-header class="py-0 px-2">
-                <v-list>
-                  <v-list-item>
-                    <v-list-item-content>
-                      <v-list-item-title class="indigo--text">
-                        Работа
-                      </v-list-item-title>                      
-                    </v-list-item-content>
-                  </v-list-item>
-                </v-list>
+              <v-expansion-panel-header class="py-0 px-2 indigo--text">
+                Работа
               </v-expansion-panel-header>
               <v-expansion-panel-content>
                 <Work
                   :unit="getUnit"
                   :orgPosition="getPosition"
                   :workPlace="getWorkPlace"
-                  :recruitment="recruitment[0].Period.substring(0, 10)"
+                  :recruitment="recruitment[0] !== undefined ? recruitment[0].Period.substring(0, 10) : 'Не указано'"
                 />
               </v-expansion-panel-content>
             </v-expansion-panel>
-                        <v-expansion-panel>
-              <v-expansion-panel-header class="py-0 px-2">
-                <v-list>
-                  <v-list-item>
-                    <v-list-item-content>
-                      <v-list-item-title class="indigo--text">
-                        Образование
-                      </v-list-item-title>                      
-                    </v-list-item-content>
-                  </v-list-item>
-                </v-list>
+            <v-expansion-panel>
+              <v-expansion-panel-header class="py-0 px-2 indigo--text">
+                Образование
               </v-expansion-panel-header>
               <v-expansion-panel-content>
                 <Education :educations="educations"/>
               </v-expansion-panel-content>
             </v-expansion-panel>
-            <v-expansion-panel>
-              <v-expansion-panel-header class="py-0 px-2">
-                <v-list>
-                  <v-list-item>
-                    <v-list-item-content>
-                      <v-list-item-title class="indigo--text">
-                        Родственники
-                      </v-list-item-title>                      
-                    </v-list-item-content>
-                  </v-list-item>
-                </v-list>
+             <v-expansion-panel>
+              <v-expansion-panel-header class="py-0 px-2 indigo--text">
+                Родственники
               </v-expansion-panel-header>
               <v-expansion-panel-content>
                 <Family :relatives="relatives" />
-              </v-expansion-panel-content>
+              </v-expansion-panel-content> 
             </v-expansion-panel>
           </v-expansion-panels>
       </v-card>
 
     </v-row>
-    
+    </div>
   
 </template>
 
@@ -114,6 +96,7 @@ import Individual from "@/components/Individual.vue";
 import Work from "@/components/Work.vue";
 import Education from "@/components/Education.vue";
 import Family from "@/components/Family.vue";
+import { Base64 } from 'js-base64';
 export default {
   name: "Employee",
   props: {
@@ -130,6 +113,7 @@ export default {
   },
   data() {
     return {
+      loading: true,
       panel: [],
       employee: {},
       person: [],
@@ -169,6 +153,32 @@ export default {
       "fetchSchools",
       "fetchRelationDegree",
     ]),
+    saveResume() {
+      const username = 'Дмитраков С.Н.';
+      const password = '340340340';
+      const config = {
+        method: "GET",
+        headers: {
+          'Access-Control-Allow-Origin': '*',
+          "content-type": "application/octet-stream",
+          "Authorization": `Basic ${Base64.encode(username + ":" + password)}`,
+        },
+        responseType: 'blob',
+        withCredentials: true,
+        credentials: 'same-origin',
+      };
+      fetch("http://localhost:8080/ZUP/odata/standard.odata/Catalog_ХранилищеДополнительнойИнформации(guid eq '55f1bed5-e84a-11ea-bf40-000c29a7d70a')/Хранилище", config)
+      .then(response => {
+        return response;
+      })
+      .then((response) => {
+        let blob = new Blob([response.data],{ type:'application/vnd.openxmlformats-officedocument.wordprocessingml.document'})
+        let link = document.createElement('a');
+        link.href = window.URL.createObjectURL(blob);
+        link.download = '222.docx'
+        link.click();
+      });
+    },
   },
   computed: {
     ...mapGetters([
@@ -258,9 +268,8 @@ export default {
       const yy = this.person.birthday.substring(0, 4);
       const mm = this.person.birthday.substring(5, 7);
       const dd = this.person.birthday.substring(8, 10);
-      const birthday = `${dd}.${mm}.${yy}`;
-
-      return birthday;
+      
+      return `${dd}.${mm}.${yy}`
     },
     getStartWork() {
       const emp = this.employees.filter((e) => {
@@ -277,7 +286,10 @@ export default {
     },
   },
   async mounted() {
-    console.log('ID', this.id)
+    await this.fetchSpecialities();
+    await this.fetchTypeEducation();
+    await this.fetchSchools();
+    await this.fetchRelationDegree();
     this.employee = await this.fetchEmployeeByID(this.id);
     this.person = await this.fetchPersonByID(this.employee.personKey);
     this.recruitment = await this.fetchRecruitmentByID(this.employee.personKey);
@@ -289,10 +301,8 @@ export default {
     this.units = await this.getUnits;
     this.educations = this.person.education;
     this.relatives = this.person.family;
-    await this.fetchSpecialities();
-    await this.fetchTypeEducation();
-    await this.fetchSchools();
-    await this.fetchRelationDegree();
+    this.loading = false
+    
   },
 };
 </script>

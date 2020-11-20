@@ -3,6 +3,7 @@ import App from "./App.vue";
 import router from "./router";
 import axios from "axios";
 import store from './store'
+import VueMarkdown from 'vue-markdown'
 import "bootstrap/dist/css/bootstrap.css";
 import Loader from './components/app/Loader'
 import '@/plugins/apexcharts'
@@ -17,6 +18,7 @@ Vue.prototype.$http = base;
 Vue.config.productionTip = false;
 
 Vue.component('Loader', Loader)
+Vue.component('vue-markdown', VueMarkdown)
 
 new Vue({
   router,

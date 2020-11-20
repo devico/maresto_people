@@ -24,8 +24,7 @@ export default {
     };
   },
   mounted() {
-    console.log("SU: ", this.series)
-    console.log("CO: ", this.chartOptions)
+    
   }
 };
 </script>

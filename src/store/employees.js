@@ -187,7 +187,8 @@ export default {
           gender: p.Пол,
           image: `${p.ОсновноеИзображение_Key}.png`,
           family: p.СоставСемьи,
-          education: p.Образование
+          education: p.Образование,
+          comment: p.Комментарий
         }
       })
       return person[0]
@@ -304,7 +305,6 @@ export default {
 
       const recruitments = docs.filter(r => {
         if (r.ФизЛицо_Key == id) {
-          console.log(r.Period)
           return {
             individualKey: r.ФизЛицо_Key,
             startRecruitment: r.Period
@@ -345,7 +345,8 @@ export default {
             gender: p.Пол,
             image: `${p.ОсновноеИзображение_Key}.png`,
             family: p.СоставСемьи,
-            education: p.Образование
+            education: p.Образование,
+            comment: p.Комментарий
           }
         })
 

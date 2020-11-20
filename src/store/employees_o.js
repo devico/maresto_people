@@ -47,7 +47,7 @@ export default {
         // .get('/Catalog_СотрудникиОрганизаций?$format=json')
       
       const oHandler = await o('http://192.168.58.106:8080/Corp_ZUP/odata/standard.odata/Catalog_СотрудникиОрганизаций?$format=json', config).get(function(data) {
-        console.log(data); 
+        // console.log(data); 
     });
 
       // let endpoint = 'http://192.168.58.106:8080/Catalog_СотрудникиОрганизаций?$format=json';
@@ -55,7 +55,7 @@ export default {
       //   console.log('1', data)
       //   ctx.commit('updateEmployees', data)
       // })
-      console.log(oHandler)
+      // console.log(oHandler)
     }
   },
   getters: {

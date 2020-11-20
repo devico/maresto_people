@@ -1,11 +1,14 @@
 <template>
-  <v-card-text class="px-0 py-0">
-      <p class="subtitle-0">Год окончания: {{ finish_year }}</p>
-      <p class="subtitle-0">Вид: {{ vid_edu }}</p>
-      <p class="subtitle-0">Уч. заведение: {{ uch_edu }}</p>
-      <p class="subtitle-0">Специальность: {{ specialnost }}</p>
-      <p class="subtitle-0">Квалификация: {{ kvalification }}</p>
+  <v-card-text class="py-0">
+    <p class="subtitle-0">Год окончания: {{ finish_year }}</p>
+    <p class="subtitle-0">Вид: {{ vid_edu }}</p>
+    <p class="subtitle-0">Уч. заведение: {{ uch_edu }}</p>
+    <p class="subtitle-0">Специальность: {{ specialnost }}</p>
+    <p class="subtitle-0">Квалификация: {{ kvalification }}</p>
+    <v-divider></v-divider>
    </v-card-text>
+   
+  
     <!-- <v-card>
       <v-card-title class="pt-0">Основное</v-card-title>
       <v-timeline align-top dense >
@@ -39,7 +42,11 @@ export default {
         "diplom",
         "finish_year",
         "kvalification"
-    ]
+    ],
+    mounted() {
+      
+    }
+
 };
 </script>
 

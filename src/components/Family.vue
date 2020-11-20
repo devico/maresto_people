@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="my-0">
     <div v-for="(f, i) in listRelations" :key="i">
       <ItemFamily
         :rel_degree="f.rel_degree"
@@ -45,12 +45,13 @@ export default {
           year_burth: r.ГодРождения
         };
       });
-      console.log('LE: ', this.listRelations)
+      
     },
     getCurrentRelationDegree(id) {
       const relDegree = this.relationDegree.filter(rd => {
         return rd.refKey == id;
       });
+      
       return relDegree[0].description;
     },
     getCurrentIndividual(id) {

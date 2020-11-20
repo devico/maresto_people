@@ -21,7 +21,7 @@ export default {
         // const sheet = doc.sheetsByIndex[0]; // or use doc.sheetsById[id]
         // const sheet = doc.sheetsByTitle['02.11.2020']
         // const sheet = doc.sheetsByTitle[`${today}`]
-        console.log(data.month, '_', data.year)
+        
                 
         const sheet = doc.sheetsByTitle['10_2020']
         // console.log('DATA', data)

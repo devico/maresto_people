@@ -12,11 +12,12 @@
 
 <script>
 import Navbar from "@/components/Navbar.vue";
+import AppBar from "@/components/AppBar.vue";
 import EmptyLayout from '@/layouts/EmptyLayout'
 import AdminLayout from '@/layouts/AdminLayout'
 export default {
   components: {
-    Navbar, EmptyLayout, AdminLayout
+    Navbar, AppBar, EmptyLayout, AdminLayout
   },
   computed: {
     layout() {

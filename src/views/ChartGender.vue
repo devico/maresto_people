@@ -43,7 +43,7 @@ export default {
     };
   },
   mounted() {
-      console.log("S: ", this.series)
+      // console.log("S: ", this.series)
   }
 };
 </script>

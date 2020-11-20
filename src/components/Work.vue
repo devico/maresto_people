@@ -1,5 +1,5 @@
 <template>
-  <v-card-text class="px-0 py-0">
+  <v-card-text >
       <p class="subtitle-0">Организация: Наша организация</p>
       <p class="subtitle-0">Подразделение: {{unit}}</p>
       <p class="subtitle-0">Руководитель: Руководитель</p>

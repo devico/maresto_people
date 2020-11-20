@@ -1,107 +1,104 @@
 <template>
-  <div flex class="mx-15">
-    <v-row>
-      <v-col cols="12" class="mt-3">
-        <v-row>
-          <v-btn x-large icon right tile class="ml-2" @click.prevent="backToEmployees">
-            <v-icon>mdi-arrow-left</v-icon>
-          </v-btn>
-          <span class="mt-2 ml-5"><h2>Сотрудники</h2></span>
-        </v-row>
-      </v-col>
-    </v-row>
-    <v-row>
-      <v-col cols="3" class="pl-10">
-        <v-row flex>
-          <v-card class="mx-auto mt-3" width="100%" :elevation="6">
-            <v-card-text class="text-center">
-              <v-avatar size="177" class="mt-2">
-                <v-img
-                  class="mr-3"
-                  :src="require(`@/assets/images/${person.image}`)"
-                  height="177"
-                ></v-img>
-              </v-avatar>
-            </v-card-text>
-            <v-card-title class="justify-center">{{person.description}}</v-card-title>
-            <v-card-text>
-              <p class="my-2 subtitle-1"><v-icon class="mr-3">mdi-briefcase-variant</v-icon>{{getPosition}}</p>
-              <p class="my-2 subtitle-1"><v-icon class="mr-3">mdi-office-building-marker</v-icon>{{getWorkPlace}}</p>
-            </v-card-text>
-          </v-card>
-        </v-row>
-        <v-row >
-          <v-sheet class="mx-auto mt-5 px-4" width="100%" :elevation="6">
-            <p class="my-2 subtitle-1"><v-icon class="mr-3">mdi-at</v-icon>{{getEmail}}</p>
-            <p class="my-2 subtitle-1"><v-icon class="mr-3">mdi-facebook</v-icon>Социальная сеть</p>
-            <p class="my-2 subtitle-1"><v-icon class="mr-3">mdi-cellphone-basic</v-icon>{{getPhone}}</p>
-            <hr>
-            <div>
-              <p class="my-2 subtitle-1 grey--text"><strong>Дата рождения</strong></p>
-              <p class="my-2 subtitle-1">{{getBirthday}}</p>
-            </div>
-            <div>
-              <p class="my-2 subtitle-1 grey--text"><strong>Нанят</strong></p>
-              <p class="my-2 subtitle-1">{{getStartWork}}</p>
-            </div>
-            <div>
-              <p class="my-2 subtitle-1 grey--text"><strong>Вид занятости</strong></p>
-              <p class="my-2 subtitle-1">Основной договор</p>
-            </div>
-            <div>
-              <p class="my-2 subtitle-1 grey--text"><strong>Должность</strong></p>
-              <p class="my-2 subtitle-1">{{getPosition}}</p>
-            </div>
-            <div>
-              <p class="my-2 subtitle-1 grey--text"><strong>Локация</strong></p>
-              <p class="my-2 subtitle-1">{{getWorkPlace}}</p>
-            </div>
-          </v-sheet>
-          
-        </v-row>
-        
-        
-      </v-col>
-      <v-col cols="9" class="mx-0">
-        <v-col cols="12">
-        <!-- <v-card height="1000px" :elevation="6"> -->
-          <v-tabs v-model="tab" background-color="transparent" grow>
-            <v-tab>Контакты</v-tab>
-            <v-tab>Работа</v-tab>
-            <v-tab>Образование</v-tab>
-            <v-tab>Родственники</v-tab>
-            <v-tab>ТМЦ</v-tab>
-          </v-tabs>
-          <v-tabs-items v-model="tab">
-            <v-tab-item>
+  <div>
+    <Loader v-if="loading"/>
+    <div v-else flex class="mx-15">
+      <v-row>
+        <v-col cols="12" class="mt-3">
+          <v-row>
+            <v-btn x-large icon right tile class="ml-2" @click.prevent="backToEmployees">
+              <v-icon>mdi-arrow-left</v-icon>
+            </v-btn>
+            <span class="mt-2 ml-5"><h2>Сотрудники</h2></span>
+          </v-row>
+        </v-col>
+      </v-row>
+      <v-row>
+        <v-col cols="3" class="pl-10 mt-1">
+          <v-row flex>
+            <v-card class="mx-auto" width="100%" :elevation="6"  height="875">
+              <v-card-text class="text-center">
+                <v-avatar size="177" class="mt-2">
+                  <v-img
+                    class="mr-3"
+                    :src="require(`@/assets/images/${person.image}`)"
+                    height="177"
+                  ></v-img>
+                </v-avatar>
+              </v-card-text>
+              <v-card-title class="justify-center py-0">{{getLastName}}</v-card-title>
+              <v-card-title class="justify-center py-0">{{getFirstName}}</v-card-title>
+              <v-card-title class="justify-center py-0">{{getFathersName}}</v-card-title>
+              <v-card-text>
+                <p class="my-2 subtitle-1"><v-icon class="mr-3">mdi-briefcase-variant</v-icon>{{getPosition}}</p>
+                <p class="my-2 subtitle-1"><v-icon class="mr-3">mdi-office-building-marker</v-icon>{{getWorkPlace}}</p>
+              </v-card-text>
+            </v-card>
+          </v-row>
+        </v-col>
+        <v-col cols="9" class="pl-7 my-0">
+          <v-row flex>
+            <v-col cols="6" class="mx-0 py-1">
+              <v-card class="mx-auto" width="100%" :elevation="6" height="250">
+                <v-card-title class="justify-start">ЛИЧНОЕ</v-card-title>
                 <Individual
                   :homePlace="getHomePlace"
                   :phone="getPhone"
                   :email="getEmail"
                   :birthday="getBirthday"
                 />
-            </v-tab-item>
-            <v-tab-item>
-                <Work
-                  :unit="getUnit"
-                  :orgPosition="getPosition"
-                  :workPlace="getWorkPlace"
-                  :recruitment="recruitment[0].Period.substring(0, 10)"
-                />
-            </v-tab-item>
-            <v-tab-item>
-              <Education :educations="educations"/>
-            </v-tab-item>
-            <v-tab-item>
-              <Family :relatives="relatives" />
-            </v-tab-item>
-          </v-tabs-items>
-       <!--  </v-card> -->
-      </v-col>
-      </v-col>
-    </v-row>
-    
+              </v-card>
+            </v-col>
+            <v-col cols="6" class="mx-0  py-1">
+              <v-card class="mx-auto" width="100%" :elevation="6" height="250">
+                <v-card-title class="justify-start">РАБОТА</v-card-title>
+                  <Work
+                    :unit="getUnit"
+                    :orgPosition="getPosition"
+                    :workPlace="getWorkPlace"
+                    :recruitment="recruitment[0] !== undefined ? recruitment[0].Period.substring(0, 10) : 'Не указано'"
+                  />
+                </v-card>
+            </v-col>
+            
+          </v-row>
+          <v-row flex>
+            <v-col cols="6" class="mx-0 py-1">
+              <v-card class="mx-auto" width="100%" :elevation="6" height="500">
+                <v-card-title class="justify-start">ОБРАЗОВАНИЕ</v-card-title>
+                <Education :educations="educations"/>
+              </v-card>
+              
+            </v-col>
+            <v-col cols="6" class="mx-0 py-1">
+              <v-card class="mx-auto" width="100%" :elevation="6" height="500">
+                <v-card-title class="justify-start">РОДСТВЕННИКИ</v-card-title>
+                  <Family :relatives="relatives" />
+                </v-card>
+            </v-col>
+            
+          </v-row>
+          <v-row flex>
+            <v-col cols="12" class="mx-0  py-1">
+              <v-card class="mx-auto" width="100%" :elevation="6" height="110">
+                <v-card-title class="justify-start">Документы</v-card-title>
+                <v-expansion-panels accordion>
+                  <v-expansion-panel>
+                    <v-expansion-panel-header>Показать Резюме</v-expansion-panel-header>
+                    <v-expansion-panel-content>
+                      <vue-markdown>{{person.comment}}</vue-markdown>
+                    </v-expansion-panel-content>
+                  </v-expansion-panel>
+                </v-expansion-panels>
+              </v-card>
+            </v-col>          
+          </v-row>
 
+          
+        </v-col>
+      </v-row>
+      
+
+    </div>
   </div>
 </template>
 
@@ -127,6 +124,7 @@ export default {
   },
   data() {
     return {
+      loading: true,
       employee: {},
       person: [],
       personImage: '',
@@ -161,6 +159,18 @@ export default {
   },
   computed: {
     ...mapGetters([ "getPositions", "getWorkPlaces", "getTypesContact", "getContacts", "getEmployees", 'getUnits']),
+    getFirstName() {
+      const names = this.person.description.split(' ')
+      return names[1]
+    },
+    getLastName() {
+      const names = this.person.description.split(' ')
+      return names[0]
+    },
+    getFathersName() {
+      const names = this.person.description.split(' ')
+      return names[2]
+    },
     getPosition() {
       const emp = this.employees.filter((e) => {
         return this.person.refKey == e.personKey;
@@ -268,12 +278,15 @@ export default {
     this.typesContact = await this.getTypesContact;
     this.contacts = await this.getContacts;   
     this.units = await this.getUnits;
-    this.educations = this.person.education
-    this.relatives = this.person.family
+    
     await this.fetchSpecialities()
     await this.fetchTypeEducation()
     await this.fetchSchools()
     await this.fetchRelationDegree()
+    this.educations = this.person.education
+    this.relatives = this.person.family
+    this.loading = false
+    
 
   }
 };

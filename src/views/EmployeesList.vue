@@ -26,14 +26,14 @@
               <v-icon v-if="onFilter">mdi-filter</v-icon>
               <v-icon v-else>mdi-filter-outline</v-icon>
             </v-btn>
-            <v-btn icon @click.prevent="onDetail = false">
+            <!-- <v-btn icon @click.prevent="onDetail = false">
               <v-icon v-if="onDetail">mdi-account-arrow-right</v-icon>
               <v-icon v-else>mdi-account-arrow-right-outline</v-icon>
             </v-btn>
             <v-btn icon @click.prevent="toGrid">
               <v-icon v-if="onGrid">mdi-view-grid</v-icon>
               <v-icon v-else>mdi-view-grid-outline</v-icon>
-            </v-btn>
+            </v-btn> -->
             <v-btn icon right @click.prevent="onList = !onList">
               <v-icon v-if="onList">mdi-view-list</v-icon>
               <v-icon v-else>mdi-view-list-outline</v-icon>
@@ -148,9 +148,9 @@
           ></v-text-field> -->
         </div>
       </v-col>
-      <v-col cols="2" v-if="onDetail">
+      <!-- <v-col cols="2" v-if="onDetail">
       <EmployeeDetail :id="employeeID"/>
-      </v-col>
+      </v-col> -->
     </v-row>
   </div>
   </div>
@@ -347,15 +347,15 @@ export default {
       return email[0].description      
     },
     showEmployeeDetail(item) {
-      this.onDetail = false
-      console.log('1 ID', this.onDetail)
-      this.employeeID = item.id
-      setTimeout(() => {
-        this.onDetail = true
-        console.log('2 ID', this.onDetail)
-      }, 500)
+      // this.onDetail = false
+      // console.log('1 ID', this.onDetail)
+      // this.employeeID = item.id
+      // setTimeout(() => {
+      //   this.onDetail = true
+      //   console.log('2 ID', this.onDetail)
+      // }, 500)
       
-      // this.$router.push(`/employee/${item.id}`)
+      this.$router.push(`/employee/${item.id}`)
     },
     toGrid() {
       // this.$router.push('/employees/grid')

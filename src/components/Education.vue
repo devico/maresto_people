@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="my-0">
     <div v-for="(edu, i) in listEdu" :key="i">
       <ItemEducation
         :vid_edu="edu.vid_edu"
@@ -35,6 +35,7 @@ export default {
     this.specialities = await this.getSpecialities;
     this.schools = await this.getSchools;
     this.getEdu();
+    // console.log('EEE', this.educations)
     
   },
   methods: {
