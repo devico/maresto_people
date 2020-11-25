@@ -13,6 +13,7 @@
     "base-64": "^0.1.0",
     "bootstrap": "^4.5.2",
     "core-js": "^3.6.5",
+    "crypto-js": "^4.0.0",
     "file-saver": "^2.0.2",
     "google-spreadsheet": "^3.0.13",
     "googleapis": "^39.2.0",

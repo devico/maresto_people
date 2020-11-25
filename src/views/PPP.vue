@@ -140,10 +140,11 @@ export default {
     // this.getDataFromMikrotik()
     // this.getVpnUsers()
     // this.getCountConstant();
+    this.fetchUProx()
 
   },
   methods: {
-    ...mapActions(["fetchPPPClients", "getDataFromMikrotik", "getVpnUsers"]),
+    ...mapActions(["fetchPPPClients", "getDataFromMikrotik", "getVpnUsers", "fetchUProx"]),
   },
   computed: {
     ...mapGetters(["getPPPClients"]),

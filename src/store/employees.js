@@ -15,7 +15,9 @@ export default {
     schools: JSON.parse(localStorage.getItem('schools') || '[]'),
     relationDegree: JSON.parse(localStorage.getItem('relationDegree') || '[]'),
     dismissed: JSON.parse(localStorage.getItem('dismissed') || '[]'), 
-    resumes: JSON.parse(localStorage.getItem('resumes') || '[]'),     
+    resumes: JSON.parse(localStorage.getItem('resumes') || '[]'),
+    typesObjects: JSON.parse(localStorage.getItem('typesObjects') || '[]'),
+    valueTypesObjects: JSON.parse(localStorage.getItem('typesObjects') || '[]'),
   },
   mutations: {
     updateEmployees(state, records) {
@@ -73,7 +75,15 @@ export default {
     updateListResume(state, data){
       state.resumes = data
       localStorage.setItem('resumes', JSON.stringify(state.resumes))
-    }
+    },
+    updateTypesObjects(state, data){
+      state.typesObjects = data
+      localStorage.setItem('typesObjects', JSON.stringify(state.typesObjects))
+    },
+    updateValuesTypesObjects(state, data){
+      state.valueTypesObjects = data
+      localStorage.setItem('valueTypesObjects', JSON.stringify(state.valueTypesObjects))
+    },
   },
   actions: {
     async fetchEmployees(ctx) {
@@ -278,6 +288,61 @@ export default {
           }
         })
         ctx.commit('updateTypesEducation', typeEdu)
+      })
+    },
+    async fetchTypesObjects(ctx) {
+      const username = 'Дмитраков С.Н.';
+      const password = '340340340';
+      const config = {
+        method: "GET",
+        headers: {
+          'Access-Control-Allow-Origin': '*',
+          "content-type": "application/json",
+          "Authorization": `Basic ${Base64.encode(username + ":" + password)}`,
+        },
+        withCredentials: true,
+        credentials: 'same-origin',
+      };
+
+      // await fetch('http://people.maresto.ua/ZUP/odata/standard.odata/Catalog_ВидыОбразованияФизЛиц?&$format=json', config).then(response => {
+      await fetch('http://localhost:8080/ZUP/odata/standard.odata/ChartOfCharacteristicTypes_СвойстваОбъектов?&$format=json', config).then(response => {
+        return response.json();
+      }).then(data => {
+        const typeObj = data.value.map(t => {
+          return {
+            refKey: t.Ref_Key,
+            description: t.Description
+          }
+        })
+        ctx.commit('updateTypesObjects', typeObj)
+      })
+    },
+    async fetchValuesTypesObjects(ctx) {
+      const username = 'Дмитраков С.Н.';
+      const password = '340340340';
+      const config = {
+        method: "GET",
+        headers: {
+          'Access-Control-Allow-Origin': '*',
+          "content-type": "application/json",
+          "Authorization": `Basic ${Base64.encode(username + ":" + password)}`,
+        },
+        withCredentials: true,
+        credentials: 'same-origin',
+      };
+
+      // await fetch('http://people.maresto.ua/ZUP/odata/standard.odata/Catalog_ВидыОбразованияФизЛиц?&$format=json', config).then(response => {
+      await fetch('http://localhost:8080/ZUP/odata/standard.odata/InformationRegister_ЗначенияСвойствОбъектов?&$format=json', config).then(response => {
+        return response.json();
+      }).then(data => {
+        const valueObj = data.value.map(v => {
+          return {
+            value: v.Значение,
+            propertyKey: v.Свойство_Key,
+            personKey: v.Объект
+          }
+        })
+        ctx.commit('updateValuesTypesObjects', valueObj)
       })
     },
     async fetchRecruitmentByID(ctx, id) {
@@ -627,6 +692,11 @@ export default {
     getResumes(state) {
       return state.resumes
     },
-    
+    getTypesObjects(state) {
+      return state.typesObjects
+    },
+    getValueTypesObjects(state) {
+      return state.valueTypesObjects
+    },    
   }
 }

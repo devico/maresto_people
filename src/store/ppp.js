@@ -1,5 +1,6 @@
 import { GoogleSpreadsheet } from 'google-spreadsheet'
 import {client_email, private_key } from "../common/keys.json"
+import MD5 from "crypto-js/md5"
 
 export default {
   state: {
@@ -297,7 +298,62 @@ export default {
       })
       
       ctx.commit('updateSKUDEmployeesToday', data)
-    }
+    },
+    async fetchUProx(ctx) {
+      const username = 'admin';
+      const password = 'admin';
+
+      
+      const ff = new Date()
+      
+      const yyyy = ff.getFullYear()
+      const mm = ff.getMonth()
+      const dd = ff.getDate()
+      const startEvents = new Date(yyyy, mm, dd, 6, 0, 0)
+
+      const passwordHash = (MD5((MD5((MD5(password).toString()).toUpperCase() + "F593B01C562548C6B7A31B30884BDE53").toString()).toUpperCase()).toString()).toUpperCase()
+      console.log('passwordHash: ', passwordHash)
+      const config = {
+        method: "POST",
+        headers: {
+          'Access-Control-Allow-Origin': '*',
+          "content-type": "application/json",          
+        },
+        body: JSON.stringify({"PasswordHash": `${passwordHash}`, "UserName": `${username}`})
+        
+      };
+
+      const auth = await fetch('http://localhost:8080/json/Authenticate', config)
+        .then(response => {
+          return response.json()
+        })
+      // console.log('AUTH', auth)
+      
+      const params = {
+        method: "POST",
+        headers: {
+          'Access-Control-Allow-Origin': '*',
+          "content-type": "application/json",          
+        },
+        body: JSON.stringify({
+          "UserSID":`${auth.UserSID}`,
+          "Limit":10000, 
+          "StartToken":`${auth.UserToken}`,
+          "IssuedFrom":`\/Date(${startEvents.getTime()})\/`
+        })
+        
+      }
+      const data = await fetch('http://localhost:8080/json/EventGetList', params)
+        .then(response => {
+          return response.json()
+        })
+      
+        // http://localhost:40001/json/EventGetList
+        // console.log('DETE', `\/Date(${startEvents.getTime()})\/`)
+      console.log('DATA', data)
+
+
+  },
   },
   getters: {
     getPPPClients(state) {

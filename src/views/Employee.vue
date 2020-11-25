@@ -62,6 +62,7 @@
                     :unit="getUnit"
                     :orgPosition="getPosition"
                     :workPlace="getWorkPlace"
+                    :chief="getChiefOfPerson"
                     :recruitment="recruitment[0] !== undefined ? recruitment[0].Period.substring(0, 10) : 'Не указано'"
                   />
                 </v-card>
@@ -150,15 +151,17 @@ export default {
       units: [],
       recruitment: {},
       educations: [],
-      relatives: []
+      relatives: [],
+      typesObjects: [],
+      valueTypesObjects: [],
     };
   },
   methods: {
-    ...mapActions(['fetchEmployeeByID', 'fetchPersonByID', 'fetchRecruitmentByID', 'fetchSpecialities', 'fetchTypeEducation', 'fetchSchools', 'fetchRelationDegree']),      
+    ...mapActions(['fetchEmployeeByID', 'fetchPersonByID', 'fetchRecruitmentByID', 'fetchSpecialities', 'fetchTypeEducation', 'fetchSchools', 'fetchRelationDegree', 'fetchTypesObjects', 'fetchValuesTypesObjects']),      
     
   },
   computed: {
-    ...mapGetters([ "getPositions", "getWorkPlaces", "getTypesContact", "getContacts", "getEmployees", 'getUnits']),
+    ...mapGetters([ "getPositions", "getWorkPlaces", "getTypesContact", "getContacts", "getEmployees", 'getUnits', 'getTypesObjects', 'getValueTypesObjects']),
     getFirstName() {
       const names = this.person.description.split(' ')
       return names[1]
@@ -267,6 +270,28 @@ export default {
     backToEmployees() {
       this.$router.push('/employees')
     },
+    getChiefOfPerson() {
+      const values = this.valueTypesObjects.filter((v) => {
+        return this.employee.refKey == v.personKey
+      });
+      
+      const chief = this.employees.filter(e => {
+        const type = this.typesObjects.filter(t => {
+          return t.description == 'Руководитель'
+        });
+        
+        if (values[0] !== undefined) {
+          if (values[0].propertyKey == type[0].refKey) {
+            return e.refKey == values[0].value
+          }
+        }        
+      })
+      
+      if (chief[0] == undefined) {
+        return 'Не указан'
+      }
+      return chief[0].description
+    },
   },
   async mounted() {
     this.employee = await this.fetchEmployeeByID(this.id);
@@ -283,11 +308,14 @@ export default {
     await this.fetchTypeEducation()
     await this.fetchSchools()
     await this.fetchRelationDegree()
+    await this.fetchTypesObjects()
+    await this.fetchValuesTypesObjects()
     this.educations = this.person.education
     this.relatives = this.person.family
+    this.typesObjects = await this.getTypesObjects
+    this.valueTypesObjects = await this.getValueTypesObjects
+    this.getChiefOfPerson
     this.loading = false
-    
-
   }
 };
 </script>
