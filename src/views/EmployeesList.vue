@@ -100,7 +100,7 @@
           :page.sync="page"
           :items-per-page="itemsPerPage"
           hide-default-footer
-          class="elevation-1 searchable sortable"
+          class="elevation-1 searchable sortable v-clickable"
           @page-count="pageCount = $event"
           @click:row="showEmployeeDetail"
           :sort-by="['full_name']"
@@ -432,5 +432,5 @@ export default {
 };
 </script>
 <style scoped>
-
+.v-clickable { cursor: pointer; }
 </style>
