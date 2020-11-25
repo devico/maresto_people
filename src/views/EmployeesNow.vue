@@ -48,7 +48,7 @@
                         >Сотрудников в офисе</v-list-item-subtitle
                       >
                       <v-list-item-title class="display-1 text--primary"
-                        >{{ active_office_users.length }} 
+                        >{{ sortTodayUProxEmployeesByTime.length }} 
                         </v-list-item-title
                       >
                     </v-list-item-content>
