@@ -9,7 +9,9 @@ export default {
     ovpn_clients: JSON.parse(localStorage.getItem('ovpn_clients') || '[]'),
     active_vpn_users: JSON.parse(localStorage.getItem('active_vpn_users') || '[]'),
     vpn_users_start_conns: JSON.parse(localStorage.getItem('vpn_users_start_conns') || '[]'),
+    uproxEmployees: JSON.parse(localStorage.getItem('uproxEmployees') || '[]'),
     active_office_users: [],
+
     
   },
   mutations: {
@@ -35,6 +37,10 @@ export default {
     updateTodatVpnUsersConnection(state, records) {
       state.vpn_users_start_conns = records
       localStorage.setItem('vpn_users_start_conns', JSON.stringify(state.vpn_users_start_conns))
+    },
+    updateUProxEmployees(state, records) {
+      state.uproxEmployees = records
+      localStorage.setItem('uproxEmployees', JSON.stringify(state.uproxEmployees))
     },
   },
   actions: {
@@ -301,9 +307,7 @@ export default {
     },
     async fetchUProx(ctx) {
       const username = 'admin';
-      const password = 'admin';
-
-      
+      const password = 'admin';      
       const ff = new Date()
       
       const yyyy = ff.getFullYear()
@@ -312,7 +316,7 @@ export default {
       const startEvents = new Date(yyyy, mm, dd, 6, 0, 0)
 
       const passwordHash = (MD5((MD5((MD5(password).toString()).toUpperCase() + "F593B01C562548C6B7A31B30884BDE53").toString()).toUpperCase()).toString()).toUpperCase()
-      console.log('passwordHash: ', passwordHash)
+      
       const config = {
         method: "POST",
         headers: {
@@ -327,7 +331,6 @@ export default {
         .then(response => {
           return response.json()
         })
-      // console.log('AUTH', auth)
       
       const params = {
         method: "POST",
@@ -347,10 +350,48 @@ export default {
         .then(response => {
           return response.json()
         })
-      
+
+        const events1 = data.Event.filter(e => {
+          return e.Sender.Name == "Турникет 56 - вход" || e.Sender.Name == "Лобановского 50 Входная дверь  - вход"
+        })
+
+        const events2 = events1.filter(e => {
+          return e.User.EmployeeNumber !== ""
+        })
+
+        const emps = events2.map(e => {
+          return e.User.Name
+        })
+
+        const uniqueEmps = emps.filter((value, index, self) => {
+          return self.indexOf(value) === index;
+        })
+        
+        function getTimeDate(time) {
+          // /Date(1606279848000)/
+          // console.log('Time: ', time.substring(6, 19))
+          const tm = new Date(parseInt(time.substring(6, 19))).toLocaleTimeString()
+          return tm
+        }
+
+        const employees = uniqueEmps.map(ue => {
+          const entersEmp = events2.filter(ev => {
+            return ev.User.Name == ue
+          })
+
+          return {
+            employeeName: entersEmp[0].User.Name,
+            employeeNumber: entersEmp[0].User.EmployeeNumber,
+            device: entersEmp[0].Sender.Name,
+            datetime: getTimeDate(entersEmp[0].Issued)
+          }
+        })
+        
+        // console.log('DATA', events2)
         // http://localhost:40001/json/EventGetList
         // console.log('DETE', `\/Date(${startEvents.getTime()})\/`)
-      console.log('DATA', data)
+        // console.log('DATA', data)
+        ctx.commit('updateUProxEmployees', employees)
 
 
   },
@@ -373,7 +414,9 @@ export default {
     },
     getVpnUserStartConnections(state) {
       return state.vpn_users_start_conns
+    },    
+    getUproxEmployees(state) {
+      return state.uproxEmployees
     },
-    
   }
 }

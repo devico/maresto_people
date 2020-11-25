@@ -184,7 +184,7 @@
               </div>
               <div v-if="workplace === 'office' && active_office_users !== 0">
                 <v-list-item
-                  v-for="(user, idx) in sortActiveUsersByTime"
+                  v-for="(user, idx) in sortTodayUProxEmployeesByTime"
                   :key="idx"                  
                 >
                   <v-flex>
@@ -196,10 +196,10 @@
                         <v-list-item> 
                           <v-list-item-content>
                             <v-list-item-title class="text--white"
-                              ><h5>{{ user.fullName }}</h5></v-list-item-title
+                              ><h5>{{ user.employeeName }}</h5></v-list-item-title
                             >
                             <v-list-item-title
-                              >В офисе с {{ user.coming }}</v-list-item-title
+                              >В офисе с {{ user.datetime }}</v-list-item-title
                             >
                           </v-list-item-content>
                         </v-list-item>
@@ -208,13 +208,13 @@
                   </v-flex>
                 </v-list-item>
               </div>
-              <div v-if="workplace === 'office' && active_office_users == 0">
+              <!-- <div v-if="workplace === 'office' && active_office_users == 0">
                 <v-sheet color="white" align="center"
                   ><h5 class="mx-auto mt-10 mb-10">
                     Данные еще не загружены
                   </h5></v-sheet
                 >
-              </div>
+              </div> -->
             </div>
           </section>
         </v-col>
@@ -242,7 +242,8 @@ export default {
     contacts: [],
     today_start_vpn_users: [],
     today_vpn_clients: [],
-    today_vpn_employees: []
+    today_vpn_employees: [],
+    employeesFromUProx: []
   }),
   async mounted() {
     await this.fetchEmployees();
@@ -255,6 +256,7 @@ export default {
     await this.fetchTypesContact();
     await this.fetchContacts();
     await this.fetchVpnUsersFromDB()
+    await this.fetchUProx()
     this.employees = await this.getEmployees;
     this.persons = await this.getPersons;
     this.typesContact = await this.getTypesContact;
@@ -269,13 +271,9 @@ export default {
     this.sortActiveUsersByTime
     this.sortVPNUsersByTime    
     this.prepareTodayStartVpnUsers()
-    this.today_vpn_employees = this.getTodayVpnEmployes
+    this.today_vpn_employees = await this.getTodayVpnEmployes
+    this.employeesFromUProx = await this.getUproxEmployees
     this.loading = false
-
-    // this.getEmployeesRemote
-    // array.sort((a, b) => {
-    //   return new Date(b.date) - new Date(a.date) 
-    // })
     
   },
   methods: {
@@ -291,6 +289,7 @@ export default {
       "fetchContacts",
       "fetchSKUDCurrentDay",
       "fetchVpnUsersFromDB",
+      "fetchUProx"
     ]),
     getEmail(p_id) {
       const cnts = this.contacts.filter((c) => {
@@ -341,6 +340,14 @@ export default {
         return parseInt(total_array[0]);
       }
     },
+    calcTimeUproxToday(times) {
+      const total_array = times.split(":");
+      if (total_array[1] !== undefined) {
+        return ((parseInt(total_array[0], 10) * 60 + parseInt(total_array[1], 10)) / 60).toFixed(2)
+      } else {
+        return parseInt(total_array[0]);
+      }
+    },
     prepareTodayStartVpnUsers() {
       const today_vpn_clients = this.today_start_vpn_users.filter((oc, i) => {
         const pcs = this.ppp_clients.filter((pc) => {
@@ -369,7 +376,8 @@ export default {
       "getPersons",
       "getTypesContact",
       "getContacts",
-      "getVpnUserStartConnections"
+      "getVpnUserStartConnections",
+      "getUproxEmployees"
     ]),
     
     sortActiveUsersByTime() {
@@ -498,6 +506,21 @@ export default {
       
       return vau.reverse()
 
+    },
+    sortTodayUProxEmployeesByTime() {
+      const efu = this.employeesFromUProx.map(e => {
+        return {
+          ...e,
+          color: this.calcTimeUproxToday(e.datetime) <= 9.25 ? 'green lighten-2' : 'red lighten-2'
+        }
+      })
+      
+      // efu.sort((a, b) => {
+      //   return new Date(b.timestamp) - new Date(a.timestamp) 
+      // })
+      
+      // return vau.reverse()
+      return efu
     },
     getEmployeesToday() {},
     getEmployeesOffice() {},
