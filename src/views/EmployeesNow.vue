@@ -250,9 +250,9 @@ export default {
     await this.fetchPersons();
     await this.fetchPPPClients();
     await this.getVpnUsers();
-    await this.fetchSKUDClients();
-    this.fetchActiveVpnUsers();
-    await this.fetchSKUDCurrentDay();
+    // await this.fetchSKUDClients();
+    await this.fetchActiveVpnUsers();
+    // await this.fetchSKUDCurrentDay();
     await this.fetchTypesContact();
     await this.fetchContacts();
     await this.fetchVpnUsersFromDB()
@@ -261,14 +261,14 @@ export default {
     this.persons = await this.getPersons;
     this.typesContact = await this.getTypesContact;
     this.contacts = await this.getContacts;
-    this.skud_clients = await this.getSKUDClients;
+    // this.skud_clients = await this.getSKUDClients;
     this.ovpn_clients = await this.getOVPNClients;
     this.ppp_clients = await this.getPPPClients;
     this.active_vpn_users = await this.getActiveVpnUsers;
-    this.active_office_users = await this.getActiveOfficeUsers;
+    //this.active_office_users = await this.getActiveOfficeUsers;
     this.today_start_vpn_users = this.getVpnUserStartConnections
     this.getCountEmployeeWithEmail();
-    this.sortActiveUsersByTime
+    // this.sortActiveUsersByTime
     this.sortVPNUsersByTime    
     this.prepareTodayStartVpnUsers()
     this.today_vpn_employees = await this.getTodayVpnEmployes
