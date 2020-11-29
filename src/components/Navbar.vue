@@ -27,6 +27,7 @@
           :prepend-icon="item['icon-ctr']"
           :append-icon="item.model ? item.icon : item['icon-alt']"
           active-class="teal accent-4 black--text"
+          class="routerLink"
         >
            <template v-slot:activator>
              <v-list-item-content>
@@ -40,6 +41,7 @@
             :key="i"
             route :to="child.route"
             active-class="teal accent-4 black--text"
+            class="routerLink"
            >
             <v-list-item-action v-if="child.icon">
               <v-icon>{{child.icon}}</v-icon>
@@ -57,6 +59,7 @@
           active-class="teal accent-4 black--text"
           route
           :to="item.route"
+          class="routerLink"
         >
           <v-list-item-action>
             <v-icon>{{item.icon}}</v-icon>
@@ -178,5 +181,11 @@ export default {
 <style>
 .pointer {
   cursor: pointer;
+}
+.routerLink{
+  text-decoration: none;
+}
+a.routerLink:hover, a.routerLink:focus {
+  text-decoration: none;
 }
 </style>
