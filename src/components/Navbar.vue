@@ -26,7 +26,7 @@
           v-model="item.model"
           :prepend-icon="item['icon-ctr']"
           :append-icon="item.model ? item.icon : item['icon-alt']"
-          active-class="teal accent-4 black--text"
+          active-class="white--text"
           class="routerLink"
         >
            <template v-slot:activator>
