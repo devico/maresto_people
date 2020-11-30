@@ -5,7 +5,40 @@
         <h2>Отчеты</h2>
       </v-col>
     </v-row>
-
+    <v-row align="center">
+      <v-col cols="12" md="4">
+        <v-card class="mb-5 ml-2" min-height="100">
+          <v-list-item two-line subheader>
+            <v-list-item-content>
+              <v-list-item-title><h5>Всего сотрудников:</h5></v-list-item-title>
+              <v-list-item-title><h5>{{getEmployeesLessOneYear.total}} человек</h5></v-list-item-title>
+            </v-list-item-content>            
+          </v-list-item>
+        </v-card>
+      </v-col>
+      <v-spacer></v-spacer>
+      <v-col cols="12" md="4">
+        <v-card class="mb-5 ml-2" min-height="100">
+          <v-list-item>
+            <v-list-item-content>
+              <v-list-item-title><h5>Сотрудников, стаж меньше 1 года:</h5></v-list-item-title>
+              <v-list-item-title><h5>{{getEmployeesLessOneYear.countLessOneYear}} человек</h5></v-list-item-title>
+              </v-list-item-content>
+          </v-list-item>
+        </v-card>
+      </v-col>
+      <v-spacer></v-spacer>
+      <v-col cols="12" md="4">
+        <v-card class="mb-5 ml-2" min-height="100">
+          <v-list-item>
+            <v-list-item-content>
+              <v-card-title class="mb-1 py-0 px-0">Процент со стажем меньше 1 года:</v-card-title> 
+              <v-list-item-title><h5>{{getEmployeesLessOneYear.percentLessOneYear}} %</h5></v-list-item-title>             
+            </v-list-item-content>
+          </v-list-item>
+        </v-card>
+      </v-col>      
+    </v-row>
     <v-row>
       <v-col cols="12" class="py-2" align="center" justify="center">
         <v-btn-toggle
@@ -40,7 +73,7 @@
 <script>
 import ChartGender from "./ChartGender";
 import ChartUnits from "./ChartUnits";
-import { mapGetters } from "vuex";
+import { mapGetters, mapActions } from "vuex";
 export default {
   components: {
     ChartGender,
@@ -54,6 +87,8 @@ export default {
       units: [],
       workPlaces: [],
       unitsCount: [],
+      dismissed_employees: [],
+      recruitments: [],
       totalMan: 0,
       totalWoman: 0,
       man: [],
@@ -121,14 +156,19 @@ export default {
   async mounted() {
     this.employees = await this.getEmployees;
     this.persons = await this.getPersons;
+    this.recruitments = await this.fetchRecruitments()
     this.units = await this.getUnits;
     this.workPlaces = await this.getWorkPlaces;
+    this.dismissed_employees = await this.getDismissed
+    
     setTimeout(() => {
       this.getGenderForCharts();
       this.getUnitsForCharts();
     }, 0);
+    console.log('TOTal', this.getEmployeesLessOneYear)
   },
   methods: {
+    ...mapActions(['fetchRecruitmentByID', 'fetchRecruitments']),
     getGenderForCharts() {
       this.employees.map((e) => {
         this.persons.map((p) => {
@@ -186,10 +226,59 @@ export default {
         },
       ];
     },
+    
+    getCountEmpsLessYear(recrs) {
+      const lessOne = recrs.filter(r => {
+        const currentYear = 2020
+        if (r.recrut !== 'Не указан') {
+          const startWork = parseInt(r.recrut.substring(0,4))
+          return currentYear - startWork == 0
+        }
+      })
+      // console.log('List', lessOne)
+
+      return {
+        countLessOneYear: lessOne.length,
+        percentLessOneYear: (lessOne.length * 100 / recrs.length).toFixed(2),
+      }
+    },
   },
   watch: {},
   computed: {
-    ...mapGetters(["getEmployees", "getPersons", "getUnits", "getWorkPlaces"]),
+    ...mapGetters(["getEmployees", "getPersons", "getUnits", "getWorkPlaces", "getDismissed"]),
+    getEmployeesLessOneYear() {
+      const actual = this.employees.filter((e) => {
+        return !this.dismissed_employees.includes(e.refKey)
+      })
+      
+      const recrs = actual.map(e => {
+        const prs = this.recruitments.filter(r => {
+          return r.ФизЛицо_Key == e.personKey
+        })
+        
+        if (prs[0] !== undefined) {
+          return {
+            ...e,
+            recrut: prs[0].Period
+          } 
+        } else {
+          return {
+            ...e,
+            recrut: 'Не указан'
+          } 
+        }
+               
+      })
+
+      const less = this.getCountEmpsLessYear(recrs)
+
+
+      return {
+        total: recrs.length,
+        countLessOneYear: less.countLessOneYear,
+        percentLessOneYear: less.percentLessOneYear
+      }
+    },
   },
 };
 </script>

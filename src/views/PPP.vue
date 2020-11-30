@@ -11,11 +11,11 @@
                 >
                   Удаленный доступ
                 </v-list-item-title>
-                <v-list-item-action>
+                <!-- <v-list-item-action>
                   <v-btn class="ma-2" tile outlined color="cyan darken-1">
                     <v-icon left>fas fa-eye</v-icon>See all
                   </v-btn>
-                </v-list-item-action>
+                </v-list-item-action> -->
               </v-list-item>
             </v-list>
           </v-flex>

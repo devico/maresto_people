@@ -345,6 +345,31 @@ export default {
         ctx.commit('updateValuesTypesObjects', valueObj)
       })
     },
+    async fetchRecruitments(ctx) {
+      const username = 'Дмитраков С.Н.';
+      const password = '340340340';
+      const config = {
+        method: "GET",
+        headers: {
+          'Access-Control-Allow-Origin': '*',
+          "content-type": "application/json",
+          "Authorization": `Basic ${Base64.encode(username + ":" + password)}`,
+        },
+        withCredentials: true,
+        credentials: 'same-origin',
+      };
+
+      // const data = await fetch('http://people.maresto.ua/ZUP/odata/standard.odata/InformationRegister_Работники?&$format=json', config).then(response => {
+      const data = await fetch('http://localhost:8080/ZUP/odata/standard.odata/InformationRegister_Работники?&$format=json', config).then(response => {
+        return response.json();
+      })
+
+      const docs = data.value.map(r => {
+        return r.RecordSet[0] 
+      })
+      
+      return docs
+    },
     async fetchRecruitmentByID(ctx, id) {
       const username = 'Дмитраков С.Н.';
       const password = '340340340';

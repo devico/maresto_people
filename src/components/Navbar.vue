@@ -40,7 +40,7 @@
             v-for="(child, i) in item.children"
             :key="i"
             route :to="child.route"
-            active-class="teal accent-4 black--text"
+            active-class="teal accent-4 white--text"
             class="routerLink"
            >
             <v-list-item-action v-if="child.icon">
@@ -56,7 +56,7 @@
         <v-list-item 
           v-else
           :key="item.text"
-          active-class="teal accent-4 black--text"
+          active-class="teal accent-4 white--text"
           route
           :to="item.route"
           class="routerLink"
