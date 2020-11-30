@@ -22,7 +22,7 @@
         </v-col>
         <v-col cols="3" class="mt-1">
           <v-row flex>
-            <v-card class="mx-auto" width="100%" :elevation="6"  height="875">
+            <v-card class="mx-auto mt-3" width="100%" :elevation="6"  height="900">
               <v-card-text class="text-center">
                 <v-avatar size="177" class="mt-2">
                   <v-img
@@ -45,8 +45,8 @@
         <v-col cols="8" class="pl-7 my-0">
           <v-row flex>
             <v-col cols="6" class="mx-0 py-1">
-              <v-card class="mx-auto" width="100%" :elevation="6" height="265">
-                <v-card-title class="justify-start">ЛИЧНОЕ</v-card-title>
+              <v-card class="mx-auto rounded-card mt-5" width="100%" :elevation="6" height="265">
+                <v-toolbar color="#2C3A47" flat class="white--text">ЛИЧНОЕ</v-toolbar>
                 <Individual
                   :homePlace="getHomePlace"
                   :phone="getPhone"
@@ -56,8 +56,8 @@
               </v-card>
             </v-col>
             <v-col cols="6" class="mx-0  py-1">
-              <v-card class="mx-auto" width="100%" :elevation="6" height="265">
-                <v-card-title class="justify-start">РАБОТА</v-card-title>
+              <v-card class="mx-auto rounded-card mt-5" width="100%" :elevation="6" height="265">
+                <v-toolbar color="#2C3A47" flat class="white--text">РАБОТА</v-toolbar>
                   <Work
                     :unit="getUnit"
                     :orgPosition="getPosition"
@@ -70,22 +70,22 @@
           </v-row>
           <v-row flex>
             <v-col cols="6" class="mx-0 py-1">
-              <v-card class="mx-auto" width="100%" :elevation="6" height="485">
-                <v-card-title class="justify-start">ОБРАЗОВАНИЕ</v-card-title>
+              <v-card class="mx-auto rounded-card mt-5" width="100%" :elevation="6" height="485">
+                <v-toolbar color="#2C3A47" flat class="white--text">ОБРАЗОВАНИЕ</v-toolbar>
                 <Education :educations="educations"/>
               </v-card>
             </v-col>
             <v-col cols="6" class="mx-0 py-1">
-              <v-card class="mx-auto" width="100%" :elevation="6" height="485">
-                <v-card-title class="justify-start">РОДСТВЕННИКИ</v-card-title>
+              <v-card class="mx-auto rounded-card mt-5" width="100%" :elevation="6" height="485">
+                <v-toolbar color="#2C3A47" flat class="white--text">РОДСТВЕННИКИ</v-toolbar>
                   <Family :relatives="relatives" />
                 </v-card>
             </v-col>
           </v-row>
           <v-row flex>
             <v-col cols="12" class="mx-0  py-1">
-              <v-card class="mx-auto" width="100%" :elevation="6" height="110">
-                <v-card-title class="justify-start">Документы</v-card-title>
+              <v-card class="mx-auto rounded-card" width="100%" :elevation="6" height="110">
+                <v-toolbar color="#2C3A47" flat class="white--text">ДОКУМЕНТЫ</v-toolbar>
                 <v-expansion-panels accordion>
                   <v-expansion-panel>
                     <v-expansion-panel-header>Показать Резюме</v-expansion-panel-header>
@@ -320,4 +320,8 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+.rounded-card{
+  border-radius: 15px;
+}
+</style>
