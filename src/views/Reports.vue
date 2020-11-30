@@ -6,39 +6,51 @@
       </v-col>
     </v-row>
     <v-row align="center">
-      <v-col cols="12" md="4">
+      <v-col cols="12" md="3">
         <v-card class="mb-5 ml-2" min-height="100">
           <v-list-item two-line subheader>
             <v-list-item-content>
-              <v-list-item-title><h5>Всего сотрудников:</h5></v-list-item-title>
-              <v-list-item-title><h5>{{getEmployeesLessOneYear.total}} человек</h5></v-list-item-title>
+              <v-list-item-title><h6>Всего сотрудников:</h6></v-list-item-title>
+              <v-list-item-title><h6>{{getEmployeesLessOneYear.total}} человек</h6></v-list-item-title>
             </v-list-item-content>            
           </v-list-item>
         </v-card>
       </v-col>
       <v-spacer></v-spacer>
-      <v-col cols="12" md="4">
+      <v-col cols="12" md="3">
         <v-card class="mb-5 ml-2" min-height="100">
           <v-list-item>
             <v-list-item-content>
-              <v-list-item-title><h5>Сотрудников, стаж меньше 1 года:</h5></v-list-item-title>
-              <v-list-item-title><h5>{{getEmployeesLessOneYear.countLessOneYear}} человек</h5></v-list-item-title>
-              </v-list-item-content>
+              <v-list-item-title><h6>Сотрудников, стаж меньше 1 года:</h6></v-list-item-title>
+              <v-list-item-title><h6>{{getEmployeesLessOneYear.countLessOneYear}} человек</h6></v-list-item-title>
+            </v-list-item-content>
           </v-list-item>
         </v-card>
       </v-col>
       <v-spacer></v-spacer>
-      <v-col cols="12" md="4">
+      <v-col cols="12" md="3">
         <v-card class="mb-5 ml-2" min-height="100">
           <v-list-item>
             <v-list-item-content>
-              <v-card-title class="mb-1 py-0 px-0">Процент со стажем меньше 1 года:</v-card-title> 
-              <v-list-item-title><h5>{{getEmployeesLessOneYear.percentLessOneYear}} %</h5></v-list-item-title>             
+              <v-list-item-title><h6>Процент со стажем меньше 1 года:</h6></v-list-item-title>
+              <v-list-item-title><h6>{{getEmployeesLessOneYear.percentLessOneYear}} %</h6></v-list-item-title>             
             </v-list-item-content>
           </v-list-item>
         </v-card>
-      </v-col>      
+      </v-col>
+      <v-spacer></v-spacer>
+      <v-col cols="12" md="3">
+        <v-card class="mb-5 ml-2" min-height="100">
+          <v-list-item>
+            <v-list-item-content>
+              <v-list-item-title><h6>Средний возраст сотрудников:</h6></v-list-item-title>
+              <v-list-item-title><h6>{{getAverageAge}} года</h6></v-list-item-title>             
+            </v-list-item-content>
+          </v-list-item>
+        </v-card>
+      </v-col>  
     </v-row>
+    
     <v-row>
       <v-col cols="12" class="py-2" align="center" justify="center">
         <v-btn-toggle
@@ -165,7 +177,7 @@ export default {
       this.getGenderForCharts();
       this.getUnitsForCharts();
     }, 0);
-    console.log('TOTal', this.getEmployeesLessOneYear)
+    this.getAverageAge
   },
   methods: {
     ...mapActions(['fetchRecruitmentByID', 'fetchRecruitments']),
@@ -226,7 +238,6 @@ export default {
         },
       ];
     },
-    
     getCountEmpsLessYear(recrs) {
       const lessOne = recrs.filter(r => {
         const currentYear = 2020
@@ -279,6 +290,28 @@ export default {
         percentLessOneYear: less.percentLessOneYear
       }
     },
+    getAverageAge() {
+      const actual = this.employees.filter((e) => {
+        return !this.dismissed_employees.includes(e.refKey)
+      })
+
+      const currentYear = 2020
+
+      const ages = actual.map(e => {
+        const bds = this.persons.filter(p => {
+          if (p.refKey == e.personKey) {
+            return p.birthday
+          }     
+        })
+        return currentYear - parseInt(bds[0].birthday.substring(0,4))
+      })
+      
+      const avgAge = ages.reduce((a, b) => {
+        return (a += b)
+      }, 0)
+    
+      return (avgAge / ages.length).toFixed(1)
+    }
   },
 };
 </script>
