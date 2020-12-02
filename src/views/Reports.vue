@@ -24,8 +24,8 @@
           
               <v-list-item>
                 <v-list-item-content v-on="on">
-                  <v-list-item-title><h6>Сотрудников, стаж меньше 1 года:</h6></v-list-item-title>
-                  <v-list-item-title><h6>{{getEmployeesLessOneYear.countLessOneYear}} человек</h6></v-list-item-title>
+                  <v-list-item-title><h6>Сотрудников, пришедших в 2020 году:</h6></v-list-item-title>
+                  <v-list-item-title><h6>{{getEmployeesLessOneYear.countLessOneYear}} человек ({{getEmployeesLessOneYear.percentLessOneYear}} %)</h6></v-list-item-title>
                 </v-list-item-content>
               </v-list-item>
               </v-card>         
@@ -60,7 +60,7 @@
       </v-col>  
     </v-row>
     
-    <v-row>
+    <!-- <v-row>
       <v-col cols="12" class="py-2" align="center" justify="center">
         <v-btn-toggle
           v-model="typeChart"
@@ -76,8 +76,34 @@
           </v-btn>
         </v-btn-toggle>
       </v-col>
+    </v-row> -->
+    <v-row flex>
+      <v-col cols="4" class="mx-0 py-1">
+        <v-card class="mx-auto rounded-card mt-5" width="100%" :elevation="6">
+          <v-toolbar color="#2C3A47" flat>
+            <v-col class="d-flex justify-space-around">
+              <v-toolbar-title class="white--text">Гендерный профиль</v-toolbar-title>
+            </v-col>
+          </v-toolbar>
+          <v-col class="d-flex justify-space-around">
+            <ChartGender :series="series" :chartOptions="chartOptions" />
+          </v-col>
+        </v-card>
+      </v-col>
+      <v-col cols="8" class="mx-0 py-1">
+        <v-card class="mx-auto rounded-card mt-5" width="100%" :elevation="6">
+          <v-toolbar color="#2C3A47" flat>
+            <v-col class="d-flex justify-space-around">
+              <v-toolbar-title class="white--text">Численность сотрудников по подразделениям</v-toolbar-title>
+            </v-col>
+          </v-toolbar>
+          <v-col cols="10" class="flex-grow-0 flex-shrink-1">
+            <ChartUnits :series="seriesUnits" :chartOptions="chartOptionsUnits" />
+          </v-col>
+          </v-card>
+      </v-col>
     </v-row>
-    <v-row>
+    <!-- <v-row>
       <v-col cols="4" class="mt-3">
         <h6>Гендерный профиль</h6>
         <ChartGender :series="series" :chartOptions="chartOptions" />
@@ -87,7 +113,7 @@
         <h6>Численность сотрудников по подразделениям</h6>
         <ChartUnits :series="seriesUnits" :chartOptions="chartOptionsUnits" />
       </v-col>
-    </v-row>
+    </v-row> -->
   </div>
 </template>
 
@@ -219,9 +245,13 @@ export default {
       ];
     },
     getUnitsForCharts() {
+      const actual = this.employees.filter((e) => {
+        return !this.dismissed_employees.includes(e.refKey)
+      })
+
       this.units.map((u) => {
         let count = 0;
-        this.employees.map((e) => {
+        actual.map((e) => {
           if (e.unitKey == u.refKey) {
             count += 1;
           }
@@ -340,8 +370,7 @@ export default {
         if(bds[0] !== undefined) {
           return currentYear - parseInt(bds[0].birthday.substring(0,4))
         }
-      })
-      
+      })      
       
       const avgAge = ages.reduce((a, b) => {
         return (a += b)
