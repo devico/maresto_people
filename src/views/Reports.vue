@@ -140,6 +140,8 @@ export default {
       totalWoman: 0,
       man: [],
       woman: [],
+      unitsWoman: [],
+      unitsMan: [],
       series: [
         {
           data: [50, 50],
@@ -175,6 +177,7 @@ export default {
         chart: {
           type: "bar",
           height: 350,
+          stacked: true,
           toolbar: {
             show: false,
           },
@@ -204,6 +207,11 @@ export default {
         yaxis: {
           reversed: true
         },
+        legend: {
+          position: 'top',
+          horizontalAlign: 'left',
+          offsetX: 40
+        }
       },
     };
   },
@@ -240,8 +248,8 @@ export default {
       const newData = [this.man.length, this.woman.length];
       this.series = [
         {
-          data: newData,
-        },
+          data: newData
+        }
       ];
     },
     getUnitsForCharts() {
@@ -251,12 +259,26 @@ export default {
 
       this.units.map((u) => {
         let count = 0;
+        let countMan = 0;
+        let countWoman = 0;
+
         actual.map((e) => {
           if (e.unitKey == u.refKey) {
             count += 1;
+            this.persons.map((p) => {
+              if (e.personKey == p.refKey) {
+                if (p.gender == "Женский") {
+                  countWoman += 1;
+                }
+                if (p.gender == "Мужской") {
+                  countMan += 1
+                }
+              }
+            });
           }
+          
         });
-        this.unitsCount.push({ title: u.description, number: count });
+        this.unitsCount.push({ title: u.description, total: count, countMan: countMan, countWoman: countWoman });
       });
 
       // arr.sort(function(a, b) {
@@ -271,14 +293,20 @@ export default {
         return 0;
       });
       
-      const newDataUnit = this.unitsCount.map((uc) => {
-        return uc.number;
-      });
+      // const newDataUnit = this.unitsCount.map((uc) => {
+      //   return uc.number;
+      // });
       const newLabelsUnit = this.unitsCount.map((uc) => {
         return uc.title;
       });
-      
 
+       const newDataUnitMan = this.unitsCount.map((uc) => {
+        return uc.countMan;
+      });
+       const newDataUnitWoman = this.unitsCount.map((uc) => {
+        return uc.countWoman;
+      });
+      
       this.chartOptionsUnits = {
         xaxis: {
           categories: newLabelsUnit,
@@ -293,8 +321,13 @@ export default {
 
       this.seriesUnits = [
         {
-          data: newDataUnit,
+          name: 'Мужчины',
+          data: newDataUnitMan,
         },
+        {
+          name: 'Женщины',
+          data: newDataUnitWoman
+        }
       ];
     },
     getCountEmpsLessYear(recrs) {
