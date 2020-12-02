@@ -189,10 +189,10 @@ export default {
         },
         dataLabels: {
           enabled: true,
-          offsetX: -20,
+          offsetX: -10,
           style: {
             fontSize: '12px',
-            colors: ['#fff']
+            colors: ['#000']
           }
         },
         xaxis: {
