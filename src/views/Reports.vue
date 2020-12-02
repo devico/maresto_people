@@ -18,14 +18,23 @@
       </v-col>
       <v-spacer></v-spacer>
       <v-col cols="12" md="3">
+        <v-tooltip bottom>
+            <template v-slot:activator="{ on }">
         <v-card class="mb-5 ml-2" min-height="100">
-          <v-list-item>
-            <v-list-item-content>
-              <v-list-item-title><h6>Сотрудников, стаж меньше 1 года:</h6></v-list-item-title>
-              <v-list-item-title><h6>{{getEmployeesLessOneYear.countLessOneYear}} человек</h6></v-list-item-title>
-            </v-list-item-content>
-          </v-list-item>
-        </v-card>
+          
+              <v-list-item>
+                <v-list-item-content v-on="on">
+                  <v-list-item-title><h6>Сотрудников, стаж меньше 1 года:</h6></v-list-item-title>
+                  <v-list-item-title><h6>{{getEmployeesLessOneYear.countLessOneYear}} человек</h6></v-list-item-title>
+                </v-list-item-content>
+              </v-list-item>
+              </v-card>         
+            </template>
+            <span v-for="item in getEmployeesLessOneYear.listEmployees" :key="item.refKey">
+              <p>{{item.description}}</p>
+            </span>
+          </v-tooltip>          
+        
       </v-col>
       <v-spacer></v-spacer>
       <v-col cols="12" md="3">
@@ -68,14 +77,14 @@
         </v-btn-toggle>
       </v-col>
     </v-row>
-    <v-row d-flex>
-      <v-col class="mt-3">
+    <v-row>
+      <v-col cols="4" class="mt-3">
         <h6>Гендерный профиль</h6>
         <ChartGender :series="series" :chartOptions="chartOptions" />
       </v-col>
     
-      <v-col class="mt-3">
-        <h6>Численность подразделений</h6>
+      <v-col cols="8" class="mt-3">
+        <h6>Численность сотрудников по подразделениям</h6>
         <ChartUnits :series="seriesUnits" :chartOptions="chartOptionsUnits" />
       </v-col>
     </v-row>
@@ -151,6 +160,11 @@ export default {
         },
         dataLabels: {
           enabled: true,
+          offsetX: -20,
+          style: {
+            fontSize: '12px',
+            colors: ['#fff']
+          }
         },
         xaxis: {
           categories: [
@@ -160,6 +174,9 @@ export default {
             "Филиал в г.Львов",
             "Отдел логистики",
           ],
+        },
+        yaxis: {
+          reversed: true
         },
       },
     };
@@ -211,14 +228,26 @@ export default {
         });
         this.unitsCount.push({ title: u.description, number: count });
       });
-      // console.log('UCount', this.unitsCount)
+
+      // arr.sort(function(a, b) {
+      //   if (a.title < b.title) return -1;
+      //   if (a.title > b.title) return 1;
+      //   return 0;
+      // });
+   
+      this.unitsCount = this.unitsCount.sort((a, b) => {
+        if (a.title < b.title) return -1;
+        if (a.title > b.title) return 1;
+        return 0;
+      });
+      
       const newDataUnit = this.unitsCount.map((uc) => {
         return uc.number;
       });
       const newLabelsUnit = this.unitsCount.map((uc) => {
         return uc.title;
       });
-      // console.log('UCount', newLabelsUnit)
+      
 
       this.chartOptionsUnits = {
         xaxis: {
@@ -251,6 +280,7 @@ export default {
       return {
         countLessOneYear: lessOne.length,
         percentLessOneYear: (lessOne.length * 100 / recrs.length).toFixed(2),
+        listEmployees: lessOne
       }
     },
   },
@@ -281,13 +311,13 @@ export default {
                
       })
 
-      const less = this.getCountEmpsLessYear(recrs)
-
+      const less = this.getCountEmpsLessYear(recrs)     
 
       return {
         total: recrs.length,
         countLessOneYear: less.countLessOneYear,
-        percentLessOneYear: less.percentLessOneYear
+        percentLessOneYear: less.percentLessOneYear,
+        listEmployees: less.listEmployees
       }
     },
     getAverageAge() {
@@ -300,17 +330,24 @@ export default {
       const ages = actual.map(e => {
         const bds = this.persons.filter(p => {
           if (p.refKey == e.personKey) {
-            return p.birthday
+            if(p.birthday !== null) {
+              return p.birthday
+            }
+            
           }     
         })
-        return currentYear - parseInt(bds[0].birthday.substring(0,4))
+
+        if(bds[0] !== undefined) {
+          return currentYear - parseInt(bds[0].birthday.substring(0,4))
+        }
       })
+      
       
       const avgAge = ages.reduce((a, b) => {
         return (a += b)
       }, 0)
     
-      return (avgAge / ages.length).toFixed(1)
+      return parseInt(avgAge / ages.length)
     }
   },
 };
