@@ -189,7 +189,6 @@ export default {
         },
         dataLabels: {
           enabled: true,
-          offsetX: -10,
           style: {
             fontSize: '12px',
             colors: ['#000']
