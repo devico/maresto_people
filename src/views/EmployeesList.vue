@@ -383,7 +383,7 @@ export default {
     },
     setAllEmployees(result) {
       this.filterPosition = result['filterPosition']
-      this.filterUnit = ['filterUnit']
+      this.filterUnit = result['filterUnit']
       this.filterWP =result['filterWP']
       this.filterGender = result['filterGender']
       this.textFilter = result['text']
