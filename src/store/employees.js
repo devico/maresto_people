@@ -18,6 +18,9 @@ export default {
     resumes: JSON.parse(localStorage.getItem('resumes') || '[]'),
     typesObjects: JSON.parse(localStorage.getItem('typesObjects') || '[]'),
     valueTypesObjects: JSON.parse(localStorage.getItem('typesObjects') || '[]'),
+    baseDismiss: JSON.parse(localStorage.getItem('baseDismiss') || '[]'),
+    docsDismiss: JSON.parse(localStorage.getItem('docsDismiss') || '[]'),
+    
   },
   mutations: {
     updateEmployees(state, records) {
@@ -83,6 +86,14 @@ export default {
     updateValuesTypesObjects(state, data){
       state.valueTypesObjects = data
       localStorage.setItem('valueTypesObjects', JSON.stringify(state.valueTypesObjects))
+    },    
+    updateBaseDismiss(state, data){
+      state.baseDismiss = data
+      localStorage.setItem('baseDismiss', JSON.stringify(state.baseDismiss))
+    },    
+    updateDocsDismiss(state, data){
+      state.docsDismiss = data
+      localStorage.setItem('docsDismiss', JSON.stringify(state.docsDismiss))
     },
   },
   actions: {
@@ -367,7 +378,7 @@ export default {
       const docs = data.value.map(r => {
         return r.RecordSet[0] 
       })
-      
+
       return docs
     },
     async fetchRecruitmentByID(ctx, id) {
@@ -616,6 +627,61 @@ export default {
 
       })
     },
+    async fetchBaseDismiss(ctx) {
+      const username = 'Дмитраков С.Н.';
+      const password = '340340340';
+      const config = {
+        method: "GET",
+        headers: {
+          'Access-Control-Allow-Origin': '*',
+          "content-type": "application/json",
+          "Authorization": `Basic ${Base64.encode(username + ":" + password)}`,
+        },
+        withCredentials: true,
+        credentials: 'same-origin',
+      };
+
+      // await fetch('http://people.maresto.ua/ZUP/odata/standard.odata/InformationRegister_КонтактнаяИнформация?&$format=json', config).then(response => {
+      await fetch('http://localhost:8080/ZUP/odata/standard.odata/Catalog_ОснованияУвольнения?&$format=json', config).then(response => {
+        return response.json();
+      }).then(data => {
+        const base = data.value.map(b => {
+          return {
+            refKey: b.Ref_Key,
+            code: b.Code,
+            description: b.Description
+          }
+        })
+        ctx.commit('updateBaseDismiss', base)
+      })
+    },
+    async fetchDocsDismiss(ctx) {
+      const username = 'Дмитраков С.Н.';
+      const password = '340340340';
+      const config = {
+        method: "GET",
+        headers: {
+          'Access-Control-Allow-Origin': '*',
+          "content-type": "application/json",
+          "Authorization": `Basic ${Base64.encode(username + ":" + password)}`,
+        },
+        withCredentials: true,
+        credentials: 'same-origin',
+      };
+
+      // await fetch('http://people.maresto.ua/ZUP/odata/standard.odata/InformationRegister_КонтактнаяИнформация?&$format=json', config).then(response => {
+      await fetch('http://localhost:8080/ZUP/odata/standard.odata/Document_Увольнение?&$format=json', config).then(response => {
+        return response.json();
+      }).then(data => {
+        const base = data.value.map(b => {
+          return {
+            refKey: b.Ref_Key,
+            reasonDismiss: b.Работники[0]['ПричинаУвольнения_Key']
+          }
+        })
+        ctx.commit('updateDocsDismiss', base)
+      })
+    },
     async fetchRelationDegree(ctx) {
       const username = 'Дмитраков С.Н.';
       const password = '340340340';
@@ -722,6 +788,13 @@ export default {
     },
     getValueTypesObjects(state) {
       return state.valueTypesObjects
-    },    
+    },
+    getBaseDismiss(state) {
+      return state.baseDismiss
+    },
+    getDocsDismiss(state) {
+      return state.docsDismiss
+    },
+    
   }
 }

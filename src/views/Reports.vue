@@ -103,9 +103,33 @@
           </v-col>
         </v-card>
         </v-row>
-      </v-col>
-      <v-col cols="3" class="mx-2 py-1">
-        <v-card class="mx-auto rounded-card mt-5" width="100%" :elevation="6">
+        <v-row flex>
+          <v-card class="mx-auto rounded-card mt-5" width="100%" :elevation="6">
+          <v-toolbar color="#2C3A47" flat>
+            <v-col class="d-flex justify-space-around">
+              <v-toolbar-title class="white--text">Уволены в подразделениях</v-toolbar-title>
+            </v-col>
+          </v-toolbar>
+          
+          <v-col class="flex-grow-0 flex-shrink-1 py-0">
+            <v-simple-table>
+            <template v-slot:default>
+              
+              <tbody>
+                <tr
+                  v-for="item in unitsDismissEmps"
+                  :key="item.nameUnit"
+                >
+                  <td>{{ item.nameUnit }}</td>
+                  <td>{{ item.countDismiss }}</td>
+                </tr>
+              </tbody>
+            </template>
+          </v-simple-table>
+          </v-col>
+          </v-card>
+          
+          <!-- <v-card class="mx-auto rounded-card mt-5" width="100%" :elevation="6">
           <v-toolbar color="#2C3A47" flat>
             <v-col class="d-flex justify-space-around">
               <v-toolbar-title class="white--text">Число уволенных</v-toolbar-title>
@@ -116,10 +140,38 @@
             <v-card-text class="py-0">По подразделениям</v-card-text>
             <ChartDismissByUnit :series="seriesDismissCountByUnit" :chartOptions="chartOptionsDismissCountByUnit" />
           </v-col>
+          </v-card> -->
+          
+        </v-row>
+        <v-row flex>
+          <v-card class="mx-auto rounded-card mt-5" width="100%" :elevation="6">
+          <v-toolbar color="#2C3A47" flat>
+            <v-col class="d-flex justify-space-around">
+              <v-toolbar-title class="white--text">Уволены по причине</v-toolbar-title>
+            </v-col>
+          </v-toolbar>
+          
+          <v-col class="flex-grow-0 flex-shrink-1 py-0">
+            <v-simple-table>
+            <template v-slot:default>
+              
+              <tbody>
+                <tr
+                  v-for="item in baseDismissEmps"
+                  :key="item.nameReason"
+                >
+                  <td>{{ item.nameReason }}</td>
+                  <td>{{ item.countReason }}</td>
+                </tr>
+              </tbody>
+            </template>
+          </v-simple-table>
+          </v-col>
           </v-card>
+        </v-row>
       </v-col>
-      
-      <v-col cols="5" class="mx-0 py-1">
+     
+      <v-col cols="9" class="mx-0 py-1">
         <v-card class="mx-auto rounded-card mt-5" width="100%" :elevation="6">
           <v-toolbar color="#2C3A47" flat>
             <v-col class="d-flex justify-space-around">
@@ -176,6 +228,10 @@ export default {
       unitsWoman: [],
       unitsMan: [],
       series: [],
+      unitsDismissEmps: [],
+      baseDismiss: [],
+      docsDismiss: [],
+      baseDismissEmps: [],
       chartOptions: {
         chart: {
           width: 280,
@@ -331,11 +387,15 @@ export default {
 
   async mounted() {
     this.employees = await this.getEmployees;
+    await this.fetchBaseDismiss()
+    await this.fetchDocsDismiss()
     this.persons = await this.getPersons;
     this.recruitments = await this.fetchRecruitments()
     this.units = await this.getUnits;
     this.workPlaces = await this.getWorkPlaces;
     this.dismissed_employees = await this.getDismissed
+    this.baseDismiss = await this.getBaseDismiss
+    this.docsDismiss = await this.getDocsDismiss
     
     setTimeout(() => {
       this.getGenderForCharts();
@@ -344,9 +404,10 @@ export default {
     this.getAverageAge
     this.getCountEmpsPerYear()
     this.getCountDismissUnits()
+    this.getCountDismissBase()
   },
   methods: {
-    ...mapActions(['fetchRecruitmentByID', 'fetchRecruitments']),
+    ...mapActions(['fetchRecruitmentByID', 'fetchRecruitments', "fetchBaseDismiss", "fetchDocsDismiss"]),
     getGenderForCharts() {
       this.employees.map((e) => {
         this.persons.map((p) => {
@@ -544,35 +605,64 @@ export default {
         }
       })
       
-      const newLabelsUnit = dismissCountUnits.map((uc) => {
-        return uc.nameUnit;
-      });
+      this.unitsDismissEmps = dismissCountUnits
+      // const newLabelsUnit = dismissCountUnits.map((uc) => {
+      //   return uc.nameUnit;
+      // });
 
-       const newDataUnit = dismissCountUnits.map((uc) => {
-        return uc.countDismiss;
-      });
+      //  const newDataUnit = dismissCountUnits.map((uc) => {
+      //   return uc.countDismiss;
+      // });
       
-      console.log('L: ', newLabelsUnit)
-      console.log('D: ', newDataUnit)
+      // console.log('L: ', newLabelsUnit)
+      // console.log('D: ', newDataUnit)
       
-      this.chartOptionsDismissCountByUnit = {
-        xaxis: {
-          categories: newLabelsUnit,
-          labels: {
-            show: false,
-          },
-          crosshairs: {
-            show: false,
-          },
-        },
-      };
+      // this.chartOptionsDismissCountByUnit = {
+      //   xaxis: {
+      //     categories: newLabelsUnit,
+      //     labels: {
+      //       show: false,
+      //     },
+      //     crosshairs: {
+      //       show: false,
+      //     },
+      //   },
+      // };
 
-      this.seriesDismissCountByUnit = [
-        {
-          data: newDataUnit,
+      // this.seriesDismissCountByUnit = [
+      //   {
+      //     data: newDataUnit,
+      //   }
+      // ];
+
+    },
+    getCountDismissBase() {
+      const bases = this.baseDismiss.filter(b => {
+        let countDism = 0
+        this.docsDismiss.map(dd => {
+          if (b.refKey == dd.reasonDismiss) {
+            countDism += 1
+          }
+        })
+        
+        return countDism > 0
+      })
+
+      const dismissCountBase = bases.map(b => {
+        let countDism = 0
+        this.docsDismiss.map(de => {
+          if (b.refKey == de.reasonDismiss) {
+            countDism += 1
+          }
+        })
+
+        return {
+          nameReason: b.description,
+          countReason: countDism
         }
-      ];
-
+      })
+      
+      this.baseDismissEmps = dismissCountBase
     },
     getCountEmpsLessYear(recrs) {
       const lessOne = recrs.filter(r => {
@@ -593,7 +683,7 @@ export default {
   },
   watch: {},
   computed: {
-    ...mapGetters(["getEmployees", "getPersons", "getUnits", "getWorkPlaces", "getDismissed"]),
+    ...mapGetters(["getEmployees", "getPersons", "getUnits", "getWorkPlaces", "getDismissed", "getBaseDismiss", "getDocsDismiss"]),
     getEmployeesLessOneYear() {
       const actual = this.employees.filter((e) => {
         return !this.dismissed_employees.includes(e.refKey)
