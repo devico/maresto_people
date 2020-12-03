@@ -2,9 +2,9 @@
   <div>
     <div id="chart">
       <apexchart
-        width="380"
+        width="400"
         :options="chartOptions"
-        :series="series[0].data"
+        :series="series"
       ></apexchart>
     </div>
   </div>
@@ -43,7 +43,8 @@ export default {
     };
   },
   mounted() {
-    // console.log("S: ", this.series[0].data)
+    console.log("S: ", this.series)
+    console.log("P: ", this.chartOptions)
   }
 };
 </script>

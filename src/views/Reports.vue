@@ -1,5 +1,5 @@
 <template>
-  <div flex class="mx-15">
+  <div flex class="mx-10">
     <v-row>
       <v-col cols="12" class="mt-3">
         <h2>Отчеты</h2>
@@ -41,8 +41,8 @@
         <v-card class="mb-5 ml-2" min-height="100">
           <v-list-item>
             <v-list-item-content>
-              <v-list-item-title><h6>Процент со стажем меньше 1 года:</h6></v-list-item-title>
-              <v-list-item-title><h6>{{getEmployeesLessOneYear.percentLessOneYear}} %</h6></v-list-item-title>             
+              <v-list-item-title><h6>Уволившихся сотрудников в 2020 году:</h6></v-list-item-title>
+              <v-list-item-title><h6>{{dismissed_employees.length}} человек</h6></v-list-item-title>             
             </v-list-item-content>
           </v-list-item>
         </v-card>
@@ -78,19 +78,33 @@
       </v-col>
     </v-row> -->
     <v-row flex>
-      <v-col cols="4" class="mx-0 py-1">
-        <v-card class="mx-auto rounded-card mt-5" width="100%" :elevation="6">
+      <v-col cols="3" class="mx-0 py-1">
+        <v-row flex>
+          <v-card class="mx-auto rounded-card mt-5" width="100%" :elevation="6">
+            <v-toolbar color="#2C3A47" flat>
+              <v-col class="d-flex justify-space-around">
+                <v-toolbar-title class="white--text">Гендерный профиль</v-toolbar-title>
+              </v-col>
+            </v-toolbar>
+            <v-col class="d-flex justify-space-around">
+              <ChartGender :series="series" :chartOptions="chartOptions" />
+            </v-col>
+          </v-card>
+        </v-row>
+        <v-row flex>
+          <v-card class="mx-auto rounded-card mt-5" width="100%" :elevation="6">
           <v-toolbar color="#2C3A47" flat>
             <v-col class="d-flex justify-space-around">
-              <v-toolbar-title class="white--text">Гендерный профиль</v-toolbar-title>
+              <v-toolbar-title class="white--text">Стаж работы</v-toolbar-title>
             </v-col>
           </v-toolbar>
           <v-col class="d-flex justify-space-around">
-            <ChartGender :series="series" :chartOptions="chartOptions" />
+            <ChartExperience :series="seriesCountEmpsByYear" :chartOptions="chartOptionsCountEmpsByYear" />
           </v-col>
         </v-card>
+        </v-row>
       </v-col>
-      <v-col cols="8" class="mx-0 py-1">
+      <v-col cols="9" class="mx-0 py-1">
         <v-card class="mx-auto rounded-card mt-5" width="100%" :elevation="6">
           <v-toolbar color="#2C3A47" flat>
             <v-col class="d-flex justify-space-around">
@@ -120,11 +134,13 @@
 <script>
 import ChartGender from "./ChartGender";
 import ChartUnits from "./ChartUnits";
+import ChartExperience from "./ChartExperience"
 import { mapGetters, mapActions } from "vuex";
 export default {
   components: {
     ChartGender,
     ChartUnits,
+    ChartExperience
   },
   data() {
     return {
@@ -142,17 +158,33 @@ export default {
       woman: [],
       unitsWoman: [],
       unitsMan: [],
-      series: [
-        {
-          data: [50, 50],
-        },
-      ],
+      series: [],
       chartOptions: {
         chart: {
           width: 380,
           type: "pie",
+          events: {
+            click: function(event, chartContext, config) {
+              // console.log('Ev: ', event)
+              // console.log('chartContext: ', chartContext)
+              // console.log('config: ', config)
+              // The last parameter config contains additional information like `seriesIndex` and `dataPointIndex` for cartesian charts
+            }
+          },
         },
         labels: ["Мужчины", "Женщины"],
+        dataLabels: {
+          enabled: true,
+          formatter: function(value, { seriesIndex, dataPointIndex, w }) {
+            return w.config.series[seriesIndex]
+          },
+          style: {
+            fontSize: '14px',
+            fontFamily: 'Helvetica, Arial, sans-serif',
+            colors: ["#000"]
+          },
+
+        },
         responsive: [
           {
             breakpoint: 480,
@@ -161,17 +193,47 @@ export default {
                 width: 200,
               },
               legend: {
-                position: "bottom",
+                position: "top",
               },
             },
           },
         ],
       },
+      chartOptionsCountEmpsByYear: {
+        chart: {
+          type: 'bar',
+          height: 350,
+          toolbar: {
+            show: false,
+          },
+        },
+        plotOptions: {
+          bar: {
+            horizontal: false,
+          }
+        },
+        xaxis: {
+          axisBorder: {
+            show: false,
+          },
+          categories: ['до 1 года', 'от 1 до 3', 'от 3 до 5', 'свыше 5'],          
+        },
+        yaxis: {
+          labels: {
+            show: false
+          }
+        }
+        
+      },
       seriesUnits: [
         {
-          name: "Сотрудников",
-          data: [1, 2, 3, 4, 5],
+          data: [],
         },
+      ],
+      seriesCountEmpsByYear: [
+        {
+          data: []
+        }
       ],
       chartOptionsUnits: {
         chart: {
@@ -226,8 +288,9 @@ export default {
     setTimeout(() => {
       this.getGenderForCharts();
       this.getUnitsForCharts();
-    }, 0);
+    }, 500);
     this.getAverageAge
+    this.getCountEmpsPerYear()
   },
   methods: {
     ...mapActions(['fetchRecruitmentByID', 'fetchRecruitments']),
@@ -328,6 +391,74 @@ export default {
           data: newDataUnitWoman
         }
       ];
+    },
+    getCountEmpsPerYear() {
+      const actual = this.employees.filter((e) => {
+        return !this.dismissed_employees.includes(e.refKey)
+      })
+      
+      const recrs = actual.map(e => {
+        const prs = this.recruitments.filter(r => {
+          return r.ФизЛицо_Key == e.personKey
+        })
+        
+        if (prs[0] !== undefined) {
+          return {
+            ...e,
+            recrut: prs[0].Period
+          } 
+        } else {
+          return {
+            ...e,
+            recrut: 'Не указан'
+          } 
+        }
+               
+      })
+
+      const empsLessOne = recrs.filter(r => {
+        const currentYear = 2020
+        if (r.recrut !== 'Не указан') {
+          const startWork = parseInt(r.recrut.substring(0,4))
+          return currentYear - startWork == 0
+        }
+      })
+
+      const empsOneThree = recrs.filter(r => {
+        const currentYear = 2020
+        if (r.recrut !== 'Не указан') {
+          const startWork = parseInt(r.recrut.substring(0,4))
+          return (currentYear - startWork >= 1 && currentYear - startWork < 3)
+        }
+      })
+
+      const empsThreeFive = recrs.filter(r => {
+        const currentYear = 2020
+        if (r.recrut !== 'Не указан') {
+          const startWork = parseInt(r.recrut.substring(0,4))
+          return (currentYear - startWork >= 3 && currentYear - startWork < 5)
+        }
+      })
+
+      const empsMoreFive = recrs.filter(r => {
+        const currentYear = 2020
+        if (r.recrut !== 'Не указан') {
+          const startWork = parseInt(r.recrut.substring(0,4))
+          return (currentYear - startWork >= 5)
+        }
+      })
+      
+      const countsYears = [empsLessOne.length, empsOneThree.length, empsThreeFive.length, empsMoreFive.length]
+
+      // console.log('countsYears', countsYears)
+
+      this.seriesCountEmpsByYear = [
+        {
+          name: "Сотрудников",
+          data: countsYears,
+        }
+      ];
+
     },
     getCountEmpsLessYear(recrs) {
       const lessOne = recrs.filter(r => {
