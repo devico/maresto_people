@@ -80,38 +80,26 @@
     <v-row flex>
       <v-col cols="3" class="mx-0 py-1">
         <v-row flex>
-          <v-card class="mx-auto rounded-card mt-5" width="100%" :elevation="6">
-            <v-toolbar color="#2C3A47" flat>
-              <v-col class="d-flex justify-space-around">
-                <v-toolbar-title class="white--text">Гендерный профиль</v-toolbar-title>
+          <!-- <v-card class="mx-auto rounded-card mt-5" width="100%" :elevation="6"> -->
+            <v-toolbar flat>
+              <v-col class="d-flex justify-start">
+                <v-toolbar-title class="black--text">Гендерный профиль</v-toolbar-title>
               </v-col>
             </v-toolbar>
             <v-col class="d-flex justify-space-around">
               <ChartGender :series="series" :chartOptions="chartOptions" />
             </v-col>
-          </v-card>
+          <!-- </v-card> -->
         </v-row>
-        <v-row flex>
-          <v-card class="mx-auto rounded-card mt-5" width="100%" :elevation="6">
-          <v-toolbar color="#2C3A47" flat>
-            <v-col class="d-flex justify-space-around">
-              <v-toolbar-title class="white--text">Стаж работы</v-toolbar-title>
-            </v-col>
-          </v-toolbar>
-          <v-col class="d-flex justify-space-around">
-            <ChartExperience :series="seriesCountEmpsByYear" :chartOptions="chartOptionsCountEmpsByYear" />
-          </v-col>
-        </v-card>
-        </v-row>
-        <v-row flex>
-          <v-card class="mx-auto rounded-card mt-5" width="100%" :elevation="6">
-          <v-toolbar color="#2C3A47" flat>
-            <v-col class="d-flex justify-space-around">
-              <v-toolbar-title class="white--text">Уволены в подразделениях</v-toolbar-title>
+        <v-row flex class="mt-1">
+          <!-- <v-card class="mx-auto rounded-card mt-5" width="100%" :elevation="6"> -->
+          <v-toolbar flat>
+            <v-col class="d-flex justify-start">
+              <v-toolbar-title class="black--text">Уволены в подразделениях</v-toolbar-title>
             </v-col>
           </v-toolbar>
           
-          <v-col class="flex-grow-0 flex-shrink-1 py-0">
+          <v-col>
             <v-simple-table>
             <template v-slot:default>
               
@@ -127,31 +115,36 @@
             </template>
           </v-simple-table>
           </v-col>
-          </v-card>
+          <!-- </v-card> -->
           
-          <!-- <v-card class="mx-auto rounded-card mt-5" width="100%" :elevation="6">
-          <v-toolbar color="#2C3A47" flat>
-            <v-col class="d-flex justify-space-around">
-              <v-toolbar-title class="white--text">Число уволенных</v-toolbar-title>
-            </v-col>
-          </v-toolbar>
           
-          <v-col class="flex-grow-0 flex-shrink-1 py-0">
-            <v-card-text class="py-0">По подразделениям</v-card-text>
-            <ChartDismissByUnit :series="seriesDismissCountByUnit" :chartOptions="chartOptionsDismissCountByUnit" />
-          </v-col>
-          </v-card> -->
           
         </v-row>
+      </v-col>
+
+      <v-col cols="3" class="ml-0 py-1">
         <v-row flex>
-          <v-card class="mx-auto rounded-card mt-5" width="100%" :elevation="6">
-          <v-toolbar color="#2C3A47" flat>
-            <v-col class="d-flex justify-space-around">
-              <v-toolbar-title class="white--text">Уволены по причине</v-toolbar-title>
+          <!-- <v-card class="mx-auto rounded-card mt-5" width="100%" :elevation="6"> -->
+          <v-toolbar flat>
+            <v-col class="d-flex justify-start">
+              <v-toolbar-title class="black--text">Стаж работы</v-toolbar-title>
+            </v-col>
+          </v-toolbar>
+          <v-col class="d-flex justify-space-around">
+            <ChartExperience :series="seriesCountEmpsByYear" :chartOptions="chartOptionsCountEmpsByYear" />
+          </v-col>
+        <!-- </v-card> -->
+        </v-row>
+        <v-row flex  class="mt-0">
+          <!-- <v-card class="mx-auto rounded-card mt-5" width="100%" :elevation="6"> -->
+          <v-toolbar flat>
+            <v-col class="d-flex justify-start">
+              <v-toolbar-title class="black--text">Уволены по причине</v-toolbar-title>
             </v-col>
           </v-toolbar>
           
-          <v-col class="flex-grow-0 flex-shrink-1 py-0">
+          <v-col>
+            <v-flex>
             <v-simple-table>
             <template v-slot:default>
               
@@ -166,22 +159,24 @@
               </tbody>
             </template>
           </v-simple-table>
+          </v-flex>
           </v-col>
-          </v-card>
+          <!-- </v-card> -->
         </v-row>
       </v-col>
+      
      
-      <v-col cols="9" class="mx-0 py-1">
-        <v-card class="mx-auto rounded-card mt-5" width="100%" :elevation="6">
-          <v-toolbar color="#2C3A47" flat>
-            <v-col class="d-flex justify-space-around">
-              <v-toolbar-title class="white--text">Численность сотрудников по подразделениям</v-toolbar-title>
+      <v-col cols="6" class="ml-0 py-1 px-0">
+        <!-- <v-card class="mx-auto rounded-card mt-5" width="100%" :elevation="6"> -->
+          <v-toolbar flat>
+            <v-col class="d-flex justify-start">
+              <v-toolbar-title class="black--text">Численность сотрудников по подразделениям</v-toolbar-title>
             </v-col>
           </v-toolbar>
           <v-col cols="10" class="flex-grow-0 flex-shrink-1">
             <ChartUnits :series="seriesUnits" :chartOptions="chartOptionsUnits" />
           </v-col>
-          </v-card>
+          <!-- </v-card> -->
       </v-col>
     </v-row>
     <!-- <v-row>
