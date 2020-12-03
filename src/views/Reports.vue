@@ -1,5 +1,5 @@
 <template>
-  <div flex class="mx-10">
+  <div flex class="mx-15">
     <v-row>
       <v-col cols="12" class="mt-3">
         <h2>Отчеты</h2>
@@ -104,7 +104,22 @@
         </v-card>
         </v-row>
       </v-col>
-      <v-col cols="9" class="mx-0 py-1">
+      <v-col cols="3" class="mx-2 py-1">
+        <v-card class="mx-auto rounded-card mt-5" width="100%" :elevation="6">
+          <v-toolbar color="#2C3A47" flat>
+            <v-col class="d-flex justify-space-around">
+              <v-toolbar-title class="white--text">Число уволенных</v-toolbar-title>
+            </v-col>
+          </v-toolbar>
+          
+          <v-col class="flex-grow-0 flex-shrink-1 py-0">
+            <v-card-text class="py-0">По подразделениям</v-card-text>
+            <ChartDismissByUnit :series="seriesDismissCountByUnit" :chartOptions="chartOptionsDismissCountByUnit" />
+          </v-col>
+          </v-card>
+      </v-col>
+      
+      <v-col cols="5" class="mx-0 py-1">
         <v-card class="mx-auto rounded-card mt-5" width="100%" :elevation="6">
           <v-toolbar color="#2C3A47" flat>
             <v-col class="d-flex justify-space-around">
@@ -135,12 +150,14 @@
 import ChartGender from "./ChartGender";
 import ChartUnits from "./ChartUnits";
 import ChartExperience from "./ChartExperience"
+import ChartDismissByUnit from "./ChartDismissByUnit"
 import { mapGetters, mapActions } from "vuex";
 export default {
   components: {
     ChartGender,
     ChartUnits,
-    ChartExperience
+    ChartExperience,
+    ChartDismissByUnit,
   },
   data() {
     return {
@@ -161,7 +178,7 @@ export default {
       series: [],
       chartOptions: {
         chart: {
-          width: 380,
+          width: 280,
           type: "pie",
           events: {
             click: function(event, chartContext, config) {
@@ -225,12 +242,47 @@ export default {
         }
         
       },
+      chartOptionsDismissCountByUnit: {
+        chart: {
+          type: "bar",
+          height: 280,
+          toolbar: {
+            show: false,
+          },
+        },
+        plotOptions: {
+          bar: {
+            horizontal: true,
+          },
+        },
+        dataLabels: {
+          enabled: true,
+          style: {
+            fontSize: '12px',
+            colors: ['#000']
+          }
+        },
+        yaxis: {
+          reversed: true
+        },
+        legend: {
+          position: 'top',
+          horizontalAlign: 'left',
+          offsetX: 40
+        }
+        
+      },
       seriesUnits: [
         {
           data: [],
         },
       ],
       seriesCountEmpsByYear: [
+        {
+          data: []
+        }
+      ],
+      seriesDismissCountByUnit: [
         {
           data: []
         }
@@ -291,6 +343,7 @@ export default {
     }, 500);
     this.getAverageAge
     this.getCountEmpsPerYear()
+    this.getCountDismissUnits()
   },
   methods: {
     ...mapActions(['fetchRecruitmentByID', 'fetchRecruitments']),
@@ -365,6 +418,7 @@ export default {
        const newDataUnitMan = this.unitsCount.map((uc) => {
         return uc.countMan;
       });
+
        const newDataUnitWoman = this.unitsCount.map((uc) => {
         return uc.countWoman;
       });
@@ -456,6 +510,66 @@ export default {
         {
           name: "Сотрудников",
           data: countsYears,
+        }
+      ];
+
+    },
+    getCountDismissUnits() {
+      const dismissEmps = this.employees.filter((e) => {
+        return this.dismissed_employees.includes(e.refKey)
+      })
+
+      const unitsDismiss = this.units.filter(u => {
+        let countDism = 0
+        dismissEmps.map(de => {
+          if (u.refKey == de.unitKey) {
+            countDism += 1
+          }
+        })
+        
+        return countDism > 0
+      })
+
+      const dismissCountUnits = unitsDismiss.map(ud => {
+        let countDism = 0
+        dismissEmps.map(de => {
+          if (ud.refKey == de.unitKey) {
+            countDism += 1
+          }
+        })
+
+        return {
+          nameUnit: ud.description,
+          countDismiss: countDism
+        }
+      })
+      
+      const newLabelsUnit = dismissCountUnits.map((uc) => {
+        return uc.nameUnit;
+      });
+
+       const newDataUnit = dismissCountUnits.map((uc) => {
+        return uc.countDismiss;
+      });
+      
+      console.log('L: ', newLabelsUnit)
+      console.log('D: ', newDataUnit)
+      
+      this.chartOptionsDismissCountByUnit = {
+        xaxis: {
+          categories: newLabelsUnit,
+          labels: {
+            show: false,
+          },
+          crosshairs: {
+            show: false,
+          },
+        },
+      };
+
+      this.seriesDismissCountByUnit = [
+        {
+          data: newDataUnit,
         }
       ];
 

@@ -43,8 +43,7 @@ export default {
     };
   },
   mounted() {
-    console.log("S: ", this.series)
-    console.log("P: ", this.chartOptions)
+    
   }
 };
 </script>
