@@ -202,6 +202,13 @@ export default {
         title: {
           text: 'УСЛОВИЯ РАБОТЫ В КОМПАНИИ'
         },
+        dataLabels: {
+          enabled: true,
+          background: {
+            enabled: true,
+            borderRadius:2,
+          }
+        },
         xaxis: {
           categories: [
             "Взаимодействие между подразделениями компании",
@@ -215,7 +222,15 @@ export default {
             "Комфортность условий работы",
             "Отношение к инициативам сотрудников",
             "Признание, уважение вложенного труда и заслуг"          
-          ]
+          ],
+          labels: {
+            show: true,
+            style: {
+              colors: ["#000"],
+              fontSize: "11px",
+              fontFamily: 'Arial'
+            }
+          }
         },
       },
       seriesUnits: [
