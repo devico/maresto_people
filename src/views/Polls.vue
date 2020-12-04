@@ -226,7 +226,7 @@ export default {
           labels: {
             show: true,
             style: {
-              colors: ["#000"],
+              colors: ["#000", "#000", "#000", "#000", "#000", "#000", "#000", "#000", "#000", "#000", "#000"],
               fontSize: "11px",
               fontFamily: 'Arial'
             }
