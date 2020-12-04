@@ -77,13 +77,13 @@
         </v-btn-toggle>
       </v-col>
     </v-row> -->
-    <v-row flex>
-      <v-col cols="3" class="mx-0 py-1">
+    <v-row flex >
+      <v-col cols="3" class="mx-0 py-1" >
         <v-row flex>
           <!-- <v-card class="mx-auto rounded-card mt-5" width="100%" :elevation="6"> -->
-            <v-toolbar flat>
+            <v-toolbar flat class="grey lighten-5">
               <v-col class="d-flex justify-start">
-                <v-toolbar-title class="black--text">Гендерный профиль</v-toolbar-title>
+                <v-toolbar-title class="black--text">ГЕНДЕРНЫЙ ПРОФИЛЬ</v-toolbar-title>
               </v-col>
             </v-toolbar>
             <v-col class="d-flex justify-space-around">
@@ -93,27 +93,27 @@
         </v-row>
         <v-row flex class="mt-1">
           <!-- <v-card class="mx-auto rounded-card mt-5" width="100%" :elevation="6"> -->
-          <v-toolbar flat>
+          <v-toolbar flat class="grey lighten-5">
             <v-col class="d-flex justify-start">
-              <v-toolbar-title class="black--text">Уволены в подразделениях</v-toolbar-title>
+              <v-toolbar-title class="black--text">УВОЛЕНЫ В ПОДРАЗДЕЛЕНИЯХ</v-toolbar-title>
             </v-col>
           </v-toolbar>
           
           <v-col>
-            <v-simple-table>
-            <template v-slot:default>
-              
-              <tbody>
-                <tr
-                  v-for="item in unitsDismissEmps"
-                  :key="item.nameUnit"
-                >
-                  <td>{{ item.nameUnit }}</td>
-                  <td>{{ item.countDismiss }}</td>
-                </tr>
-              </tbody>
-            </template>
-          </v-simple-table>
+            <v-simple-table class="grey lighten-5">
+              <template v-slot:default>
+                
+                <tbody>
+                  <tr
+                    v-for="item in unitsDismissEmps"
+                    :key="item.nameUnit"
+                  >
+                    <td>{{ item.nameUnit }}</td>
+                    <td>{{ item.countDismiss }}</td>
+                  </tr>
+                </tbody>
+              </template>
+            </v-simple-table>
           </v-col>
           <!-- </v-card> -->
           
@@ -125,9 +125,9 @@
       <v-col cols="3" class="ml-0 py-1">
         <v-row flex>
           <!-- <v-card class="mx-auto rounded-card mt-5" width="100%" :elevation="6"> -->
-          <v-toolbar flat>
+          <v-toolbar flat class="grey lighten-5">
             <v-col class="d-flex justify-start">
-              <v-toolbar-title class="black--text">Стаж работы</v-toolbar-title>
+              <v-toolbar-title class="black--text">СТАЖ РАБОТЫ</v-toolbar-title>
             </v-col>
           </v-toolbar>
           <v-col class="d-flex justify-space-around">
@@ -137,28 +137,28 @@
         </v-row>
         <v-row flex  class="mt-0">
           <!-- <v-card class="mx-auto rounded-card mt-5" width="100%" :elevation="6"> -->
-          <v-toolbar flat>
+          <v-toolbar flat class="grey lighten-5">
             <v-col class="d-flex justify-start">
-              <v-toolbar-title class="black--text">Уволены по причине</v-toolbar-title>
+              <v-toolbar-title class="black--text">УВОЛЕННЫХ ПО ПРИЧИНЕ</v-toolbar-title>
             </v-col>
           </v-toolbar>
           
           <v-col>
             <v-flex>
-            <v-simple-table>
-            <template v-slot:default>
-              
-              <tbody>
-                <tr
-                  v-for="item in baseDismissEmps"
-                  :key="item.nameReason"
-                >
-                  <td>{{ item.nameReason }}</td>
-                  <td>{{ item.countReason }}</td>
-                </tr>
-              </tbody>
-            </template>
-          </v-simple-table>
+            <v-simple-table  class="grey lighten-5">
+              <template v-slot:default>
+                
+                <tbody>
+                  <tr
+                    v-for="item in baseDismissEmps"
+                    :key="item.nameReason"
+                  >
+                    <td>{{ item.nameReason }}</td>
+                    <td>{{ item.countReason }}</td>
+                  </tr>
+                </tbody>
+              </template>
+            </v-simple-table>
           </v-flex>
           </v-col>
           <!-- </v-card> -->
@@ -168,9 +168,9 @@
      
       <v-col cols="6" class="ml-0 py-1 px-0">
         <!-- <v-card class="mx-auto rounded-card mt-5" width="100%" :elevation="6"> -->
-          <v-toolbar flat>
+          <v-toolbar flat class="grey lighten-5">
             <v-col class="d-flex justify-start">
-              <v-toolbar-title class="black--text">Численность сотрудников по подразделениям</v-toolbar-title>
+              <v-toolbar-title class="black--text">СОТРУДНИКОВ В ПОДРАЗДЕЛЕНИЯХ</v-toolbar-title>
             </v-col>
           </v-toolbar>
           <v-col cols="10" class="flex-grow-0 flex-shrink-1">
@@ -278,6 +278,13 @@ export default {
         plotOptions: {
           bar: {
             horizontal: false,
+          }
+        },
+        dataLabels: {
+          enabled: true,
+          style: {
+            fontSize: '12px',
+            colors: ['#000']
           }
         },
         xaxis: {
