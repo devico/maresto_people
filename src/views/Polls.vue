@@ -209,6 +209,11 @@ export default {
             borderRadius:2,
           }
         },
+        yaxis: {
+          labels: {
+            show: false,
+          }
+        },
         xaxis: {
           categories: [
             "Взаимодействие между подразделениями компании",
