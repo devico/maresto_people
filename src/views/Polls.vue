@@ -5,7 +5,7 @@
         <h2>Анкетирование</h2>
       </v-col>
     </v-row>
-    <v-row align="center">
+<!--     <v-row align="center">
       <v-col cols="12" md="3">
         <v-card class="mb-5 ml-2" min-height="100">
           <v-list-item two-line subheader>
@@ -49,22 +49,12 @@
           </v-list-item>
         </v-card>
       </v-col>  
-    </v-row>
+    </v-row> -->
     
     
     <v-row flex >
-      <v-col cols="8" class="mx-0 py-1" >
-        <v-row flex>
-            <v-toolbar flat class="grey lighten-5">
-              <v-col class="d-flex justify-space-around">
-                <v-toolbar-title class="black--text">УСЛОВИЯ РАБОТЫ В КОМПАНИИ</v-toolbar-title>
-              </v-col>
-            </v-toolbar>
-            <v-col class="d-flex justify-space-around">
-              <ChartWorkingCondition :series="seriesWorkingCondition" :chartOptions="chartOptionsWorkingCondition" />
-            </v-col>        
-        </v-row>
-        
+      <v-col cols="10" class="mx-0 py-1" >
+        <ChartWorkingCondition :series="seriesWorkingCondition" :chartOptions="chartOptionsWorkingCondition" />        
       </v-col>
     </v-row>
   </div>
@@ -204,36 +194,29 @@ export default {
       },
       chartOptionsWorkingCondition: {
         chart: {
-          type: 'polarArea',
-        },        
-        fill: {
-          opacity: 0.8
+          type: 'radar',
+          toolbar: {
+            show: false,
+          },
         },
-        labels: [
-          "Взаимодействие между подразделениями компании",
-          "Взаимоотношения в коллективе",
-          "Взаимоотношения с непосредственным руководителем",
-          "Уровень заработной платы",
-          "Ясность целей работы и критериев оценки труда",
-          "Объективность оценки результатов труда ",
-          "Возможность профессионального развития",
-          "Возможность реализовать свой потенциал",
-          "Комфортность условий работы",
-          "Отношение к инициативам сотрудников",
-          "Признание, уважение вложенного труда и заслуг"
-        ],
-        responsive: [{
-          breakpoint: 480,
-          options: {
-            chart: {
-              width: 600
-            },
-            legend: {
-              position: 'top'
-            }
-          }
-        }]
-        
+        title: {
+          text: 'УСЛОВИЯ РАБОТЫ В КОМПАНИИ'
+        },
+        xaxis: {
+          categories: [
+            "Взаимодействие между подразделениями компании",
+            "Взаимоотношения в коллективе",
+            "Взаимоотношения с непосредственным руководителем",
+            "Уровень заработной платы",
+            "Ясность целей работы и критериев оценки труда",
+            "Объективность оценки результатов труда ",
+            "Возможность профессионального развития",
+            "Возможность реализовать свой потенциал",
+            "Комфортность условий работы",
+            "Отношение к инициативам сотрудников",
+            "Признание, уважение вложенного труда и заслуг"          
+          ]
+        },
       },
       seriesUnits: [
         {
@@ -250,7 +233,9 @@ export default {
           data: []
         }
       ],
-      seriesWorkingCondition: [1, 3, 2, 7, 2, 5, 6, 8, 1, 1, 6],
+      seriesWorkingCondition: [{
+        data: [1, 3, 2, 7, 2, 5, 6, 8, 1, 1, 6],
+      }],
       chartOptionsUnits: {
         chart: {
           type: "bar",
