@@ -82,7 +82,7 @@
           >{{filterGender}}
           </v-chip>
         </v-row>
-        <v-row justify="space-around">
+        <v-row v-if="!onFilter" justify="space-around">
           <v-chip-group
             v-model="selectAlfabet"
             active-class="deep-purple--text text--accent-4"
