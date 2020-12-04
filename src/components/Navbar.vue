@@ -145,7 +145,7 @@ export default {
       },
       
       { icon: "mdi-finance", text: "Отчеты", route: "/reports" },
-      { icon: "mdi-chart-pie", text: "Опросы", route: "#" },
+      { icon: "mdi-chart-pie", text: "Опросы", route: "/polls" },
       {
         icon: "mdi-chevron-up",
         "icon-alt": "mdi-chevron-down",

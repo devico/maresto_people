@@ -57,6 +57,13 @@ const routes = [
     props: true
   },
   {
+    path: "/polls",
+    name: "polls",
+    meta: {layout: 'admin', auth: true, title: 'Опросы'},
+    component: () => import("../views/Polls.vue"),
+    props: true
+  },
+  {
     path: "/calendar",
     name: "calendar",
     meta: {layout: 'admin', auth: true, title: 'Календарь событий'},
